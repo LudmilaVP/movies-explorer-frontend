@@ -1,4 +1,4 @@
-const BASE_URL = 'https://api.moviexplorer.nomoredomains.rocks';
+import { BASE_URL } from './constants.js'
 
 function getResponse(res) {
   if (res.ok) {

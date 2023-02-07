@@ -1,4 +1,4 @@
-.not-found {
+.notfound {
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -7,25 +7,25 @@
     text-align: center;
   }
   
-  .not-found__container {
+  .notfound__container {
     width: 100%;
   }
   
-  .not-found__title {
+  .notfound__title {
     margin: 0;
     font-size: 140px;
     font-weight: 400;
     line-height: 169px;
   }
   
-  .not-found__text {
+  .notfound__text {
     margin: 5px 0 0;
     font-size: 16px;
     font-weight: 400;
     line-height: 19px;
   }
   
-  .not-found__link {
+  .notfound__link {
     margin-top: 184px;
     width: fit-content;
     align-self: center;
@@ -36,42 +36,42 @@
     transition: opacity .2s linear;
   }
   
-  .not-found__link:hover {
+  .notfound__link:hover {
     opacity: .6;
     cursor: pointer;
   }
   
   @media screen and (max-width: 800px) {
-    .not-found {
+    .notfound {
       padding: 408px 0 222px;
     }
   
-    .not-found__link {
+    .notfound__link {
       margin-top: 184px;
     }
   }
   
   @media screen and (max-width: 450px) {
-    .not-found {
+    .notfound {
       padding: 385px 0 10px;
     }
   
-    .not-found__link {
+    .notfound__link {
       margin-top: 284px;
     }
   
-    .not-found__title {
+    .notfound__title {
       font-size: 80px;
       line-height: 97px;
     }
   
-    .not-found__text {
+    .notfound__text {
       margin-top: 10px;
       font-size: 12px;
       line-height: 15px;
     }
   
-    .not-found__link {
+    .notfound__link {
       font-size: 12px;
       line-height: 15px;
     }

@@ -1,0 +1,146 @@
+.aboutme {
+    padding: 110px 70px 125px;
+  }
+  
+  .aboutme__header {
+    margin: 0;
+    padding: 0 0 23px;
+    border-bottom: 1px solid #000;
+    letter-spacing: -0.04em;
+    font-size: 22px;
+    font-weight: 400;
+    line-height: 27px;
+  }
+  
+  .aboutme__container {
+    margin-top: 66px;
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .aboutme__name {
+    margin: 0;
+    letter-spacing: -0.04em;
+    font-size: 50px;
+    font-weight: 400;
+    line-height: 58px;
+  }
+  
+  .aboutme__job {
+    margin: 18px 0 26px;
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 20px;
+  }
+  
+  .aboutme__description {
+    max-width: 600px;
+    margin: 0;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 18px;
+  }
+  
+  .aboutme__links {
+    display: flex;
+    margin: 79px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .aboutme__link {
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
+    color: #000;
+    transition: opacity .2s linear;
+  }
+  
+  .aboutme__link:hover {
+    opacity: .6;
+  }
+  
+  .aboutme__image {
+    max-width: 272px;
+    max-height: 331px;
+    margin-left: 182px;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 10px;
+  }
+  
+  @media screen and (max-width: 800px) {
+    .aboutme {
+      padding: 90px 79px;
+    }
+  
+    .aboutme__name {
+      font-size: 40px;
+      line-height: 40px;
+    }
+  
+    .aboutme__job {
+      margin: 16px 0 20px;
+      font-size: 12px;
+      line-height: 18px;
+    }
+  
+    .aboutme__description {
+      max-width: 364px;
+      font-size: 12px;
+      line-height: 18px;
+    }
+  
+    .aboutme__links {
+      margin: 33px 0 0;
+    }
+  
+  }
+  
+  @media screen and (max-width: 540px) {
+    .aboutme {
+      padding: 70px 0 14px 79px;
+    }
+  
+    .aboutme__header {
+      padding: 0 0 28px;
+      border-bottom: 1px solid #000;
+      font-size: 18px;
+      line-height: 22px;
+    }
+  
+    .aboutme__container {
+      flex-direction: column-reverse;
+      align-items: center;
+      margin-top: 43px;
+    }
+  
+    .aboutme__name {
+      font-size: 30px;
+      line-height: 36px;
+    }
+  
+    .aboutme__job {
+      margin: 20px 0 20px;
+      font-size: 11px;
+      line-height: 16px;
+    }
+  
+    .aboutme__description {
+      font-size: 11px;
+      line-height: 18px;
+    }
+  
+    .aboutme__links {
+      margin: 42px 0 40px;
+      font-size: 14px;
+      line-height: 17px;
+    }
+  
+    .aboutme__image {
+      max-width: 292px;
+      max-height: 380px;
+      margin: 0 0 29px;
+    }
+  }

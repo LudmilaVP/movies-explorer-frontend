@@ -7,17 +7,16 @@
   }
   
   .navtab__link {
-    font-family: 'Inter', 'Helvetica', sans-serif;
     font-weight: 500;
     text-decoration: none;
-    font-size: 10px;
+    font-size: 12px;
     line-height: 16px;
     color: #000;
     text-align: center;
     background-color: #e8e8e8;
-    border-radius: 6px;
-    width: 82px;
-    height: 26px;
+    border-radius: 10px;
+    width: 62px;
+    height: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -29,7 +28,7 @@
     cursor: pointer;
   }
   
-  @media screen and (min-width: 768px) {
+  @media screen and (min-width: 800px) {
     .navtab {
       margin: 30px 25px;
     }
