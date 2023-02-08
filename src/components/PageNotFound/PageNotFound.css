@@ -51,7 +51,7 @@
     }
   }
   
-  @media screen and (max-width: 450px) {
+  @media screen and (max-width: 540px) {
     .notfound {
       padding: 385px 0 10px;
     }

@@ -1,0 +1,89 @@
+.movie {
+    padding: 0;
+  }
+  
+  .movie__image {
+    width: 270px;
+    height: 151px;
+  }
+  
+  .movie__element {
+    display: flex;
+    justify-content: space-between;
+    margin: 10.8px 2px 0 0;
+    min-height: 44px;
+  }
+  
+  .movie__title {
+    max-width: 220px;
+    font-size: 13px;
+    font-weight: 500;
+    line-height: 16px;
+    margin: 0;
+  }
+  
+  .movie__buttons {
+    margin: -2px 0 0;
+  }
+  
+  .movie__button {
+    height: 20px;
+    width: 20px;
+    border: none;
+    border-radius: 36px;
+    transition: opacity .3s ease-in;
+    padding: 0;
+  }
+  
+  .movie__button:hover {
+    opacity: .6;
+    cursor: pointer;
+  }
+  
+  .movie__button_inactive {
+    background: #f9f9f9 url(../../images/icon-saved-inactive.svg) center no-repeat;
+  }
+  
+  .movie__button_active {
+    background: #f9f9f9 url(../../images/icon-saved-active.svg) center no-repeat;
+  }
+  
+  .movie__button_delete {
+    width: 16px;
+    height: 16px;
+  }
+  
+  .movie__button_delete:hover {
+    background: #F9F9F9 url(../../images/remove-icon.svg) center no-repeat;
+  }
+  
+  .movie__duration {
+    border-top: 1px solid #e8e8e8;
+    color: #a0a0a0;
+    font-size: 11px;
+    line-height: 13px;
+    margin: 0.4px 0 14.5px;
+    padding-top: 7px;
+  }
+  @media screen and (max-width: 800px) {
+    .movie__image {
+      width: 339px;
+      height: 190px;
+    }
+  
+    .movie__title {
+      max-width: 290px;
+    }
+  }
+  
+  @media screen and (max-width: 540px) {
+    .movie__title {
+      font-size: 12px;
+      line-height: 17px;
+    }
+  
+    .movie__image {
+      width: 300px;
+      height: 168px;
+    }
+  }
