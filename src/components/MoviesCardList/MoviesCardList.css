@@ -37,14 +37,19 @@
     opacity: .6;
     cursor: pointer;
   }
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: 1540px) {
+    .movies__list {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  @media screen and (max-width: 1000px) {
     .movies {
       margin: 0 30px 0;
     }
   
     .movies__list {
       justify-items: center;
-      grid-template-columns: repeat(auto-fit, minmax(330px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
       gap: 15px 20px;
     }
   }

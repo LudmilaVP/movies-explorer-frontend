@@ -1,170 +1,167 @@
 .navigation {
-    margin: auto 0;
+    width: 67%;
+  }
+  
+  .navigation__btn-menu {
+    display: none;
+    width: 40px;
+    height: 43px;
+    outline: none;
+    border: none;
+    background: transparent url('../../images/button-menu.svg') center center / cover no-repeat;
+    transition: opacity .3s ease-in;
+    margin-left: auto;
+    padding: 0;
+  }
+  
+  .navigation__btn-menu:hover {
+    opacity: .6;
+    cursor: pointer;
+  }
+  
+  .navigation__menu{
     display: flex;
+    justify-content: space-between;
     align-items: center;
+  }
+  
+  .navigation__list-container {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .navigation__close {
+    display: none;
+    width: 22px;
+    height: 22px;
+    outline: none;
+    border: none;
+    background: transparent url('../../images/button-close.svg') center center / 32px no-repeat;
+    align-self: flex-end;
+    transition: opacity .3s ease-in;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .navigation__close:hover {
+    opacity: .6;
+    cursor: pointer;
+  }
+  
+  .navigation__list {
+    display: flex;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .navigation__list-item {
+    margin: 0 17px 0 0;
+  }
+  
+  .navigation__list-item_type_main {
+    display: none;
   }
   
   .navigation__link {
-    text-decoration: none;
-    color: black;
-  }
-  
-  .navigation__link_unlogged {
-    font-size: 12px;
-    line-height: 16px;
-    margin-right: 29px;
-  }
-  
-  .navigation__link_unlogged:last-child {
-    margin-right: 0;
-    background: #2BE080;
-    border-radius: 3px;
-    padding: 6px 0 0 20px;
-  }
-  
-  .navigation__link_loggedin {
-    margin-right: 16px;
     font-size: 13px;
+    font-weight: 400;
     line-height: 18px;
-  }
-  
-  .navigation__link_active {
-    font-weight: 500;
-  }
-  
-  .navigation__link-main {
-    display: none;
-  }
-  
-  .navigation__account-button {
-    margin: 0 0 90px 210px;
-    align-items: center;
     text-decoration: none;
-    color: black;
-    padding: 8px 0 0 20px;
-    background: #F9F9F9;
-    border-radius: 20px;
-    font-size: 14px;
-    line-height: 16px;
-    font-weight: 500;
+    color: #000;
+    transition: opacity .3s ease-in;
   }
-
   
-  .navigation__popup-button {
-    display: none;
+  .navigation__link:hover {
+    opacity: .6;
+    cursor: pointer;
+  }
+  
+  .navigation__link_type_profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 32px;
+    border-radius: 20px;
+    background-color: #F9F9F9;
+    font-size: 14px;
+    margin: 0;
   }
   
   @media screen and (max-width: 800px) {
-    .overlay {
-      position: fixed;
-      top: 0;
-      right: 0;
-      bottom: 0;
-      left: 0;
-      z-index: 1;
-      background: rgba(0, 0, 0, 0.3);
+    .navigation__btn-menu {
+      display: flex;
     }
   
-    .navigation__popup {
+    .navigation__container {
       display: none;
     }
   
-    .navigation__popup_open {
-      width: 68%;
-      height: 100%;
+    .navigation__container_visible {
       display: flex;
-      flex-direction: column;
       position: fixed;
+      width: 100%;
+      top: 0;
       right: 0;
+      background-color: rgba(0, 0, 0, .3);
       z-index: 2;
-      background: white;
     }
   
-    .navigation__popup-button {
-      display: flex;
-      background-color: transparent;
-      background-repeat: no-repeat;
-      background-position: center;
-      border: none;
-      padding: 0;
+    .navigation__menu {
+      box-sizing: border-box;
+      width: 520px;
+      min-height: 100vh;
+      flex-direction: column;
+      background-color: #fff;
+      padding: 27px 27px 90px;
+      margin-left: auto;
     }
   
-    .navigation__popup-button_burger {
-      background-image: url(../../images/button-menu.svg);
-      width: 44px;
-      height: 44px;
-    }
-    
-    .navigation__popup-button_close {
-      background-image: url(../../images/button-close.svg);
-      width: 22px;
-      height: 22px;
-      align-self: end;
-      margin: 22px 22px 0;
-    }
-  
-    .navigation__link_loggedin {
-      margin: 0 0 28px;
-      font-size: 18px;
-      line-height: 22px;
-      font-weight: 500;
-    }
-  
-    .navigation__link_active {
-      margin-bottom: 22px;
-      padding-bottom: 7px;
-      border-bottom: 2px solid black;
-    }
-  
-    .navigation__link-main {
-      display: flex;
-      margin-top: 105px;
-    }
-  
-    .navigation__account-button {
-      margin: 0;
-      position: absolute;
-      bottom: 90px;
-    }
-  }
-  
-  @media screen and (max-width: 540px) {
-    .navigation__link_unlogged {
-      font-size: 10px;
-      line-height: 1.6;
-      margin-right: 14px;
-    }
-  
-    .navigation__link_unlogged:last-child {
-      padding: 5px 12px;
-    }
-  
-    .navigation__popup_open {
+    .navigation__list-container {
       width: 100%;
     }
   
-    .navigation__popup-button_burger {
-      width: 40px;
-      height: 43px;
-    }
-    
-    .navigation__popup-button_close {
-      margin: 13px 13px 0;
+    .navigation__close {
+      display: flex;
     }
   
-    .navigation__link_loggedin {
-      margin-bottom: 24px;
+    .navigation__list {
+      flex-direction: column;
+      margin: 110px auto 0;
+      align-items: center;
     }
   
-    .navigation__link_active {
-      margin-bottom: 15px;
+    .navigation__list-item {
+      margin: 0 0 24px;
     }
   
-    .navigation__link-main {
-      margin-top: 99px;
+    .navigation__list-item_type_main {
+      display: flex;
     }
   
-    .navigation__account-button {
-      bottom: 46px;
+    .navigation__link {
+      font-size: 18px;
+      font-weight: 500;
+      line-height: 24px;
+      text-decoration: none;
+      padding: 0 0 4px;
+    }
+  
+    .navigation__link_type_profile {
+      font-size: 14px;
+    }
+  }
+  
+  @media screen and (max-width: 450px) {
+    .navigation__list {
+      margin: 105px auto 0;
+    }
+  
+    .navigation__menu {
+      padding: 18px 18px 46px;
+    }
+  
+    .navigation__list-item {
+      margin: 0 0 20px;
     }
   }

@@ -1,43 +1,36 @@
-import React from 'react'
-import { Link, NavLink } from 'react-router-dom'
-import './Navigation.css'
+import './Navigation.css';
+import { useState } from 'react';
+import { Link, NavLink } from 'react-router-dom';
 
-function Navigation(props) {
-  const [isPopupOpen, setIsPopupOpen] = React.useState(false)
+const Navigation = () => {
+  const [popupMenu, setpopupMenu] = useState(false);
 
-  function handlePopupOpen() {
-    setIsPopupOpen(true)
-  }
-
-  function handlePopupClose() {
-    setIsPopupOpen(false)
-  }
+  const handleToggleMenu = () => setpopupMenu(!popupMenu);
 
   return (
-    <>
-      {!props.loggedIn ? (
-        <nav className="navigation">
-          <Link to="/signup" className="navigation__link navigation__link_unlogged hover-link">Регистрация</Link>
-          <Link to="/signin" className="navigation__link navigation__link_unlogged hover-button">Войти</Link>
-        </nav>
-      ) : (
-        <>
-          <div className={`${isPopupOpen ? "overlay" : ""}`}>
-            <nav className={`navigation navigation__popup ${isPopupOpen ? "navigation__popup_open" : ""}`}>
-              <button className="navigation__popup-button navigation__popup-button_close hover-button" onClick={handlePopupClose}></button>
-              <Link to="/" className="navigation__link navigation__link_loggedin navigation__link-main hover-link" onClick={handlePopupClose}>Главная</Link>
-              <NavLink to="/movies" className="navigation__link navigation__link_loggedin hover-link" activeClassName="navigation__link_active" onClick={handlePopupClose}>Фильмы</NavLink>
-              <NavLink to="/saved-movies" className="navigation__link navigation__link_loggedin hover-link" activeClassName="navigation__link_active" onClick={handlePopupClose}>Сохранённые фильмы</NavLink>
-              <Link to="/profile" className="navigation__account-button hover-button" onClick={handlePopupClose}>
-                Аккаунт
-              </Link>
-            </nav>
+    <nav className="navigation">
+      <button className="navigation__btn-menu" type="button" onClick={handleToggleMenu}></button>
+      <div className={`navigation__container ${popupMenu ? 'navigation__container_visible' : ''}`}>
+        <div className="navigation__menu">
+          <div className="navigation__list-container">
+            <button className="navigation__close" type="button" onClick={handleToggleMenu}></button>
+            <ul className="navigation__list">
+              <li className="navigation__list-item navigation__list-item_type_main">
+                <Link to="/" className="navigation__link">Главная</Link>
+              </li>
+              <li className="navigation__list-item">
+                <NavLink to="/movies" className="navigation__link" activeClassName="navigation__link_active">Фильмы</NavLink>
+              </li>
+              <li className="navigation__list-item">
+                <NavLink to="/saved-movies" className="navigation__link" activeClassName="navigation__link_active">Сохранённые фильмы</NavLink>
+              </li>
+            </ul>
           </div>
-          <button className="navigation__popup-button navigation__popup-button_burger hover-button" onClick={handlePopupOpen}></button>
-        </>
-      )}
-    </>
-  )
-}
+          <Link to="/profile" className="navigation__link navigation__link_type_profile">Аккаунт</Link>
+        </div>
+      </div>
+    </nav>
+  );
+};
 
-export default Navigation
+export default Navigation;

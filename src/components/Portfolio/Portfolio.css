@@ -1,5 +1,5 @@
 .portfolio {
-    width: 100%;
+    padding: 0 70px 100px;
   }
   
   .portfolio__title {
@@ -51,7 +51,7 @@
     }
   }
   
-  @media screen and (max-width: 540px) {
+  @media screen and (max-width: 560px) {
     .portfolio__title {
       font-size: 14px;
     }

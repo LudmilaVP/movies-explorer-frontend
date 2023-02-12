@@ -1,26 +1,18 @@
-import { Route, Link } from 'react-router-dom'
-import logo from '../../images/logo.svg'
-import Navigation from '../Navigation/Navigation'
-import './Header.css'
+import './Header.css';
+import { Link } from 'react-router-dom';
+import logo from '../../images/logo.svg';
+import NavAuth from '../NavAuth/NavAuth';
+import Navigation from '../Navigation/Navigation';
 
-function Header(props) {
-  const points = [
-    "/",
-    "/profile",
-    "/movies",
-    "/saved-movies",
-  ]
-
+const Header = ({ loggedIn, isLoading }) => {
   return (
-    <Route exact path={points}>
-      <header className="header">
-      <Link to="/">
-      <img className="logo" src={logo} alt="Логотип сайта" />
-    </Link>
-        <Navigation loggedIn={props.loggedIn} />
-      </header>
-    </Route>
-  )
-}
+    <header className="header">
+      <Link to="/" className="header__link">
+        <img className="header__logo" src={logo} alt="Логотип"></img>
+      </Link>
+      {isLoading ? '' : loggedIn ? <Navigation /> : <NavAuth />}
+    </header>
+  );
+};
 
-export default Header
+export default Header;

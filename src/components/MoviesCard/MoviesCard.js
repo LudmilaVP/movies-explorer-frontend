@@ -13,9 +13,9 @@ const MoviesCard = ({ card }) => {
 
   return (
     <li className="movie">
-      <img src={card.image} alt={card.title} className="movie__image"></img>
-      <div className="movie__container">
+        <div className="movie__container">
         <p className="movie__title">{card.title}</p>
+        <p className="movie__duration">{card.duration}</p>
         <div className="movie__buttons">
           {pathname === '/saved-movies' ? (
             <button type="button" className="movie__button movie__button_delete" />
@@ -27,8 +27,8 @@ const MoviesCard = ({ card }) => {
             />
           )}
         </div>
+        <img src={card.image} alt={card.title} className="movie__image"></img>
       </div>
-      <p className="movie__duration">{card.duration}</p>
     </li>
   );
 };

@@ -9,7 +9,7 @@ function NavTab() {
       <a href='#techs' className='navtab__link'>
         Технологии
       </a>
-      <a href='#about-me' className='navtab__link'>
+      <a href='#aboutme' className='navtab__link'>
         Студент
       </a>
     </section>

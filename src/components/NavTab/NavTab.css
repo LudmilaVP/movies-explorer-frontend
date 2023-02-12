@@ -15,8 +15,8 @@
     text-align: center;
     background-color: #e8e8e8;
     border-radius: 10px;
-    width: 62px;
-    height: 16px;
+    width: 96px;
+    height: 36px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -34,7 +34,6 @@
     }
   
     .navtab__link {
-      font-size: 12px;
       width: 96px;
       height: 36px;
       margin: 0 5px;
