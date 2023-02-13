@@ -3,7 +3,7 @@
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-    padding: 18px 70px;
+    padding: 17px 70px 19px;
   }
   
   .header__link {
@@ -22,12 +22,12 @@
   
   @media screen and (max-width: 800px) {
     .header {
-      padding: 18px 30px;
+      padding: 18px 30px 18px;
     }
   }
   
   @media screen and (max-width: 540px) {
     .header {
-      padding: 18px 14px;
+      padding: 18px 14px 18px;
     }
   }

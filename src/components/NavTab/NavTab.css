@@ -3,7 +3,7 @@
     flex-direction: row;
     justify-content: center;
     flex-wrap: nowrap;
-    margin: 17px 14px;
+    margin: 0 auto 64px;
   }
   
   .navtab__link {
@@ -28,14 +28,27 @@
     cursor: pointer;
   }
   
-  @media screen and (min-width: 800px) {
+  @media screen and (min-width: 768px) {
     .navtab {
-      margin: 30px 25px;
+      margin: 0 auto 30px;
+      padding: 0;
     }
   
     .navtab__link {
       width: 96px;
       height: 36px;
       margin: 0 5px;
+    }
+  }
+
+  @media screen and (min-width: 320px) {
+    .navtab {
+      margin-bottom: 17px;
+      padding: 0;
+    }
+    .navtab__link {
+      width: 82px;
+      height: 26px;
+      margin: 0 6px;
     }
   }

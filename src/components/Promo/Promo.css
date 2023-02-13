@@ -2,7 +2,7 @@
     max-width: 1200px;
     width: calc(100% - 40px*2);
     min-height: 506px;
-    margin: 30px auto 0;
+    margin: 29px auto 25px;
     background: #F5F5F5;
     border-radius: 10px;
     display: flex;
@@ -11,7 +11,7 @@
   
   .promo__title {
     max-width: 730px;
-    margin: 169px 235px 118px;
+    margin: 172px 235px 118px;
     font-size: 50px;
     line-height: 58px;
     font-weight: 400;
@@ -20,20 +20,26 @@
   }
   
   @media screen and (max-width: 800px) {
+    .promo {
+      width: calc(100% - 20px*2);
+    }
     .promo__title {
-      margin: 350px 24px 324px;
+      margin: 350px 24px 314px;
+      max-width: 680px;
+      font-size: 40px;
+      line-height: 52px;
     }
   }
   
   @media screen and (max-width: 540px) {
     .promo {
       width: calc(100% - 14px*2);
-      margin-top: 14px;
     }
   
     .promo__title {
-      margin: 220px auto 217px;
+      margin: 220px auto 212px;
       font-size: 29px;
       line-height: 37px;
+      width: 292px;
     }
   }

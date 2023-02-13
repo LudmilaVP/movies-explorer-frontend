@@ -1,6 +1,6 @@
 .movies {
     margin: 0 70px 0;
-    padding: 10px 0 50px;
+    padding: 10px 0 0;
   }
   .movies__list {
     display: grid;

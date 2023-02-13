@@ -1,2 +1,2 @@
 # movies-explorer-frontend
-Ссылка на макет: https://disk.yandex.ru/d/AmMhCUdmbeLoVQ
+- Ссылка на макет: https://disk.yandex.ru/d/AmMhCUdmbeLoVQ

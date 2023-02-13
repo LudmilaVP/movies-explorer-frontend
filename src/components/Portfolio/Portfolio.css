@@ -7,7 +7,7 @@
     font-size: 18px;
     line-height: 20px;
     color: #a0a0a0;
-    margin: 0 0 50px;
+    margin: 0 0 48px;
   }
   
   .portfolio__list {
@@ -46,12 +46,18 @@
   }
   
   @media screen and (max-width: 800px) {
+    .portfolio {
+      padding: 0 50px 90px;
+    }
     .portfolio__link {
       font-size: 28px;
     }
   }
   
   @media screen and (max-width: 560px) {
+    .portfolio {
+      padding: 0 14px 90px;
+    }
     .portfolio__title {
       font-size: 14px;
     }

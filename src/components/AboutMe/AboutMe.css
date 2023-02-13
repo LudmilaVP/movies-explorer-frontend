@@ -1,5 +1,5 @@
 .aboutme {
-    padding: 110px 70px 125px;
+    padding: 110px 70px 69px;
 }
 
 .aboutme__header {
@@ -43,7 +43,7 @@
 
 .aboutme__links {
     display: flex;
-    margin: 79px 0 0;
+    margin: 76px 0 0;
     padding: 0;
     list-style: none;
 }
@@ -72,7 +72,7 @@
 
 @media screen and (max-width: 800px) {
     .aboutme {
-        padding: 90px 79px;
+        padding: 90px 53px;
     }
 
     .aboutme__name {
@@ -103,7 +103,7 @@
 
 @media screen and (max-width: 560px) {
     .aboutme {
-        padding: 70px 14px 79px;
+        padding: 70px 14px 40px;
     }
 
     .aboutme__header {
@@ -136,7 +136,7 @@
     }
 
     .aboutme__links {
-        margin: 42px 0 40px;
+        margin: 42px 0 0;
         font-size: 14px;
         line-height: 17px;
     }
