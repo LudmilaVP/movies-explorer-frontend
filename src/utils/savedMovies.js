@@ -6,18 +6,18 @@ const savedMovies = [
     {
       id: 1,
       title: '33 слова о дизайне',
-      duration: '1ч42м',
+      duration: '1ч 42м',
       image: film1,
     },
     {
       id: 2,
-      title: 'Киноальманах «100 лет дизайна»',
+      title: '33 слова о дизайне',
       duration: '1ч 42м',
       image: film2,
     },
     {
       id: 3,
-      title: 'В погоне за Бенкси',
+      title: '33 слова о дизайне',
       duration: '1ч 42м',
       image: film3,
     },

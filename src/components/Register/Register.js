@@ -2,7 +2,7 @@ import Form from '../Form/Form';
 
 function Register() {
   return (
-    <Form header="Добро пожаловать!" submit="Зарегистрироваться" question="Уже зарегистрированы?" link="Войти" path="/signin">
+    <Form header="Добро пожаловать!" submit="Зарегистрироваться" title="Уже зарегистрированы?" link="Войти" path="/signin">
       <label className="form__item">
         <p className="form__item-text">Имя</p>
         <input type="text" className="form__field" placeholder="Людмила" required />

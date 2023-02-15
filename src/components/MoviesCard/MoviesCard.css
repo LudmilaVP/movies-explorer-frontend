@@ -88,7 +88,6 @@
 @media screen and (max-width: 640px) {
   .movie__image {
     height: 168px;
-    margin-bottom: 16px;
   }
 
   .movie__container {

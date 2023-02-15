@@ -14,7 +14,7 @@ const Profile = () => {
             <input className="profile__settings" placeholder="Людмила" required />
           </div>
           <div className="profile__field profile__field_type_email">
-            <input className="profile__settings" placeholder="pochta@pochta.ru" required />
+            <input className="profile__settings" placeholder="llv55@pochta.ru" required />
           </div>
           <p className="profile__text">E-mail</p>
         </div>

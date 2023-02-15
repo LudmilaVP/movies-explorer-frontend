@@ -1,6 +1,6 @@
 .movies {
-    margin: 0 70px 0;
-    padding: 10px 0 0;
+    margin: 10px 0 0;
+    padding: 0;
   }
   .movies__list {
     display: grid;
@@ -42,7 +42,7 @@
       grid-template-columns: repeat(3, 1fr);
     }
   }
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: 1300px) {
     .movies {
       margin: 0 30px 0;
     }
@@ -54,14 +54,14 @@
     }
   }
   
-  @media screen and (max-width: 540px) {
+  @media screen and (max-width: 660px) {
     .movies {
       margin: 0 10px 0;
     }
   
     .movies__list {
       padding: 40px 0 0;
-      gap: 18px 20px;
+      gap: 6px 6px;
     }
   
     .movies__container {
