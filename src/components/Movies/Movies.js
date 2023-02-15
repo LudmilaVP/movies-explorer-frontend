@@ -5,7 +5,7 @@ import SearchForm from '../SearchForm/SearchForm';
 
 function Movies() {
     return (
-        <div className="movies">
+        <div className="movies__main">
             <SearchForm />
             <MoviesCardList
                 cards={cards}

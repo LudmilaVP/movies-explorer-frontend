@@ -106,6 +106,7 @@
   }
   
   .profile__link {
+    margin: 0 0 10px;
     color: #FF3055;
     font-size: 13px;
     font-weight: 500;
