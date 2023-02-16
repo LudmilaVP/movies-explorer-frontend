@@ -1,0 +1,33 @@
+.header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 17px 70px 19px;
+  }
+  
+  .header__link {
+    display: flex;
+  }
+  
+  .header__logo {
+    transition: opacity .2s linear;
+  }
+  
+  .header__logo:hover {
+    opacity: .6;
+    cursor: pointer;
+  }
+  
+  
+  @media screen and (max-width: 1279px) {
+    .header {
+      padding: 18px 30px 18px;
+    }
+  }
+  
+  @media screen and (max-width: 660px) {
+    .header {
+      padding: 18px 14px 18px;
+    }
+  }
