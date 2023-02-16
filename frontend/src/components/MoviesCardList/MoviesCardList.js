@@ -9,6 +9,7 @@ const MoviesCardList = ({ cards, buttonMore }) => {
   const handlePreloader = () => {
     setLoading(true);
   };
+  
 
   return (
     <section className="movies">
