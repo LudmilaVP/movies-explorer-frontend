@@ -1,6 +1,6 @@
 import isEmail from 'validator/es/lib/isEmail';
 import { useState } from 'react';
-import './Form.css';
+import '../Form/Form.css';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.svg';
 
