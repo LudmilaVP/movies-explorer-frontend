@@ -59,7 +59,7 @@ function App() {
   }
 
   function handleSignOut() {
-    mainApi.logout()
+    mainApi.signout()
       .then(() => {
         setLoggedIn(false)
         history.push('/')
