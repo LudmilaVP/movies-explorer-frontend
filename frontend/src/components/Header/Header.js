@@ -1,26 +1,20 @@
 import './Header.css';
-import { Route, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import logo from '../../images/logo.svg';
 import NavAuth from '../NavAuth/NavAuth';
 import Navigation from '../Navigation/Navigation';
 
-const Header = (props) => {
-  const endpoints = [
-    "/",
-    "/profile",
-    "/movies",
-    "/saved-movies",
-  ]
+const Header = ({ loggedIn, isLoading }) => {
 
   return (
-    <Route exact path={endpoints}>
+  
     <header className="header">
       <Link to="/" className="header__link">
         <img className="header__logo" src={logo} alt="Логотип"></img>
       </Link>
-      {props.isLoading ? '' : props.loggedIn ? <Navigation /> : <NavAuth />}
+      {isLoading ? '' : loggedIn ? <Navigation /> : <NavAuth />}
     </header>
-    </Route>
+
   );
 };
 
