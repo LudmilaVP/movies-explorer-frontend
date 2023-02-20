@@ -37,7 +37,7 @@ function Movies() {
                 setMoviesAll(JSON.parse(localStorage.getItem('moviesAll')))
             })
             .catch((err) => {
-                console.log('Ошибка при запросе ', err)
+                console.log('Ошибка при запросе', err)
             });
 
         mainApi.getMovies()

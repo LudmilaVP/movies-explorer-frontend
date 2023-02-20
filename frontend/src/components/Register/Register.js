@@ -29,9 +29,9 @@ function Register({ onRegister }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
     onRegister(inputValues);
   };
+
   return (
     <section className="form">
       <div className="form__container">
