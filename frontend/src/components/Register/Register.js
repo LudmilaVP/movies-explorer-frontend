@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import isEmail from 'validator/es/lib/isEmail';
 
-function Register({ onRegister }) {
+function Register({ handleRegister }) {
   const [inputValues, setInputValues] = useState({});
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
@@ -29,7 +29,7 @@ function Register({ onRegister }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onRegister(inputValues);
+    handleRegister(inputValues);
   };
 
   return (

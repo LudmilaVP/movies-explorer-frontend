@@ -4,7 +4,7 @@ import '../Form/Form.css';
 import { Link } from 'react-router-dom';
 import logo from '../../images/logo.svg';
 
-function Login({ onLogin }) {
+function Login({ handleLogin }) {
   const [inputValues, setInputValues] = useState({});
   const [errors, setErrors] = useState({});
   const [isValid, setIsValid] = useState(false);
@@ -29,7 +29,7 @@ function Login({ onLogin }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onLogin(inputValues);
+    handleLogin(inputValues);
   };
 
   return (
