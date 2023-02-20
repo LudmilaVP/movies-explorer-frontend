@@ -12,11 +12,13 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
+import Preloader from '../Preloader/Preloader';
 import mainApi from '../../utils/MainApi';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
-  const [loggedIn, setLoggedIn] = useState(localStorage.getItem('token'))
+  const [loggedIn, setLoggedIn] = useState(false)
+  const [isLoading, setIsLoading] = useState(true);
   const [messageError, setMessageError] = useState(false)
 
   const history = useHistory()
@@ -31,6 +33,9 @@ function App() {
       .catch((err) => {
         console.log(err.message)
       })
+      .finally(() => {
+        setIsLoading(false);
+      });
   }
 
   function handleRegister(name, email, password) {
@@ -73,7 +78,7 @@ function App() {
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
         {pathname === '/' || pathname === '/profile' || pathname === '/movies' || pathname === '/saved-movies' ?
-          <Header loggedIn={!loggedIn} /> : ''}
+          <Header loggedIn={!loggedIn} isLoading={isLoading} /> : ''}
         <Switch>
 
           <Route exact path='/'>
@@ -83,26 +88,39 @@ function App() {
           <ProtectedRoute
             path="/movies"
             loggedIn={!loggedIn}
+            isLoading={isLoading}
             component={Movies}
           />
 
           <ProtectedRoute
             path='/saved-movies'
             loggedIn={!loggedIn}
+            isLoading={isLoading}
             component={SavedMovies}
           />
 
           <Route path='/signup'>
-            {!loggedIn ? <Register handleRegister={handleRegister} textError={messageError} /> : <Redirect to='/movies' />}
+            {() =>
+              isLoading ? (
+                <Preloader />
+              ) : !loggedIn ? (
+                <Register handleRegister={handleRegister} />
+              ) : (
+                <Redirect to="/movies" />
+              )
+            }
           </Route>
 
           <Route path='/signin'>
-            {!loggedIn ? <Login handleLogin={handleLogin} /> : <Redirect to='/movies' />}
+            {() =>
+              isLoading ? <Preloader /> : !loggedIn ? <Login handleLogin={handleLogin} /> : <Redirect to="/movies" />
+            }
           </Route>
 
           <ProtectedRoute
             path='/profile'
             loggedIn={!loggedIn}
+            isLoading={isLoading}
             component={Profile}
             handleSignOut={handleSignOut}
           />
