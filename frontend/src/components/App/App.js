@@ -39,7 +39,7 @@ function App() {
   }
 
   function handleRegister(name, email, password) {
-    authorization(name, email, password)
+    authorization({name, email, password})
       .then(() => {
         handleLogin(email, password)
       })
@@ -50,7 +50,7 @@ function App() {
   }
 
   function handleLogin(email, password) {
-    login(email, password)
+    login({email, password})
       .then(() => {
         setLoggedIn(true)
         history.push('/movies')
