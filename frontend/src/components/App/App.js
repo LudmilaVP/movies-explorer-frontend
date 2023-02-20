@@ -25,7 +25,7 @@ function App() {
   const { pathname } = useLocation()
 
   function getUserInfo() {
-    mainApi.getUserInfo()
+    mainApi.getUserProfile()
       .then((userData) => {
         setLoggedIn(true)
         setCurrentUser(userData)
@@ -77,8 +77,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-        {pathname === '/' || pathname === '/profile' || pathname === '/movies' || pathname === '/saved-movies' ?
-          <Header loggedIn={!loggedIn} isLoading={isLoading} /> : ''}
+          <Header loggedIn={!loggedIn} isLoading={isLoading} />
         <Switch>
 
           <Route exact path='/'>
