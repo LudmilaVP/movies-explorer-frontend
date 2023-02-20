@@ -52,14 +52,11 @@ const getUser = (req, res, next) => {
 
 const updateUser = (req, res, next) => {
   const id = req.user._id;
-  const { name, about } = req.body;
-  return User.findByIdAndUpdate(
-    { _id: id },
-    { name, about },
-    { new: true, runValidators: true },
-  ).orFail(() => {
-    throw new NotFoundError('Карточка или пользователь не найден');
-  })
+  const { name, email } = req.body;
+  return User.findByIdAndUpdate(id, { name, email }, { new: true, runValidators: true })
+    .orFail(() => {
+      throw new NotFoundError('Карточка или пользователь не найден');
+    })
     .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError' || err.name === 'CastError') {
@@ -81,13 +78,8 @@ const createUser = (req, res, next) => {
       email,
       password: hash,
     }))
-    .then((user) => {
-      res.status(200).send({
-        name: user.name,
-        _id: user._id,
-        email: user.email,
-      });
-    })
+    .then((({ _id }) => User.findById(_id)))
+    .then((user) => res.send(user))
     .catch((err) => {
       if (err.name === 'ValidationError') {
         return next(new BadRequest('Переданы некорректные данные'));
