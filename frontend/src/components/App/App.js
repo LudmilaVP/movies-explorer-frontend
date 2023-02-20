@@ -12,7 +12,8 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import auth from '../../utils/auth';
+import { authorization, login, signout } from '../../utils/auth';
+import mainApi from '../../utils/MainApi';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
@@ -24,7 +25,7 @@ function App() {
   const { pathname } = useLocation()
 
   function getUserInfo() {
-    auth.getUserInfo()
+    mainApi.getUserInfo()
       .then((userData) => {
         setLoggedIn(true)
         setCurrentUser(userData)
@@ -38,7 +39,7 @@ function App() {
   }
 
   function handleRegister(name, email, password) {
-    auth.register(name, email, password)
+    authorization(name, email, password)
       .then(() => {
         handleLogin(email, password)
       })
@@ -49,7 +50,7 @@ function App() {
   }
 
   function handleLogin(email, password) {
-    auth.login(email, password)
+    login(email, password)
       .then(() => {
         setLoggedIn(true)
         history.push('/movies')
@@ -63,7 +64,7 @@ function App() {
   }
 
   function handleSignOut() {
-    auth.signout()
+    signout()
       .then(() => {
         setLoggedIn(false)
         history.push('/')
