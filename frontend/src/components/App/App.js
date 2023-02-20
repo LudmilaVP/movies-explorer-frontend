@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Switch, Redirect, useLocation, useHistory } from 'react-router-dom';
+import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
 import { useState } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Header from '../Header/Header';
@@ -12,7 +12,6 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import Preloader from '../Preloader/Preloader';
 import mainApi from '../../utils/MainApi';
 
 function App() {
@@ -100,21 +99,11 @@ function App() {
           />
 
           <Route path='/signup'>
-            {() =>
-              isLoading ? (
-                <Preloader />
-              ) : !loggedIn ? (
-                <Register handleRegister={handleRegister} />
-              ) : (
-                <Redirect to="/movies" />
-              )
-            }
+          <Register handleRegister={handleRegister} messageError={messageError} />
           </Route>
 
           <Route path='/signin'>
-            {() =>
-              isLoading ? <Preloader /> : !loggedIn ? <Login handleLogin={handleLogin} /> : <Redirect to="/movies" />
-            }
+          <Login handleLogin={handleLogin} messageError={messageError} />
           </Route>
 
           <ProtectedRoute
