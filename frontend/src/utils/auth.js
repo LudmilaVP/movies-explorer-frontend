@@ -8,7 +8,7 @@ function getResponse(res) {
 }
 
 export const authorization = (email, password, name) => {
-  return fetch(`${BASE_URL}/signin`, {
+  return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     credentials: 'include',
     headers: {
@@ -20,7 +20,7 @@ export const authorization = (email, password, name) => {
 }
 
 export const login = (email, password) => {
-  return fetch(`${BASE_URL}/signup`, {
+  return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     credentials: 'include',
     headers: {
