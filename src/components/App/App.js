@@ -36,6 +36,19 @@ function App() {
         setIsLoading(false);
       });
   }
+  
+  const tokenCheck = () => {
+    mainApi.getUserProfile()
+      .then((res) => {
+        setLoggedIn(true);
+        history.push('/');
+      })
+      .catch((err) => console.log(err));
+  }
+
+ useEffect(() => {
+    tokenCheck();
+  }, [])
 
   function handleRegister({ name, email, password }) {
     authorization(name, email, password)
