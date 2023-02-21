@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
+import { Route, Switch, useLocation, useHistory, Redirect } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Header from '../Header/Header';
@@ -14,6 +14,7 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { authorization, login, signout } from '../../utils/auth';
 import mainApi from '../../utils/MainApi';
+import Preloader from '../Preloader/Preloader';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
@@ -99,29 +100,39 @@ function App() {
 
           <ProtectedRoute
             path="/movies"
-            loggedIn={!loggedIn}
+            loggedIn={loggedIn}
             isLoading={isLoading}
             component={Movies}
           />
 
           <ProtectedRoute
             path='/saved-movies'
-            loggedIn={!loggedIn}
+            loggedIn={loggedIn}
             isLoading={isLoading}
             component={SavedMovies}
           />
 
           <Route path='/signup'>
-            <Register handleRegister={handleRegister} messageError={messageError} />
+          {() =>
+              isLoading ? (
+                <Preloader />
+              ) : !loggedIn ? (
+                <Register handleRegister={handleRegister} messageError={messageError} />
+              ) : (
+                <Redirect to="/movies" />
+              )
+            }
           </Route>
 
           <Route path='/signin'>
-            <Login handleLogin={handleLogin} messageError={messageError} />
+          {() =>
+              isLoading ? <Preloader /> : !loggedIn ? <Login handleLogin={handleLogin} messageError={messageError} /> : <Redirect to="/movies" />
+            }
           </Route>
 
           <ProtectedRoute
             path='/profile'
-            loggedIn={!loggedIn}
+            loggedIn={loggedIn}
             isLoading={isLoading}
             component={Profile}
             handleSignOut={handleSignOut}
