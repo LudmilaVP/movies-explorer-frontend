@@ -37,18 +37,6 @@ function App() {
       });
   }
 
-
-  function handleRegister({ name, email, password }) {
-    authorization(name, email, password)
-      .then(() => {
-        handleLogin(email, password)
-      })
-      .catch((err) => {
-        setMessageError('Что-то пошло не так...')
-        console.log(err.message)
-      })
-  }
-
   function handleLogin({ email, password }) {
     login(email, password)
       .then(() => {
@@ -62,6 +50,32 @@ function App() {
         console.log(err.message)
       })
   }
+
+  function handleRegister({ name, email, password }) {
+    authorization(name, email, password)
+      .then(() => {
+        handleLogin(email, password)
+        setLoggedIn(true)
+        history.push('/');
+      })
+      .catch((err) => {
+        setMessageError('Что-то пошло не так...')
+        console.log(err.message)
+      })
+  }
+
+  const tokenCheck = () => {
+    mainApi.getUserProfile()
+      .then((res) => {
+        setLoggedIn(true);
+        history.push('/');
+      })
+      .catch((err) => console.log(err));
+  }
+
+  useEffect(() => {
+    tokenCheck();
+  }, []);
 
   function handleSignOut() {
     signout()
@@ -77,8 +91,8 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-        {pathname === '/' || pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile' ?
-          <Header loggedIn={loggedIn} isLoading={isLoading} /> : ''}
+      {pathname === '/' || pathname === '/profile' || pathname === '/movies' || pathname === '/saved-movies'  ?
+          <Header loggedIn={!loggedIn} /> : ''}
         <Switch>
 
           <Route exact path='/'>
@@ -87,29 +101,29 @@ function App() {
 
           <ProtectedRoute
             path="/movies"
-            loggedIn={loggedIn}
+            loggedIn={!loggedIn}
             isLoading={isLoading}
             component={Movies}
           />
 
           <ProtectedRoute
             path='/saved-movies'
-            loggedIn={loggedIn}
+            loggedIn={!loggedIn}
             isLoading={isLoading}
             component={SavedMovies}
           />
 
           <Route path='/signup'>
-          {loggedIn ? <Redirect to='/movies' /> : <Register handleRegister={handleRegister} messageError={messageError} />}
+          {!loggedIn ? <Redirect to='/movies' /> : <Register handleRegister={handleRegister} messageError={messageError} />}
           </Route>
 
           <Route path='/signin'>
-          {loggedIn ? <Redirect to='/movies' /> : <Login handleLogin={handleLogin} messageError={messageError} />}
+          {!loggedIn ? <Redirect to='/movies' /> : <Login handleLogin={handleLogin} messageError={messageError} />}
           </Route>
 
           <ProtectedRoute
             path='/profile'
-            loggedIn={loggedIn}
+            loggedIn={!loggedIn}
             isLoading={isLoading}
             component={Profile}
             handleSignOut={handleSignOut}
