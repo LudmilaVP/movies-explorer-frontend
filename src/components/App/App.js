@@ -64,17 +64,8 @@ function App() {
       })
   }
 
-  const tokenCheck = () => {
-    mainApi.getUserProfile()
-      .then((res) => {
-        setLoggedIn(true);
-        history.push('/');
-      })
-      .catch((err) => console.log(err));
-  }
-
   useEffect(() => {
-    tokenCheck();
+    getUserInfo();
   }, []);
 
   function handleSignOut() {
