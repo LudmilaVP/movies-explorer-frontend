@@ -14,7 +14,6 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { authorization, login, signout } from '../../utils/auth';
 import mainApi from '../../utils/MainApi';
-import Preloader from '../Preloader/Preloader';
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
@@ -100,21 +99,11 @@ function App() {
           />
 
           <Route path='/signup'>
-          {() =>
-              isLoading ? (
-                <Preloader />
-              ) : !loggedIn ? (
-                <Register handleRegister={handleRegister} messageError={messageError} />
-              ) : (
-                <Redirect to="/movies" />
-              )
-            }
+          {loggedIn ? <Redirect to='/movies' /> : <Register handleRegister={handleRegister} messageError={messageError} />}
           </Route>
 
           <Route path='/signin'>
-          {() =>
-              isLoading ? <Preloader /> : !loggedIn ? <Login handleLogin={handleLogin} messageError={messageError} /> : <Redirect to="/movies" />
-            }
+          {loggedIn ? <Redirect to='/movies' /> : <Login handleLogin={handleLogin} messageError={messageError} />}
           </Route>
 
           <ProtectedRoute
