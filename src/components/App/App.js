@@ -1,6 +1,6 @@
 import './App.css';
 import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Header from '../Header/Header';
 import Main from '../Main/Main';
@@ -37,7 +37,20 @@ function App() {
       });
   }
 
-  function handleRegister({name, email, password}) {
+  const tokenCheck = () => {
+    mainApi.getUserProfile()
+      .then((res) => {
+        setLoggedIn(true);
+        history.push('/');
+      })
+      .catch((err) => console.log(err));
+  }
+
+  useEffect(() => {
+    tokenCheck();
+  }, [tokenCheck]);
+
+  function handleRegister({ name, email, password }) {
     authorization(name, email, password)
       .then(() => {
         handleLogin(email, password)
@@ -48,7 +61,7 @@ function App() {
       })
   }
 
-  function handleLogin({email, password}) {
+  function handleLogin({ email, password }) {
     login(email, password)
       .then(() => {
         setLoggedIn(true)
@@ -76,8 +89,8 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-      {pathname === '/' || pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile' ?
-          <Header loggedIn={!loggedIn} isLoading={isLoading}/> : ''}
+        {pathname === '/' || pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile' ?
+          <Header loggedIn={!loggedIn} isLoading={isLoading} /> : ''}
         <Switch>
 
           <Route exact path='/'>
@@ -99,11 +112,11 @@ function App() {
           />
 
           <Route path='/signup'>
-          <Register handleRegister={handleRegister} messageError={messageError} />
+            <Register handleRegister={handleRegister} messageError={messageError} />
           </Route>
 
           <Route path='/signin'>
-          <Login handleLogin={handleLogin} messageError={messageError} />
+            <Login handleLogin={handleLogin} messageError={messageError} />
           </Route>
 
           <ProtectedRoute
