@@ -180,7 +180,7 @@ function App() {
       .then(() => {
         handleLogin(email, password)
         setLoggedIn(true)
-        history.push('/');
+        history.push('/movies');
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
