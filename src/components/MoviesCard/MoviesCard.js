@@ -1,60 +1,43 @@
 import './MoviesCard.css';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { useEffect, useState } from 'react';
 
-const MoviesCard = ({ movie, savedMoviesToggle, moviesSaved }) => {
-  const [saved, setSaved] = useState(false);
-  const { pathname } = useLocation();
+const MoviesCard = (props) => {
+  const nameRu = props.card.nameRU
+  const trailerLink = props.card.trailerLink
+  const poster = props.savedMoviesToggle ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
+  
 
-  function handleSavedMovie() {
-    const newSaved = !saved;
-    const savedMovie = moviesSaved.filter((obj) => {
-      return obj.movieId == movie.id;
-    });
-    savedMoviesToggle({ ...movie, _id: savedMovie.length > 0 ? savedMovie[0]._id : null }, newSaved);
-  }
-
-  function getMovieDuration(mins) {
-    return `${Math.floor(mins / 60)}ч ${mins % 60}м`;
-  }
-
-  function handleFavoriteDelete() {
-    savedMoviesToggle(movie, false);
-  }
-
-  useEffect(() => {
-    if (pathname !== '/saved-movies') {
-      const savedMovie = moviesSaved.filter((obj) => {
-        return obj.movieId == movie.id;
-      });
-
-      if (savedMovie.length > 0) {
-        setSaved(true);
-      } else {
-        setSaved(false);
-      }
+  const duration = () => {
+    if (props.card.duration > 60) {
+      return (props.card.duration / 60 | 0) + "ч " + props.card.duration % 60 + "м"
     }
-  }, [pathname, moviesSaved, movie.id]);
+    if (props.card.duration === 60) {
+      return (props.card.duration / 60) + "ч"
+    } else {
+      return props.card.duration + "м"
+    }
+  }
+
+  function handleCardSave() {
+    props.onCardSave(props.card)
+  }
+
+  function handleCardDelete() {
+    props.onCardDelete(props.card)
+  }
 
   return (
     <li className="movie">
-      <div className="movie__container" href={pathname === '/saved-movies' ? movie.trailer : movie.trailerLink} target="_blank" rel="noreferrer">
-        <img src={pathname === '/saved-movies' ? `${movie.image}` : `https://api.nomoreparties.co${movie.image.url}`} alt={movie.nameRU} className="movie__image"></img>
-        <p className="movie__title">{movie.nameRU}</p>
+      <div className="movie__container" href={trailerLink} rel="noreferrer" target="_blank">
+        <img src={poster} alt="Постер" className="movie__image"></img>
+        <p className="movie__title">{nameRu}</p>
         <div className="movie__buttons">
-          {pathname === '/saved-movies' ? (
-            <button type="button" className="movie__button movie__button_delete" onClick={handleFavoriteDelete} />
-          ) : (
-            <button
-              type="button"
-              className={`movie__button movie__button${saved ? '_active' : '_inactive'}`}
-              onClick={handleSavedMovie}
-            />
-          )}
+          {props.savedMoviesToggle ? <button type="button" className="movie__button movie__button_delete" onClick={handleCardDelete} /> :
+            (props.saveMovies(props.card) ? <button type="button" className="movie__button movie__button_active" onClick={handleCardDelete}></button> :
+              <button className="movie__button movie__button_inactive" onClick={handleCardSave} type="button">Сохранить</button>)}
         </div>
       </div>
-      <p className="movie__duration">{getMovieDuration(movie.duration)}</p>
+      <p className="movie__duration">{duration()}</p>
     </li>
   );
 };

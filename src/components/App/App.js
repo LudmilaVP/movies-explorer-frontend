@@ -14,6 +14,7 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { authorization, login, signout } from '../../utils/auth';
 import mainApi from '../../utils/MainApi';
+import moviesApi from '../../utils/MoviesApi'
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
@@ -22,6 +23,12 @@ function App() {
   const [messageError, setMessageError] = useState(false)
   const history = useHistory()
   const { pathname } = useLocation()
+  const [movies, setMovies] = useState([])
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [moreCards, setMoreCards] = useState(0)
+  const [savedMovies, setSavedMovies] = useState([])
+  const [serverError, setServerError] = useState(false)
+
 
   function getUserInfo() {
     mainApi.getUserProfile()
@@ -35,6 +42,123 @@ function App() {
       .finally(() => {
         setIsLoading(false);
       });
+  }
+
+  function searchMovie(movieName, isShortFilms) {
+    setIsLoading(true)
+    moviesApi.getMovies()
+      .then((movies) => {
+        const searchedMovies = movies.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
+        const foundMovies = isShortFilms ? searchedMovies.filter((item) => item.duration <= 40) : searchedMovies
+        localStorage.setItem('foundMovies', JSON.stringify(foundMovies))
+        localStorage.setItem('searchMovieName', movieName)
+        localStorage.setItem('shortFilms', isShortFilms)
+        setIsLoading(false)
+        handleResize()
+      })
+      .catch((err) => {
+        console.log(err.message)
+        setIsLoading(false)
+        setServerError(true)
+      })
+  }
+
+  function checkWindowWidth() {
+    setWindowWidth(window.innerWidth)
+  }
+
+  function handleResize() {
+    const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
+    if (foundMovies === null) {
+      return
+    }
+    if (windowWidth >= 1280) {
+      setMovies(foundMovies.slice(0, 12))
+      setMoreCards(3)
+    } else if (windowWidth > 480 && windowWidth < 1280) {
+      setMovies(foundMovies.slice(0, 8))
+      setMoreCards(2)
+    } else if (windowWidth <= 480) {
+      setMovies(foundMovies.slice(0, 5))
+      setMoreCards(2)
+    }
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', checkWindowWidth)
+    handleResize()
+  }, [windowWidth])
+
+  function handleMore() {
+    const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
+    setMovies(foundMovies.slice(0, movies.length + moreCards))
+  }
+
+  function handleSearch(movieName, isShortFilms) {
+    searchMovie(movieName, isShortFilms)
+  }
+
+
+  function getSavedMovies() {
+    mainApi.getMovies()
+      .then((savedMovies) => {
+        setSavedMovies(savedMovies)
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
+  useEffect(() => {
+    mainApi.getUserProfile()
+      .then((userData) => {
+        setLoggedIn(true)
+        history.push(pathname)
+        setCurrentUser(userData)
+        getSavedMovies()
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }, [])
+
+
+  function handleCardSave(movie) {
+    mainApi.addMovie(movie)
+      .then((movieData) => {
+        setSavedMovies([...savedMovies, movieData])
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
+  function handleCardDelete(card) {
+    const deleteCard = savedMovies.find(c => c.movieId === (card.id || card.movieId) && c.owner === currentUser._id)
+    if (!deleteCard) return
+    mainApi.deleteMovie(deleteCard._id)
+      .then(() => {
+        setSavedMovies(savedMovies.filter(c => c._id !== deleteCard._id))
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
+  function saveMovies(card) {
+    return savedMovies.some(item => item.movieId === card.id && item.owner === currentUser._id)
+  }
+
+
+  function handleEditProfile(name, email) {
+    mainApi.setUserInfo({ name, email })
+      .then(() => {
+        setCurrentUser({ name, email })
+      })
+      .catch((err) => {
+        setMessageError('Что-то пошло не так...')
+        console.log(err.message)
+      })
   }
 
   function handleLogin({ email, password }) {
@@ -64,10 +188,6 @@ function App() {
       })
   }
 
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
   function handleSignOut() {
     signout()
       .then(() => {
@@ -82,8 +202,8 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-      {pathname === '/' || pathname === '/profile' || pathname === '/movies' || pathname === '/saved-movies'  ?
-          <Header loggedIn={!loggedIn} /> : ''}
+        {pathname === '/' || pathname === '/profile' || pathname === '/movies' || pathname === '/saved-movies' ?
+          <Header loggedIn={loggedIn} /> : ''}
         <Switch>
 
           <Route exact path='/'>
@@ -92,31 +212,43 @@ function App() {
 
           <ProtectedRoute
             path="/movies"
-            loggedIn={!loggedIn}
+            loggedIn={loggedIn}
             isLoading={isLoading}
             component={Movies}
+            handleSearch={handleSearch}
+            defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
+            cards={movies}
+            saveMovies={saveMovies}
+            onCardSave={handleCardSave}
+            onCardDelete={handleCardDelete}
+            serverError={serverError}
+            handleMore={handleMore}
           />
 
           <ProtectedRoute
             path='/saved-movies'
-            loggedIn={!loggedIn}
+            loggedIn={loggedIn}
             isLoading={isLoading}
             component={SavedMovies}
+            onCardDelete={handleCardDelete}
+            serverError={serverError}
+            saveMovies={saveMovies}
           />
 
           <Route path='/signup'>
-          {!loggedIn ? <Redirect to='/movies' /> : <Register handleRegister={handleRegister} messageError={messageError} />}
+            {loggedIn ? <Redirect to='/movies' /> : <Register handleRegister={handleRegister} messageError={messageError} />}
           </Route>
 
           <Route path='/signin'>
-          {!loggedIn ? <Redirect to='/movies' /> : <Login handleLogin={handleLogin} messageError={messageError} />}
+            {loggedIn ? <Redirect to='/movies' /> : <Login handleLogin={handleLogin} messageError={messageError} />}
           </Route>
 
           <ProtectedRoute
             path='/profile'
-            loggedIn={!loggedIn}
+            loggedIn={loggedIn}
             isLoading={isLoading}
             component={Profile}
+            handleEditProfile={handleEditProfile}
             handleSignOut={handleSignOut}
           />
 

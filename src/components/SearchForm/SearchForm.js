@@ -1,41 +1,41 @@
 import "./SearchForm.css";
 import { useEffect, useState } from 'react';
 
-const SearchForm = ({ handleGetMovies, moviesTumbler, moviesInputSearch, handleGetMoviesTumbler }) => {
-  const [inputSearch, setInputSearch] = useState('');
-  const [tumbler, setTumbler] = useState(false);
+const SearchForm = (props) => {
+  const [movieName, setMovieName] = useState('')
+  const [checkbox, setCheckbox] = useState(false)
 
-  function handleInputChange(e) {
-    setInputSearch(e.target.value);
+  function handleChangeMovieName(e) {
+    setMovieName(e.target.value)
   }
 
-  function handleTumblerChange(e) {
-    const newTumbler = !tumbler;
-    setTumbler(newTumbler);
-    handleGetMoviesTumbler(newTumbler);
+  function handleChangeCheckbox(e) {
+    const isShortFilms = e.target.checked
+    setCheckbox(isShortFilms)
+    props.handleSearch(movieName, isShortFilms)
   }
 
   function handleSubmit(e) {
-    e.preventDefault();
-    handleGetMovies(inputSearch);
+    e.preventDefault()
+    props.handleSearch(movieName, checkbox)
   }
-
+  
   useEffect(() => {
-    setTumbler(moviesTumbler);
-    setInputSearch(moviesInputSearch);
-  }, [moviesTumbler, moviesInputSearch]);
+    setMovieName(props.defaultValue)
+    setCheckbox(JSON.parse(localStorage.getItem('shortFilms')) || false)
+  }, [])
 
   return (
     <section className="search">
       <div className="search__box">
         <form className="search__form">
           <div className="search__icon"></div>
-          <input className="search__input" placeholder="Фильм" type="text" value={inputSearch || ''} onChange={handleInputChange} required />
+          <input className="search__input" placeholder="Фильм" type="text" value={movieName} onChange={handleChangeMovieName} required />
           <button className="search__button" type="submit" onClick={handleSubmit}></button>
         </form>
         <div className="search__toggle">
           <label className="search__tumbler">
-            <input type="checkbox" className="search__checkbox" value={tumbler} checked={tumbler} onChange={handleTumblerChange}/>
+            <input type="checkbox" name="shortFilms" className="search__checkbox" checked={checkbox} onChange={handleChangeCheckbox}/>
             <span className="search__slider" />
           </label>
           <p className="search__films">Короткометражки</p>
