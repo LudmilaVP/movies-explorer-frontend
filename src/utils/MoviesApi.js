@@ -15,7 +15,7 @@ class MoviesApi {
         return Promise.reject(`Ошибка: ${res.status}`);
     }
 
-    getMovies() {
+    getApiMovies() {
         return fetch(`${this.moviesUrl}`, {
             method: 'GET',
             headers: this._headers,

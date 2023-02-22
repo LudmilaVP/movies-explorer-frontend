@@ -4,8 +4,15 @@ import React from 'react';
 const MoviesCard = (props) => {
   const nameRu = props.card.nameRU
   const trailerLink = props.card.trailerLink
-  const poster = props.savedMoviesToggle ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
-  
+  const poster = props.isOnlySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
+
+  function handleCardSave() {
+    props.onCardSave(props.card)
+  }
+
+  function handleCardDelete() {
+    props.onCardDelete(props.card)
+  }
 
   const duration = () => {
     if (props.card.duration > 60) {
@@ -18,13 +25,6 @@ const MoviesCard = (props) => {
     }
   }
 
-  function handleCardSave() {
-    props.onCardSave(props.card)
-  }
-
-  function handleCardDelete() {
-    props.onCardDelete(props.card)
-  }
 
   return (
     <li className="movie">
@@ -32,8 +32,8 @@ const MoviesCard = (props) => {
         <img src={poster} alt="Постер" className="movie__image"></img>
         <p className="movie__title">{nameRu}</p>
         <div className="movie__buttons">
-          {props.savedMoviesToggle ? <button type="button" className="movie__button movie__button_delete" onClick={handleCardDelete} /> :
-            (props.saveMovies(props.card) ? <button type="button" className="movie__button movie__button_active" onClick={handleCardDelete}></button> :
+          {props.isOnlySaved ? <button type="button" className="movie__button movie__button_delete" onClick={handleCardDelete} /> :
+            (props.isSaved(props.card) ? <button type="button" className="movie__button movie__button_active" onClick={handleCardDelete}></button> :
               <button className="movie__button movie__button_inactive" onClick={handleCardSave} type="button">Сохранить</button>)}
         </div>
       </div>

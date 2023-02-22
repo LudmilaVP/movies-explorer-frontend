@@ -46,7 +46,7 @@ function App() {
 
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
-    moviesApi.getMovies()
+    moviesApi.getApiMovies()
       .then((movies) => {
         const searchedMovies = movies.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
         const foundMovies = isShortFilms ? searchedMovies.filter((item) => item.duration <= 40) : searchedMovies
@@ -145,13 +145,13 @@ function App() {
       })
   }
 
-  function saveMovies(card) {
+  function isSaved(card) {
     return savedMovies.some(item => item.movieId === card.id && item.owner === currentUser._id)
   }
 
 
   function handleEditProfile(name, email) {
-    mainApi.setUserInfo({ name, email })
+    mainApi.setUserProfile({ name, email })
       .then(() => {
         setCurrentUser({ name, email })
       })
@@ -218,7 +218,7 @@ function App() {
             handleSearch={handleSearch}
             defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
             cards={movies}
-            saveMovies={saveMovies}
+            isSaved={isSaved}
             onCardSave={handleCardSave}
             onCardDelete={handleCardDelete}
             serverError={serverError}
@@ -232,7 +232,7 @@ function App() {
             component={SavedMovies}
             onCardDelete={handleCardDelete}
             serverError={serverError}
-            saveMovies={saveMovies}
+            isSaved={isSaved}
           />
 
           <Route path='/signup'>

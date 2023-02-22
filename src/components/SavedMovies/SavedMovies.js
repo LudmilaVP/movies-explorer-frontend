@@ -6,16 +6,6 @@ import React, { useEffect, useState } from 'react';
 function SavedMovies(props) {
   const [filteredMovies, setFilteredMovies] = useState([])
 
-  function handleSearch(movieName, isShortFilms) {
-    const filteredMovies = props.cards.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
-    if (isShortFilms) {
-      setFilteredMovies(filteredMovies.filter((item) => item.duration <= 40))
-    }
-    else {
-      setFilteredMovies(filteredMovies)
-    }
-  }
-
   function initFilteredMovies() {
     setFilteredMovies(props.cards)
   }
@@ -30,6 +20,16 @@ function SavedMovies(props) {
     initFilteredMovies()
   }, [])
 
+  function handleSearch (movieName, isShortFilms) {
+    const filteredMovies = props.cards.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
+    if (isShortFilms) {
+      setFilteredMovies(filteredMovies.filter((item) => item.duration <= 40))
+    }
+    else {
+      setFilteredMovies(filteredMovies)
+    }
+  }
+
   return (
     <div className="movies-saved">
       <SearchForm
@@ -38,11 +38,11 @@ function SavedMovies(props) {
       />
       <MoviesCardList
         cards={filteredMovies}
-        saveMovies={props.saveMovies}
-        savedMoviesToggle={props.savedMoviesToggle}
+        isSaved={props.isSaved}
+        isOnlySaved={true}
         onCardDelete={props.onCardDelete}
         serverError={props.serverError}
-        loading={props.loading}
+        isLoading={props.isLoading}
       />
     </div>
   );

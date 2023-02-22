@@ -13,13 +13,13 @@ function Movies(props) {
             <div className="movies__main">
                 <MoviesCardList
                     cards={props.cards}
+                    isSaved={props.isSaved}
+                    isOnlySaved={false}
                     handleMore={props.handleMore}
-                    saveMovies={props.saveMovies}
-                    savedMoviesToggle={props.savedMoviesToggle}
                     onCardSave={props.onCardSave}
                     onCardDelete={props.onCardDelete}
                     serverError={props.serverError}
-                    loading={props.loading}
+                    isLoading={props.isLoading}
                 />
             </div>
         </>
