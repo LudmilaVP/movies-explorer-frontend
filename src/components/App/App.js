@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Switch, useLocation, useHistory, Redirect } from 'react-router-dom';
+import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Header from '../Header/Header';
@@ -236,11 +236,11 @@ function App() {
           />
 
           <Route path='/signup'>
-            {loggedIn ? <Redirect to='/movies' /> : <Register handleRegister={handleRegister} messageError={messageError} />}
+            <Register handleRegister={handleRegister} messageError={messageError} />
           </Route>
 
           <Route path='/signin'>
-            {loggedIn ? <Redirect to='/movies' /> : <Login handleLogin={handleLogin} messageError={messageError} />}
+            <Login handleLogin={handleLogin} messageError={messageError} />
           </Route>
 
           <ProtectedRoute
