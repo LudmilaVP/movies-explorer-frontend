@@ -161,7 +161,7 @@ function App() {
       })
   }
 
-  function handleLogin({ email, password }) {
+  function handleLogin( email, password ) {
     login(email, password)
       .then(() => {
         setLoggedIn(true)
@@ -175,12 +175,12 @@ function App() {
       })
   }
 
-  function handleRegister({ name, email, password }) {
+  function handleRegister( name, email, password ) {
     authorization(name, email, password)
       .then(() => {
-        handleLogin(email, password)
         setLoggedIn(true)
-        history.push('/movies');
+        history.push('/movies')
+        getUserInfo()
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
