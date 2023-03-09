@@ -22,7 +22,7 @@ function App() {
   const [isLoading, setIsLoading] = useState(true);
   const [messageError, setMessageError] = useState(false)
   const history = useHistory()
-  const { pathname } = useLocation()
+  const pathname = useLocation()
   const [movies, setMovies] = useState([])
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [moreCards, setMoreCards] = useState(0)
@@ -110,10 +110,11 @@ function App() {
   }
 
   useEffect(() => {
+    const path = pathname.pathname
     mainApi.getUserProfile()
       .then((userData) => {
         setLoggedIn(true)
-        history.push(pathname)
+        history.push(path)
         setCurrentUser(userData)
         getSavedMovies()
       })
