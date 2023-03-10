@@ -163,13 +163,16 @@ function App() {
   }
 
   function handleRegister( name, email, password ) {
-    authorization(name, email, password)
+    authorization({name, email, password})
       .then(() => {
-        handleLogin(email, password)
+        setLoggedIn(true)
+        history.push('/movies')
+        getUserInfo()
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
         console.log(err.message)
+        setLoggedIn(false)
       })
   }
 
