@@ -162,16 +162,14 @@ function App() {
   function handleRegister( name, email, password ) {
     authorization(name, email, password)
       .then(() => {
-        setLoggedIn(true)
-        history.push('/movies')
-        getUserInfo()
+        handleLogin(email, password)
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
         console.log(err.message)
       })
   }
-  
+
   function handleLogin( email, password ) {
     login(email, password)
       .then(() => {
@@ -201,8 +199,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-        {pathname === '/' || pathname === '/profile' || pathname === '/movies' || pathname === '/saved-movies' ?
-          <Header loggedIn={loggedIn} /> : ''}
+          <Header loggedIn={loggedIn} />
         <Switch>
 
           <Route exact path='/'>
@@ -256,7 +253,7 @@ function App() {
           </Route>
 
         </Switch>
-        {pathname === '/' || pathname === '/movies' || pathname === '/saved-movies' ? <Footer /> : ''}
+        <Footer />
       </div>
     </CurrentUserContext.Provider>
   );
