@@ -19,8 +19,8 @@ import moviesApi from '../../utils/MoviesApi'
 function App() {
   const [currentUser, setCurrentUser] = useState({})
   const [loggedIn, setLoggedIn] = useState(false)
-  const [isLoading, setIsLoading] = useState(true);
-  const [messageError, setMessageError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
+  const [messageError, setMessageError] = useState('')
   const history = useHistory()
   const pathname = useLocation()
   const [movies, setMovies] = useState([])
@@ -39,9 +39,6 @@ function App() {
       .catch((err) => {
         console.log(err.message)
       })
-      .finally(() => {
-        setIsLoading(false);
-      });
   }
 
   function searchMovie(movieName, isShortFilms) {
@@ -162,6 +159,19 @@ function App() {
       })
   }
 
+  function handleRegister( name, email, password ) {
+    authorization(name, email, password)
+      .then(() => {
+        setLoggedIn(true)
+        history.push('/movies')
+        getUserInfo()
+      })
+      .catch((err) => {
+        setMessageError('Что-то пошло не так...')
+        console.log(err.message)
+      })
+  }
+  
   function handleLogin( email, password ) {
     login(email, password)
       .then(() => {
@@ -176,18 +186,6 @@ function App() {
       })
   }
 
-  function handleRegister( name, email, password ) {
-    authorization(name, email, password)
-      .then(() => {
-        setLoggedIn(true)
-        history.push('/movies')
-        getUserInfo()
-      })
-      .catch((err) => {
-        setMessageError('Что-то пошло не так...')
-        console.log(err.message)
-      })
-  }
 
   function handleSignOut() {
     signout()
