@@ -79,6 +79,7 @@ class MainApi {
 const mainApi = new MainApi({
     baseUrl: BASE_URL,
     headers: {
+        'Accept': 'application/json',
         "Content-Type": "application/json",
     },
 })

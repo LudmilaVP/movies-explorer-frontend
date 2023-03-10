@@ -29,6 +29,9 @@ function App() {
   const [savedMovies, setSavedMovies] = useState([])
   const [serverError, setServerError] = useState(false)
 
+  useEffect(() => {
+    getUserInfo();
+  }, []);
 
   function getUserInfo() {
     mainApi.getUserProfile()
@@ -171,7 +174,7 @@ function App() {
   }
 
   function handleLogin( email, password ) {
-    login(email, password)
+    login({email, password})
       .then(() => {
         setLoggedIn(true)
         history.push('/movies')

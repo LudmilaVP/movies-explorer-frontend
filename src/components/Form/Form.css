@@ -114,6 +114,14 @@
   cursor: pointer;
 }
 
+.form__button_disabled {
+  background-color: #d9d9d9;
+  color: #000;
+  cursor: default;
+  pointer-events: none;
+  opacity: .2;
+}
+
 .form__text {
   width: 100%;
   text-align: center;

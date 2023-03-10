@@ -26,6 +26,7 @@ class MoviesApi {
 const moviesApi = new MoviesApi({
     url: MOVIES_URL,
     headers: {
+        'Accept': 'application/json',
         'Content-Type': 'application/json',
     },
 });
