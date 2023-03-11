@@ -20,8 +20,8 @@ function Header ({loggedIn}) {
           <img className="header__logo" src={logo} alt="Логотип"></img>
         </Link>
         {loggedIn
-          ? <Navigation/>
-          : <NavAuth />
+          ? <NavAuth />
+          : <Navigation/>
         }
       </header>
     </Route>
