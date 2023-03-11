@@ -219,7 +219,7 @@ function App() {
             <Main />
           </Route>
 
-          <Route path='/movies' element={
+          <Route path='/movies' component={
             <ProtectedRoute loggedIn={loggedIn}>
               <Header loggedIn={loggedIn} />
               <Movies
@@ -237,12 +237,11 @@ function App() {
           }
           />
 
-          <Route path='/saved-movies' element={
+          <Route path='/saved-movies' component={
             <ProtectedRoute loggedIn={loggedIn}>
               <Header loggedIn={loggedIn} />
               <SavedMovies
                 isLoading={isLoading}
-                component={SavedMovies}
                 onCardDelete={handleCardDelete}
                 serverError={serverError}
                 isSaved={isSaved}
@@ -259,12 +258,11 @@ function App() {
             <Login handleLogin={handleLogin} messageError={messageError} />
           </Route>
 
-          <Route path='/profile' element={
+          <Route path='/profile' component={
             <ProtectedRoute loggedIn={loggedIn}>
               <Header loggedIn={loggedIn} />
               <Profile
                 isLoading={isLoading}
-                component={Profile}
                 handleEditProfile={handleEditProfile}
                 handleSignOut={handleSignOut}
               />
