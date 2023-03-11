@@ -205,7 +205,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-          <Header loggedIn={loggedIn} />
+          <Header loggedIn={loggedIn} isLoading={isLoading}/>
         <Switch>
 
           <Route exact path='/'>

@@ -19,10 +19,7 @@ function Header (props) {
         <Link to="/" className="header__link">
           <img className="header__logo" src={logo} alt="Логотип"></img>
         </Link>
-        {props.loggedIn
-          ? <NavAuth />
-          : <Navigation />
-        }
+        {props.isLoading ? '' : props.loggedIn ? <Navigation /> : <NavAuth />}
       </header>
     </Route>
   );
