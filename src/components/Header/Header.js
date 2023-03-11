@@ -4,7 +4,7 @@ import logo from '../../images/logo.svg';
 import NavAuth from '../NavAuth/NavAuth';
 import Navigation from '../Navigation/Navigation';
 
-function Header (props) {
+function Header ({loggedIn}) {
 
   const endpoints = [
     "/",
@@ -19,7 +19,7 @@ function Header (props) {
         <Link to="/" className="header__link">
           <img className="header__logo" src={logo} alt="Логотип"></img>
         </Link>
-        {props.loggedIn
+        {!loggedIn
           ? <NavAuth />
           : <Navigation />
         }
