@@ -30,31 +30,31 @@ function App() {
   const [serverError, setServerError] = useState(false)
 
   useEffect(() => {
-    if(loggedIn) {
+    if (loggedIn) {
       mainApi.getUserProfile()
-      .then((data) => {
-        setLoggedIn(true)
-        setCurrentUser(data)
-      })
-      .catch((err) => {
-        console.log(err)
-      })
+        .then((data) => {
+          setLoggedIn(true)
+          setCurrentUser(data)
+        })
+        .catch((err) => {
+          console.log(err)
+        })
     }
   }, [loggedIn])
 
   useEffect(() => {
     mainApi
-     .checkToken()
-     .then((data) => {
-      if(data) {
-        setLoggedIn(true)
-        setCurrentUser(data)
-      }
-     })
-     .catch((err) => {
-      console.log(err)
-     })
-}, [loggedIn])
+      .checkToken()
+      .then((data) => {
+        if (data) {
+          setLoggedIn(true)
+          setCurrentUser(data)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [loggedIn])
 
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
@@ -174,10 +174,10 @@ function App() {
       })
   }
 
-  function handleRegister({name, email, password}) {
+  function handleRegister({ name, email, password }) {
     authorization(name, email, password)
       .then(() => {
-        handleLogin({email, password})
+        handleLogin({ email, password })
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
@@ -185,7 +185,7 @@ function App() {
       })
   }
 
-  function handleLogin({email, password}) {
+  function handleLogin({ email, password }) {
     login(email, password)
       .then(() => {
         setLoggedIn(true)
@@ -212,36 +212,43 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-          <Header loggedIn={!loggedIn} />
         <Switch>
 
           <Route exact path='/'>
+            <Header loggedIn={!loggedIn} />
             <Main />
           </Route>
 
-          <ProtectedRoute
-            path="/movies"
-            loggedIn={loggedIn}
-            isLoading={isLoading}
-            component={Movies}
-            handleSearch={handleSearch}
-            defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
-            cards={movies}
-            isSaved={isSaved}
-            onCardSave={handleCardSave}
-            onCardDelete={handleCardDelete}
-            serverError={serverError}
-            handleMore={handleMore}
+          <Route path='/movies' element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <Header loggedIn={loggedIn} />
+              <Movies
+                isLoading={isLoading}
+                handleSearch={handleSearch}
+                defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
+                cards={movies}
+                isSaved={isSaved}
+                onCardSave={handleCardSave}
+                onCardDelete={handleCardDelete}
+                serverError={serverError}
+                handleMore={handleMore}
+              />
+            </ProtectedRoute>
+          }
           />
 
-          <ProtectedRoute
-            path='/saved-movies'
-            loggedIn={loggedIn}
-            isLoading={isLoading}
-            component={SavedMovies}
-            onCardDelete={handleCardDelete}
-            serverError={serverError}
-            isSaved={isSaved}
+          <Route path='/saved-movies' element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <Header loggedIn={loggedIn} />
+              <SavedMovies
+                isLoading={isLoading}
+                component={SavedMovies}
+                onCardDelete={handleCardDelete}
+                serverError={serverError}
+                isSaved={isSaved}
+              />
+            </ProtectedRoute>
+          }
           />
 
           <Route path='/signup'>
@@ -252,13 +259,17 @@ function App() {
             <Login handleLogin={handleLogin} messageError={messageError} />
           </Route>
 
-          <ProtectedRoute
-            path='/profile'
-            loggedIn={loggedIn}
-            isLoading={isLoading}
-            component={Profile}
-            handleEditProfile={handleEditProfile}
-            handleSignOut={handleSignOut}
+          <Route path='/profile' element={
+            <ProtectedRoute loggedIn={loggedIn}>
+              <Header loggedIn={loggedIn} />
+              <Profile
+                isLoading={isLoading}
+                component={Profile}
+                handleEditProfile={handleEditProfile}
+                handleSignOut={handleSignOut}
+              />
+            </ProtectedRoute>
+          }
           />
 
           <Route path="*">

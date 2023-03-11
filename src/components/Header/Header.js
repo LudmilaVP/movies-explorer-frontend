@@ -19,7 +19,7 @@ function Header ({loggedIn}) {
         <Link to="/" className="header__link">
           <img className="header__logo" src={logo} alt="Логотип"></img>
         </Link>
-        {loggedIn
+        {!loggedIn
           ? <NavAuth />
           : <Navigation/>
         }
