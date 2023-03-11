@@ -1,6 +1,14 @@
-import React from 'react'
-import { Link } from 'react-router-dom'
+import React from "react"
+import { Route, Redirect } from "react-router-dom"
 
-export default function ProtectedRoute({ children, ...props }) {
-  return props.loggedIn ? children : <Link  to='/' />
+const ProtectedRoute = ({ component: Component, ...props }) => {
+  return (
+    <Route>
+      {() =>
+        props.loggedIn ? <Component {...props} /> : <Redirect to="/" />
+      }
+    </Route>
+  )
 }
+
+export default ProtectedRoute
