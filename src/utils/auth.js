@@ -7,7 +7,7 @@ function getResponse(res) {
   return Promise.reject(`Ошибка: ${res.status}`);
 }
 
-export const authorization = ({name, email, password}) => {
+export const authorization = (name, email, password) => {
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     credentials: 'include',
@@ -20,7 +20,7 @@ export const authorization = ({name, email, password}) => {
     .then(res => getResponse(res))
 }
 
-export const login = ({email, password}) => {
+export const login = (email, password) => {
   return fetch(`${BASE_URL}/signin`, {
     method: 'POST',
     credentials: 'include',
