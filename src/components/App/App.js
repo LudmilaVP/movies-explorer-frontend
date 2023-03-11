@@ -29,16 +29,32 @@ function App() {
   const [savedMovies, setSavedMovies] = useState([])
   const [serverError, setServerError] = useState(false)
 
-  function getUserInfo() {
-    mainApi.getUserProfile()
-      .then((userData) => {
+  useEffect(() => {
+    if(loggedIn) {
+      mainApi.getUserProfile()
+      .then((data) => {
         setLoggedIn(true)
-        setCurrentUser(userData)
+        setCurrentUser(data)
       })
       .catch((err) => {
-        console.log(err.message)
+        console.log(err)
       })
-  }
+    }
+  }, [loggedIn])
+
+  useEffect(() => {
+    mainApi
+     .checkToken()
+     .then((data) => {
+      if(data) {
+        setLoggedIn(true)
+        setCurrentUser(data)
+      }
+     })
+     .catch((err) => {
+      console.log(err)
+     })
+}, [loggedIn])
 
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
@@ -161,7 +177,7 @@ function App() {
   function handleRegister({name, email, password}) {
     authorization(name, email, password)
       .then(() => {
-        handleLogin({email: email, password: password})
+        handleLogin({email, password})
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
@@ -169,16 +185,14 @@ function App() {
       })
   }
 
-  function handleLogin( email, password ) {
-    login({email, password})
+  function handleLogin({email, password}) {
+    login(email, password)
       .then(() => {
         setLoggedIn(true)
         history.push('/movies')
-        getUserInfo()
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
-        setLoggedIn(false)
         console.log(err.message)
       })
   }
