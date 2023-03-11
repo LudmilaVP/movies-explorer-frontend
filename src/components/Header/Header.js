@@ -4,27 +4,16 @@ import logo from '../../images/logo.svg';
 import NavAuth from '../NavAuth/NavAuth';
 import Navigation from '../Navigation/Navigation';
 
-function Header ({loggedIn}) {
+function Header ({loggedIn, isLoading}) {
 
-  const endpoints = [
-    "/",
-    "/profile",
-    "/movies",
-    "/saved-movies",
-  ]
 
   return (
-    <Route exact path={endpoints}>
       <header className="header">
         <Link to="/" className="header__link">
           <img className="header__logo" src={logo} alt="Логотип"></img>
         </Link>
-        {!loggedIn
-          ? <NavAuth />
-          : <Navigation />
-        }
+        {isLoading ? '' : loggedIn ? <Navigation /> : <NavAuth />}
       </header>
-    </Route>
   );
 };
 

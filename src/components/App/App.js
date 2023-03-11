@@ -212,7 +212,8 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-          <Header loggedIn={!loggedIn} />
+      {pathname === '/' || pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile' ?
+          <Header loggedIn={loggedIn} isLoading={isLoading}/> : ''}
         <Switch>
 
           <Route exact path='/'>
