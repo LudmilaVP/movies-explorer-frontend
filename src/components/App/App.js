@@ -219,7 +219,7 @@ function App() {
             <Main />
           </Route>
 
-          <Route path='/movies' component={
+          <Route path='/movies' element={
             <ProtectedRoute loggedIn={loggedIn}>
               <Header loggedIn={loggedIn} />
               <Movies
@@ -237,7 +237,7 @@ function App() {
           }
           />
 
-          <Route path='/saved-movies' component={
+          <Route path='/saved-movies' element={
             <ProtectedRoute loggedIn={loggedIn}>
               <Header loggedIn={loggedIn} />
               <SavedMovies
@@ -258,7 +258,7 @@ function App() {
             <Login handleLogin={handleLogin} messageError={messageError} />
           </Route>
 
-          <Route path='/profile' component={
+          <Route path='/profile' element={
             <ProtectedRoute loggedIn={loggedIn}>
               <Header loggedIn={loggedIn} />
               <Profile
