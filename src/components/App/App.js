@@ -29,10 +29,6 @@ function App() {
   const [savedMovies, setSavedMovies] = useState([])
   const [serverError, setServerError] = useState(false)
 
-  useEffect(() => {
-    getUserInfo();
-  }, []);
-
   function getUserInfo() {
     mainApi.getUserProfile()
       .then((userData) => {
@@ -165,14 +161,11 @@ function App() {
   function handleRegister( name, email, password ) {
     authorization(name, email, password)
       .then(() => {
-        setLoggedIn(true)
-        history.push('/movies')
-        getUserInfo()
+        handleLogin(email, password)
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
         console.log(err.message)
-        setLoggedIn(false)
       })
   }
 
@@ -205,7 +198,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-          <Header loggedIn={loggedIn} isLoading={isLoading}/>
+          <Header loggedIn={loggedIn} />
         <Switch>
 
           <Route exact path='/'>

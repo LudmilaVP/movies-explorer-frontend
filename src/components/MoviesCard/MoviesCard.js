@@ -3,16 +3,8 @@ import React from 'react';
 
 const MoviesCard = (props) => {
   const nameRu = props.card.nameRU
-  const trailerLink = props.card.trailerLink
   const poster = props.isOnlySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
-
-  function handleCardSave() {
-    props.onCardSave(props.card)
-  }
-
-  function handleCardDelete() {
-    props.onCardDelete(props.card)
-  }
+  const trailerLink = props.card.trailerLink
 
   const duration = () => {
     if (props.card.duration > 60) {
@@ -25,6 +17,13 @@ const MoviesCard = (props) => {
     }
   }
 
+  function handleCardSave() {
+    props.onCardSave(props.card)
+  }
+
+  function handleCardDelete() {
+    props.onCardDelete(props.card)
+  }
 
   return (
     <li className="movie">
