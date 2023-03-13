@@ -1,49 +1,42 @@
+import React from 'react';
 import './SavedMovies.css';
-import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import React, { useEffect, useState } from 'react';
+import SearchForm from '../SearchForm/SearchForm';
+import Preloader from '../Preloader/Preloader';
 
-function SavedMovies(props) {
-  const [filteredMovies, setFilteredMovies] = useState([])
+function SavedMovies({isLoggedIn, cards, closeMenu, isMenuOpen, removeCard, userId, searchAllMovies, searchMovie, messageForMoviesList, preloader}) {
+  const [sliderStatusSavedMovies, setSliderStatusSavedMovies] = React.useState();
+  const [inputValue, setInputValue] = React.useState('');
+  
+  function deleteCard(card) {
+  removeCard(card);
+ };
 
-  function handleSearch(movieName, isShortFilms) {
-    const filteredMovies = props.cards.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
-    if (isShortFilms) {
-      setFilteredMovies(filteredMovies.filter((item) => item.duration <= 40))
-    }
-    else {
-      setFilteredMovies(filteredMovies)
-    }
-  }
+ function clickSlider() {
+  setSliderStatusSavedMovies(!sliderStatusSavedMovies);
+  localStorage.setItem('sliderSavedMovies', JSON.stringify(!sliderStatusSavedMovies));
+  searchMovie(inputValue, JSON.parse(localStorage.getItem('sliderSavedMovies')));
+  };
 
-  function initFilteredMovies() {
-    setFilteredMovies(props.cards)
-  }
+ function searchinghMovie(data) {
+  setInputValue(data)
+  searchMovie(data, JSON.parse(localStorage.getItem('sliderSavedMovies')));
+  };
 
-  useEffect(() => {
-    setFilteredMovies(
-      filteredMovies.filter(movie => props.cards.some(card => movie.movieId === card.movieId))
-    )
-  }, [props.cards])
+  React.useEffect(()=>{
+    searchMovie(inputValue, JSON.parse(localStorage.getItem('sliderSavedMovies')))
+    setSliderStatusSavedMovies(JSON.parse(localStorage.getItem('sliderSavedMovies')) || false)
+  },[]);
 
-  useEffect(() => {
-    initFilteredMovies()
-  }, [])
+  React.useEffect(()=>{
+    searchMovie(inputValue, JSON.parse(localStorage.getItem('sliderSavedMovies')))
+  },[cards]);
 
   return (
     <div className="movies-saved">
-      <SearchForm
-        handleSearch={props.handleSearch}
-        defaultValue=""
-      />
-      <MoviesCardList
-        cards={filteredMovies}
-        isSaved={props.isSaved}
-        isOnlySaved={true}
-        onCardDelete={props.onCardDelete}
-        serverError={props.serverError}
-        isLoading={props.isLoading}
-      />
+      <SearchForm searchMovie={searchinghMovie} handleSliderClick={clickSlider} sliderStatus={sliderStatusSavedMovies}/>
+        <Preloader preloader={preloader} />
+        <MoviesCardList clickCard={deleteCard} userId={userId}  moviesList={searchAllMovies.length === 0 && messageForMoviesList==='' ? cards : searchAllMovies} messageForMoviesList={cards.length===0 ? 'У вас нет сохранённых фильмов' : messageForMoviesList} cards={cards} />
     </div>
   );
 };

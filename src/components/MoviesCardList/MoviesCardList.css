@@ -33,6 +33,10 @@
     padding: 10px 0 9px 0;
   }
   
+  .button-none {
+    display: none;
+  }
+  
   .movies__button:hover {
     opacity: .6;
     cursor: pointer;
