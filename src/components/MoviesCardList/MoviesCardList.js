@@ -1,6 +1,6 @@
 import './MoviesCardList.css';
 import MoviesCard from '../MoviesCard/MoviesCard';
-import {MOVIE_URL, MORE_CARDS_FOR_DESKTOP, SHOW_CARDS_FOR_DESKTOP, MORE_CARDS_FOR_TABLET_AND_PHONE, SHOW_CARDS_FOR_TABLET, SHOW_CARDS_FOR_PHONE} from '../../utils/constants';
+import {MOVIES_URL, MORE_CARDS_FOR_DESKTOP, SHOW_CARDS_FOR_DESKTOP, MORE_CARDS_FOR_TABLET_AND_PHONE, SHOW_CARDS_FOR_TABLET, SHOW_CARDS_FOR_PHONE} from '../../utils/constants';
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 
@@ -62,9 +62,9 @@ function MoviesCardList({clickCard, removeCard, moviesList, messageForMoviesList
             duration={card.duration}
             year={card.year} 
             description={card.description}
-            image={MOVIE_URL+card.image.url} 
+            image={MOVIES_URL+card.image.url} 
             trailerLink={card.trailerLink}
-            thumbnail={MOVIE_URL+card.image.formats.thumbnail.url}
+            thumbnail={MOVIES_URL+card.image.formats.thumbnail.url}
             owner={card.owner}
             movieId={card.id}
             nameRU={card.nameRU} 
