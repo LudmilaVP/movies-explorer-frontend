@@ -1,36 +1,50 @@
+import React, { useState } from "react";
 import "./SearchForm.css";
-import { useEffect, useState } from 'react';
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
-function SearchForm({searchMovie, handleSliderClick, sliderStatus, inputValues}) {
+function SearchForm({
+  searchAllMovies,
+  searchSaveMovies,
+  checkbox,
+  setCheckbox,
+  searchValue,
+}) {
+  const [value, setValue] = useState(searchValue);
+  const { pathname } = useLocation();
 
-  const [inputValue, setInputValue] = useState('');
+  useEffect(() => {});
 
-  function changeValue(e) {
-    setInputValue(e.target.value);
+  const toggleClick = () => {
+    setCheckbox(!checkbox);
   };
 
-  function submitForm(e) {
+  const heandleSearchClick = (e) => {
     e.preventDefault();
-    searchMovie(inputValue);
-  };
 
-  useEffect(()=>{
-    if(inputValues!==null){
-    setInputValue( inputValues );
-  }
-  },[inputValues]);
+    if (pathname === "/movies") {
+      searchAllMovies(value);
+    }
+    if (pathname === "/saved-movies") {
+      searchSaveMovies(value);
+    }
+  };
 
   return (
     <section className="search">
       <div className="search__box">
         <form className="search__form">
           <div className="search__icon"></div>
-          <input className="search__input" placeholder="Фильм" type="text" onChange={changeValue} value={inputValue} required />
-          <button className="search__button" type="submit" onClick={submitForm}></button>
+          <input className="search__input" type="text"
+            placeholder="Фильм"
+            required
+            onChange={(event) => setValue(event.target.value)}
+            value={value} />
+          <button className="search__button" type="submit" onClick={heandleSearchClick}></button>
         </form>
         <div className="search__toggle">
           <label className="search__tumbler">
-            <input type="checkbox" name="shortFilms" className="search__checkbox" onClickChechbox={handleSliderClick} sliderClick={sliderStatus}/>
+            <input type="checkbox" name="shortFilms" className="search__checkbox" onClick={toggleClick}/>
             <span className="search__slider" />
           </label>
           <p className="search__films">Короткометражки</p>

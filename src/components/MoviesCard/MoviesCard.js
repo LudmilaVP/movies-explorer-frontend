@@ -1,54 +1,50 @@
-import './MoviesCard.css';
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useEffect } from "react";
+import { useState } from "react";
+import { useLocation } from "react-router-dom";
+import "./MoviesCard.css";
 
-function MoviesCard({ country, director, duration, year, description, image, trailerLink, thumbnail, owner, id, movieId, nameRU, nameEN, clickCard, removeCard, cards }) {
+function MoviesCard({ movie, onMovieLike, saveMovies}) {
+  const [like, setLike] = useState(false);
+  const { pathname } = useLocation();
 
-  const location = useLocation();
-  const [statusSaved, setStatusSaved] = React.useState();
-
-  const buttonCardClass = `movie__button ${statusSaved? "movie__button_active" : "movie__button_inactive"}`
-  const buttonCardContentTitle = <button className='movie__button movie__button_inactive'>Сохранить</button>;
-  const buttonCardContentSave = <button className='movie__button movie__button_active'/>;
-  const buttonCardContentRemove = <button className='movie__button movie__button_delete'/>;
-  const time = Math.trunc(duration / 60) ? `${Math.trunc(duration / 60)}ч ${duration % 60}м` : `${duration}м`;
-  
-  function getCard() {
-    if(statusSaved) {
-      setStatusSaved(false);
-      removeCard({ country, director, duration, year, description, image, trailerLink, thumbnail, owner, id, movieId, nameRU, nameEN });
-    }else {
-      setStatusSaved(true);
-      clickCard({ country, director, duration, year, description, image, trailerLink, thumbnail, owner, id, movieId, nameRU, nameEN });
-    }
+  const convertToHours = (mins) => {
+    return `${Math.trunc(mins / 60)}ч ${mins % 60}м`;
   };
 
-  function removeSavedFilm() {
-      clickCard(id);
-  };
+  useEffect(() => {
+    saveMovies.map((data) => {
+      if (data.movieId === movie.id) {
+        setLike(true);
+      }
+    });
+  }, [saveMovies]);
 
-  React.useEffect(()=>{
-    setStatusSaved(JSON.parse(localStorage.getItem('savedMovies')).some(item=>item.movieId === movieId));
-  },[]);
+  const handleLikeClick = () => {
+    //setLike(!like)
+    onMovieLike(movie, setLike, like);
+  };
 
 
   return (
     <li className="movie">
-      <div className="movie__container" href={trailerLink} rel="noreferrer" target="_blank">
-        <img src={image} alt="Постер" className="movie__image"></img>
-        <p className="movie__title">{nameRU}</p>
+      <div className="movie__container" href={movie.trailerLink} rel="noreferrer" target="_blank">
+        <img src={pathname === "/saved-movies"
+              ? movie.image
+              : `https://api.nomoreparties.co/${movie.image.url}`} alt="Постер" className="movie__image"></img>
+        <p className="movie__title">{movie.nameRU}</p>
         <div className="movie__buttons">
-        {location.pathname === '/saved-movies' && (
-        <button className='movie__button movie__button_delete' onClick={removeSavedFilm}>{buttonCardContentRemove}
-        </button>
-      )}
-      {location.pathname === '/movies' && (
-        <button className={buttonCardClass} onClick={getCard}>{statusSaved ? buttonCardContentSave : buttonCardContentTitle}
-        </button>
-      )}
+        <button
+          className={`${
+            pathname === "/saved-movies" ? "movie__button_delete" : ""
+          } movie__button ${
+            like ? "movie__button_active" : "movie__button_inactive"
+          }`}
+          type="button"
+          onClick={handleLikeClick}
+        ></button>
         </div>
       </div>
-      <p className="movie__duration">{time}</p>
+      <p className="movie__duration">{convertToHours(movie.duration)}</p>
     </li>
   );
 };

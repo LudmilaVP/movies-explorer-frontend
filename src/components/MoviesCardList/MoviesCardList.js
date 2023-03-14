@@ -1,108 +1,114 @@
-import './MoviesCardList.css';
-import MoviesCard from '../MoviesCard/MoviesCard';
-import {MOVIES_URL, MORE_CARDS_FOR_DESKTOP, SHOW_CARDS_FOR_DESKTOP, MORE_CARDS_FOR_TABLET_AND_PHONE, SHOW_CARDS_FOR_TABLET, SHOW_CARDS_FOR_PHONE} from '../../utils/constants';
-import React from 'react';
-import { useLocation } from 'react-router-dom';
+import React from "react";
+import "./MoviesCardList.css";
+import MoviesCard from "../MoviesCard/MoviesCard";
+import { useLocation } from "react-router-dom";
+import { useState } from "react";
+import { useEffect } from "react";
+import {
+  ADD_MOVIES_EXTRO_LARGE_SIZE,
+  ADD_MOVIES_LARGE_SIZE,
+  ADD_MOVIES_MEDIUM_SIZE,
+  ADD_MOVIES_SMALL_SIZE,
+  DISPLAY_MOVIES_LARGE_SIZE,
+  DISPLAY_MOVIES_MEDIUM_SIZE,
+  DISPLAY_MOVIES_SMALL_SIZE,
+  EXTRO_LARGE_SIZE,
+  LARGE_SIZE,
+  MEDIUM_SIZE,
+} from "../../utils/constants";
 
-function MoviesCardList({clickCard, removeCard, moviesList, messageForMoviesList, cards}) {
+function MoviesCardList({
+  movies,
+  onMovieLike,
+  saveMovies,
+  allMoviesList,
+  searchValue,
+}) {
+  const { pathname } = useLocation();
+  const [width, setWidth] = useState(0);
+  const [numberOfFilms, setNumberOfFilms] = useState(0);
+  const slice = movies.slice(0, numberOfFilms);
 
-    const location = useLocation();
+  function screenWidthChange() {
+    setTimeout(() => {  
+      setWidth(window.innerWidth);
+    }, 1000);
+  }
 
-    const [windowSize, setWindowSize] = React.useState(window.innerWidth);
-    const [cardListSize, setCardListSize] = React.useState();
-    const [firstSize, setfirstSize] = React.useState();
-
-    const resultCardsList = moviesList.slice(0, firstSize);
-
-    const buttonOtherClass = `movies__button ${resultCardsList.length === moviesList.length || moviesList.length === setfirstSize  ? 'button-none' : ''} `;
-
-    function plusCards() {
-      setfirstSize(firstSize + cardListSize);
-    };
-
-    React.useEffect(()=>{
-      if(windowSize < 1279) {
-        setCardListSize(MORE_CARDS_FOR_TABLET_AND_PHONE)
-      }else if (windowSize >= 1280 ) {
-        setCardListSize(MORE_CARDS_FOR_DESKTOP)
-      }
-    },[windowSize]);
-
-    React.useEffect(() => {
-    if(windowSize >= 1280) {
-      setfirstSize(SHOW_CARDS_FOR_DESKTOP);
-    }else if (windowSize < 1280 && windowSize >= 768) {
-      setfirstSize(SHOW_CARDS_FOR_TABLET);
-    }else if (windowSize < 768) {
-      setfirstSize(SHOW_CARDS_FOR_PHONE);
+  const handleLoadMore = () => {
+    if (width >= EXTRO_LARGE_SIZE) {
+      setNumberOfFilms(numberOfFilms + ADD_MOVIES_EXTRO_LARGE_SIZE);
+    } else if (width >= LARGE_SIZE) {
+      setNumberOfFilms(numberOfFilms + ADD_MOVIES_LARGE_SIZE);
+    } else if (width >= MEDIUM_SIZE) {
+      setNumberOfFilms(numberOfFilms + ADD_MOVIES_MEDIUM_SIZE);
+    } else {
+      setNumberOfFilms(numberOfFilms + ADD_MOVIES_SMALL_SIZE);
     }
-    },[windowSize]);
+  };
 
-    React.useEffect(() => {
-      function handleWindowResize() {
-        setWindowSize(window.innerWidth);
-      }
-    
-      window.addEventListener('resize', handleWindowResize);
-
-      return () => {
-        window.removeEventListener('resize', handleWindowResize);
-      };
-    },[firstSize]);
+  useEffect(() => {
+    window.addEventListener("resize", screenWidthChange);
+    setWidth(window.innerWidth);
+    if (width >= LARGE_SIZE) {
+      setNumberOfFilms(DISPLAY_MOVIES_LARGE_SIZE);
+    } else if (width >= MEDIUM_SIZE) {
+      setNumberOfFilms(DISPLAY_MOVIES_MEDIUM_SIZE);
+    } else {
+      setNumberOfFilms(DISPLAY_MOVIES_SMALL_SIZE);
+    }
+    return () => {
+      window.removeEventListener("resize", screenWidthChange);
+    };
+  }, [width]);
 
   return (
     <section className="movies">
-      <ul className="movies__list">
-      {location.pathname === '/movies' && ( resultCardsList.length === 0 ? <p className='result-none'>{messageForMoviesList}</p> :
-          resultCardsList.map(card=>(
-            <MoviesCard
-            key={card.id} 
-            country={card.country} 
-            director={card.director}
-            duration={card.duration}
-            year={card.year} 
-            description={card.description}
-            image={MOVIES_URL+card.image.url} 
-            trailerLink={card.trailerLink}
-            thumbnail={MOVIES_URL+card.image.formats.thumbnail.url}
-            owner={card.owner}
-            movieId={card.id}
-            nameRU={card.nameRU} 
-            nameEN={card.nameEN}
-            clickCard={clickCard}
-            removeCard={removeCard} 
-            cards={cards}
-            />
-           )) 
+      {(
+        pathname === "/movies"
+          ? allMoviesList === null
+          : JSON.parse(localStorage.getItem("saveMovies")).length === 0
+      ) ? (
+        pathname === "/movies" ? (
+          <div></div>
+        ) : (
+          <p className="movies__nothing-found">Нет сохранненых фильмов</p>
+        )
+      ) : (
+        <div className="movies__container">
+          {movies.length === 0 ? (
+            searchValue === "" ? (
+              <p className="movies__nothing-found">
+                Нужно ввести ключевое слово
+              </p>
+            ) : (
+              <p className="movies__nothing-found">Ничего не найдено</p>
+            )
+          ) : (
+            slice.map((movie) => {
+              return (
+                <MoviesCard
+                  key={pathname === "/movies" ? movie.id : movie.movieId}
+                  movie={movie}
+                  onMovieLike={onMovieLike}
+                  saveMovies={saveMovies}
+                />
+              );
+            })
+          )}
+        </div>
       )}
-        {location.pathname === '/saved-movies' && ( resultCardsList.length === 0 ? <p className='result-none'>{messageForMoviesList}</p> :
-          resultCardsList.map(card=>(
-             <MoviesCard 
-             key={card._id}  
-             country={card.country} 
-             director={card.director}
-             duration={card.duration}
-             year={card.year} 
-             description={card.description}
-            image={card.image} 
-             trailerLink={card.trailerLink}
-            thumbnail={card.thumbnail}
-             owner={card.owner}
-             id={card._id}
-             movieId={card.movieId}
-            nameRU={card.nameRU} 
-            nameEN={card.nameEN}
-            clickCard={clickCard}
-            cards={cards} 
-             />
-           )) )
-        }
-      </ul>
-          <div className="movies__container">
-            <button className={buttonOtherClass} onClick={plusCards}>Ещё</button>
-          </div>
+      {numberOfFilms >= movies.length ? null : (
+        <button
+          className="movies__button"
+          type="button"
+          onClick={handleLoadMore}
+        >
+          Еще
+        </button>
+      )}
     </section>
   );
-};
+}
 
 export default MoviesCardList;
