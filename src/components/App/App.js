@@ -129,8 +129,6 @@ function App() {
 
   const searchAllMovies = (value) => {
     setPreloaderActive(true);
-
-    if (allMoviesList === null) {
       moviesApi
         .getApiMovies()
         .then((movies) => {
@@ -141,11 +139,9 @@ function App() {
         })
         .catch((err) => {
           console.log(err);
-        });
-    } else {
-      const moviesList = fitersMovies(allMoviesList, value);
+          const moviesList = fitersMovies(allMoviesList, value);
       searchMovies(moviesList, value);
-    }
+        });
   };
 
   const searchMovies = (moviesList, value) => {

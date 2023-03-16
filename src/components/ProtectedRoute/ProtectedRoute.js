@@ -1,8 +1,7 @@
-import React from "react";
-import { Redirect, Outlet } from "react-router-dom";
+import React from 'react'
+import { Redirect } from 'react-router-dom'
 
-const ProtectedRoute = ({ loggedIn }) => {
-  return loggedIn ? <Outlet /> : <Redirect to="/" />;
-};
-
-export default ProtectedRoute;
+function ProtectedRoute({ children, ...props }) {
+  return props.loggedIn ? children : <Redirect  to='/' />
+}
+export default ProtectedRoute
