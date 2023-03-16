@@ -139,9 +139,9 @@ function App() {
         })
         .catch((err) => {
           console.log(err);
-          const moviesList = fitersMovies(allMoviesList, value);
+      const moviesList = fitersMovies(allMoviesList, value);
       searchMovies(moviesList, value);
-        });
+    });
   };
 
   const searchMovies = (moviesList, value) => {
@@ -307,14 +307,11 @@ function App() {
             <Main />
           </Route>
 
-          <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
-            <Route
-              path="/movies"
-              element={
-                <>
-                  <Header loggedIn={loggedIn} />
-                  <Movies
-                    searchAllMovies={searchAllMovies}
+          <Route exact path="/movies">
+            <Header loggedIn={loggedIn} />
+            <ProtectedRoute
+              component={Movies}
+              searchAllMovies={searchAllMovies}
                     movies={movies}
                     onMovieLike={handleMovieLike}
                     loggedIn={loggedIn}
@@ -324,50 +321,39 @@ function App() {
                     preloaderActive={preloaderActive}
                     allMoviesList={allMoviesList}
                     searchValue={searchValue}
-                  />
-                </>
-              }
             />
+          </Route>
 
-            <Route
-              path="/saved-movies"
-              element={
-                <>
-                  <Header loggedIn={loggedIn} />
-                  <SavedMovies
-                    saveMovies={saveMovies}
-                    onMovieLike={handleMovieLike}
-                    searchSaveMovies={searchSaveMovies}
-                    checkbox={checkbox}
-                    setCheckbox={setCheckbox}
-                    preloaderActive={preloaderActive}
-                    allSaveMovies={allSaveMovies}
+          <Route exact path="/saved-movies">
+            <Header loggedIn={loggedIn} />
+            <ProtectedRoute
+              component={SavedMovies}
+              saveMovies={saveMovies}
+              onMovieLike={handleMovieLike}
+              searchSaveMovies={searchSaveMovies}
+              checkbox={checkbox}
+              setCheckbox={setCheckbox}
+              preloaderActive={preloaderActive}
+              allSaveMovies={allSaveMovies}
 
-                  />
-                </>
-              }
             />
+          </Route>
 
-            <Route path='/signup'>
-              <Register handleRegister={handleRegister} messageError={messageError} />
-            </Route>
+          <Route path='/signup'>
+            <Register handleRegister={handleRegister} messageError={messageError} />
+          </Route>
 
-            <Route path='/signin'>
-              <Login handleLogin={handleLogin} messageError={messageError} />
-            </Route>
+          <Route path='/signin'>
+            <Login handleLogin={handleLogin} messageError={messageError} />
+          </Route>
 
-            <Route
-              path="/profile"
-              element={
-                <>
-                  <Header loggedIn={loggedIn} />
-                  <Profile
-                    loggedIn={loggedIn}
-                    handleEditProfile={handleUpdateUser}
-                    handleSignOut={handleSignOut}
-                  />
-                </>
-              }
+          <Route exact path="/profile">
+            <Header loggedIn={loggedIn} />
+            <ProtectedRoute
+              loggedIn={loggedIn}
+              component={Profile}
+              handleEditProfile={handleUpdateUser}
+              handleSignOut={handleSignOut}
             />
           </Route>
 
