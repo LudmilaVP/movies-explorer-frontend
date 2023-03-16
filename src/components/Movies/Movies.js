@@ -69,7 +69,7 @@ const Movies = ({ messageError }) => {
     setPreloader(true);
 
     try {
-      const data = await moviesApi.getMovies();
+      const data = await moviesApi.getApiMovies();
       let filterData = data.filter(({ nameRU }) => nameRU.toLowerCase().includes(inputSearch.toLowerCase()));
       localStorage.setItem('films', JSON.stringify(filterData));
       localStorage.setItem('filmsInputSearch', inputSearch);
@@ -129,7 +129,7 @@ const Movies = ({ messageError }) => {
         nameEN: film.nameEN,
       };
       try {
-        await mainApi.addMovies(objFilm);
+        await mainApi.addMovie(objFilm);
         const newSaved = await mainApi.getMovies();
         setFilmsSaved(newSaved);
       } catch (err) {
@@ -137,7 +137,7 @@ const Movies = ({ messageError }) => {
       }
     } else {
       try {
-        await mainApi.deleteMovies(film._id);
+        await mainApi.deleteMovie(film._id);
         const newSaved = await mainApi.getMovies();
         setFilmsSaved(newSaved);
       } catch (err) {

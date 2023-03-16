@@ -51,7 +51,7 @@ const SavedMovies = ({ messageError }) => {
   async function savedMoviesToggle(film, favorite) {
     if (!favorite) {
       try {
-        await mainApi.deleteMovies(film._id);
+        await mainApi.deleteMovie(film._id);
         const newFilms = await mainApi.getMovies();
         setFilmsShowed(newFilms);
         setFilms(newFilms);
