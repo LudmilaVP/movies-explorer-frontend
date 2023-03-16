@@ -1,38 +1,34 @@
-import MoviesCard from '../MoviesCard/MoviesCard'
-import Preloader from '../Preloader/Preloader'
-import './MoviesCardList.css'
+import './MoviesCardList.css';
+import { useLocation } from 'react-router-dom';
+import MoviesCard from '../MoviesCard/MoviesCard';
 
-function MoviesCardList(props) {
-  if (props.loading) return <Preloader />
-  if (props.cards.length === 0) return <span className="movies__error">Ничего не найдено</span>
-  if (props.serverError) return <span className="movies__error">Во время запроса произошла ошибка.
-    Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз</span>
-
-  const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
+const MoviesCardList = ({ films, savedMoviesToggle, filmsSaved, filmsRemains, handleMore }) => {
+  const { pathname } = useLocation();
 
   return (
-    <>
-      <section className="movies">
-        {
-          props.cards.map(card => {
-            return (
-              <MoviesCard
-                card={card}
-                key={props.isOnlySaved ? card.movieId : card.id}
-                isSaved={props.isSaved}
-                isOnlySaved={props.isOnlySaved}
-                onCardSave={props.onCardSave}
-                onCardDelete={props.onCardDelete}
-              />
-            )
-          })
-        }
-      </section>
-      {props.isOnlySaved ? '' :
-        (props.cards.length < foundMovies.length ?
-          <button className="movies__button" onClick={props.handleShowMore} type="button">Ещё</button> : '')}
-    </>
-  )
-}
+    <section className="movies">
+      {films.length > 0 ? (
+        <ul className="movies__list">
+          {films.map((film) => (
+            <MoviesCard
+              key={film.id || film.movieId}
+              film={film}
+              savedMoviesToggle={savedMoviesToggle}
+              filmsSaved={filmsSaved}
+            />
+          ))}
+        </ul>
+      ) : (
+        <div className="movies__text">Ничего не найдено</div>
+      )}
 
-export default MoviesCardList
+      {filmsRemains.length > 0 && pathname !== '/saved-movies' && (
+        <div className="movies__button-container">
+          <button className="movies__button" type="button" name="more" onClick={handleMore}>Ещё</button>
+        </div>
+      )}
+    </section>
+  );
+};
+
+export default MoviesCardList;
