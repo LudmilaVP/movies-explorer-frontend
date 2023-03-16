@@ -24,15 +24,13 @@ function MoviesCard({ movie, onMovieLike, saveMovies}) {
     onMovieLike(movie, setLike, like);
   };
 
-
   return (
     <li className="movie">
       <div className="movie__container" href={movie.trailerLink} rel="noreferrer" target="_blank">
-        <img src={pathname === "/saved-movies"
-              ? movie.image
-              : `https://api.nomoreparties.co/${movie.image.url}`} alt="Постер" className="movie__image"></img>
+        <img src={movie.trailerLink} alt="Постер" className="movie__image"></img>
         <p className="movie__title">{movie.nameRU}</p>
         <div className="movie__buttons">
+
         <button
           className={`${
             pathname === "/saved-movies" ? "movie__button_delete" : ""

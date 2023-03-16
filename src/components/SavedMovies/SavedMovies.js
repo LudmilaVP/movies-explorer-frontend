@@ -13,7 +13,7 @@ function SavedMovies({
   preloaderActive,
 }) {
   return (
-    <main className="movies-saved">
+    <main>
       <SearchForm
         searchSaveMovies={searchSaveMovies}
         checkbox={checkbox}

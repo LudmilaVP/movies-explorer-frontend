@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Switch, useLocation, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Header from '../Header/Header';
@@ -18,9 +18,10 @@ import moviesApi from '../../utils/MoviesApi'
 import { DURATION_MOVIES } from "../../utils/constants";
 
 function App() {
+  const [messageError, setMessageError] = useState('')
+  const history = useHistory()
   const [loggedIn, setLoggedIn] = useState(false);
   const [currentUser, setCurrentUser] = useState({});
-  const [errorMessage, setErrorMessage] = useState('')
 
   const [movies, setMovies] = useState([]);
   const [saveMovies, setSaveMovies] = useState([]);
@@ -51,17 +52,13 @@ function App() {
     JSON.parse(localStorage.getItem("searchValue")) ?? ""
   );
 
-  const [editInfo, setEditInfo] = useState(false);
-  const history = useHistory();
-  const pathname = useLocation();
-
   useEffect(() => {
     if (loggedIn) {
       mainApi.getUserProfile()
         .then((data) => {
           setLoggedIn(true)
           setCurrentUser(data)
-          getSaveMovies(data._id)
+          getSaveMovies(data._id);
         })
         .catch((err) => {
           console.log(err)
@@ -89,7 +86,7 @@ function App() {
         handleLogin({ email, password })
       })
       .catch((err) => {
-        setErrorMessage('Что-то пошло не так...')
+        setMessageError('Что-то пошло не так...')
         console.log(err.message)
       })
   }
@@ -101,10 +98,11 @@ function App() {
         history.push('/movies')
       })
       .catch((err) => {
-        setErrorMessage('Что-то пошло не так...')
+        setMessageError('Что-то пошло не так...')
         console.log(err.message)
       })
   }
+
 
   function handleSignOut() {
     signout()
@@ -208,7 +206,6 @@ function App() {
       movie.nameRU.toLowerCase().includes(value.toLowerCase())
     );
   };
-
   const handleUpdateUser = (data) => {
     mainApi
       .setUserProfile(data)
@@ -317,7 +314,7 @@ function App() {
           <Route exact path="/movies">
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
-              compoment={Movies}
+              component={Movies}
               searchAllMovies={searchAllMovies}
                     movies={movies}
                     onMovieLike={handleMovieLike}
@@ -327,40 +324,41 @@ function App() {
                     setCheckbox={setCheckbox}
                     preloaderActive={preloaderActive}
                     allMoviesList={allMoviesList}
-                    searchValue={searchValue}>
-            </ProtectedRoute>
+                    searchValue={searchValue}
+            />
           </Route>
 
           <Route exact path="/saved-movies">
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
-              compoment={SavedMovies}
+              component={SavedMovies}
               saveMovies={saveMovies}
-                    onMovieLike={handleMovieLike}
-                    searchSaveMovies={searchSaveMovies}
-                    checkbox={checkbox}
-                    setCheckbox={setCheckbox}
-                    preloaderActive={preloaderActive}
-                    allSaveMovies={allSaveMovies}>
-            </ProtectedRoute>
+              onMovieLike={handleMovieLike}
+              searchSaveMovies={searchSaveMovies}
+              checkbox={checkbox}
+              setCheckbox={setCheckbox}
+              preloaderActive={preloaderActive}
+              allSaveMovies={allSaveMovies}
+
+            />
           </Route>
 
           <Route path='/signup'>
-            <Register handleRegister={handleRegister}  errorMessage={errorMessage} />
+            <Register handleRegister={handleRegister} messageError={messageError} />
           </Route>
 
           <Route path='/signin'>
-            <Login handleLogin={handleLogin}  errorMessage={errorMessage} />
+            <Login handleLogin={handleLogin} messageError={messageError} />
           </Route>
 
           <Route exact path="/profile">
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
               loggedIn={loggedIn}
-              compoment={Profile}
+              component={Profile}
               handleEditProfile={handleUpdateUser}
-              onSingOut={handleSignOut} >
-            </ProtectedRoute>
+              handleSignOut={handleSignOut}
+            />
           </Route>
 
           <Route path="*">

@@ -16,7 +16,7 @@ function Movies({
   searchValue
 }) {
   return (
-    <main className="movies__main">
+    <main className="movies-main">
       <SearchForm
         searchAllMovies={searchAllMovies}
         checkbox={checkbox}

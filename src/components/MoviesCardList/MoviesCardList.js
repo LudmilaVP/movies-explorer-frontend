@@ -107,7 +107,7 @@ function MoviesCardList({
           Еще
         </button>
       )}
-    </section>
+      </section>
   );
 }
 
