@@ -174,7 +174,7 @@ function App() {
     mainApi
       .getMovies()
       .then((movies) => {
-        const moviesList = movies.data.filter((movie) => movie.owner === data);
+        const moviesList = movies.filter((movie) => movie.owner === data);
 
         localStorage.setItem("saveMovies", JSON.stringify(moviesList));
         setAllSaveMovies(moviesList);
@@ -311,11 +311,14 @@ function App() {
             <Main />
           </Route>
 
-          <Route exact path="/movies">
-            <Header loggedIn={loggedIn} />
-            <ProtectedRoute
-              component={Movies}
-              searchAllMovies={searchAllMovies}
+          <Route element={<ProtectedRoute loggedIn={loggedIn} />}>
+            <Route
+              path="/movies"
+              element={
+                <>
+                  <Header loggedIn={loggedIn} />
+                  <Movies
+                    searchAllMovies={searchAllMovies}
                     movies={movies}
                     onMovieLike={handleMovieLike}
                     loggedIn={loggedIn}
@@ -325,39 +328,50 @@ function App() {
                     preloaderActive={preloaderActive}
                     allMoviesList={allMoviesList}
                     searchValue={searchValue}
+                  />
+                </>
+              }
             />
-          </Route>
 
-          <Route exact path="/saved-movies">
-            <Header loggedIn={loggedIn} />
-            <ProtectedRoute
-              component={SavedMovies}
-              saveMovies={saveMovies}
-              onMovieLike={handleMovieLike}
-              searchSaveMovies={searchSaveMovies}
-              checkbox={checkbox}
-              setCheckbox={setCheckbox}
-              preloaderActive={preloaderActive}
-              allSaveMovies={allSaveMovies}
+            <Route
+              path="/saved-movies"
+              element={
+                <>
+                  <Header loggedIn={loggedIn} />
+                  <SavedMovies
+                    saveMovies={saveMovies}
+                    onMovieLike={handleMovieLike}
+                    searchSaveMovies={searchSaveMovies}
+                    checkbox={checkbox}
+                    setCheckbox={setCheckbox}
+                    preloaderActive={preloaderActive}
+                    allSaveMovies={allSaveMovies}
 
+                  />
+                </>
+              }
             />
-          </Route>
 
-          <Route path='/signup'>
-            <Register handleRegister={handleRegister} messageError={messageError} />
-          </Route>
+            <Route path='/signup'>
+              <Register handleRegister={handleRegister} messageError={messageError} />
+            </Route>
 
-          <Route path='/signin'>
-            <Login handleLogin={handleLogin} messageError={messageError} />
-          </Route>
+            <Route path='/signin'>
+              <Login handleLogin={handleLogin} messageError={messageError} />
+            </Route>
 
-          <Route exact path="/profile">
-            <Header loggedIn={loggedIn} />
-            <ProtectedRoute
-              loggedIn={loggedIn}
-              component={Profile}
-              handleEditProfile={handleUpdateUser}
-              handleSignOut={handleSignOut}
+            <Route
+              path="/profile"
+              element={
+                <>
+                  <Header loggedIn={loggedIn} />
+                  <Profile
+                    loggedIn={loggedIn}
+                    handleEditProfile={handleUpdateUser}
+                    handleSignOut={handleSignOut}
+                  />
+                </>
+              }
             />
           </Route>
 
