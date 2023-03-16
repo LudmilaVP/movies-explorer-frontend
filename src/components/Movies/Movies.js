@@ -1,42 +1,28 @@
-import React from "react";
-import SearchForm from "../SearchForm/SearchForm";
-import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import Preloader from "../Preloader/Preloader";
+import SearchForm from '../SearchForm/SearchForm'
+import MoviesCardList from '../MoviesCardList/MoviesCardList'
+import './Movies.css'
 
-function Movies({
-  movies,
-  addMovies,
-  searchAllMovies,
-  onMovieLike,
-  saveMovies,
-  checkbox,
-  setCheckbox,
-  preloaderActive,
-  allMoviesList,
-  searchValue
-}) {
+function Movies(props) {
   return (
-    <main className="movies-main">
+    <>
       <SearchForm
-        searchAllMovies={searchAllMovies}
-        checkbox={checkbox}
-        setCheckbox={setCheckbox}
-        searchValue={searchValue}
+        handleSearch={props.handleSearch}
+        defaultValue={props.defaultSearchValue}
       />
-      {preloaderActive ? (
-        <Preloader />
-      ) : (
+      <main className="movies__main">
         <MoviesCardList
-          addMovies={addMovies}
-          movies={movies}
-          onMovieLike={onMovieLike}
-          saveMovies={saveMovies}
-          allMoviesList={allMoviesList}
-          searchValue={searchValue}
+          cards={props.cards}
+          handleShowMore={props.handleShowMore}
+          isSaved={props.isSaved}
+          isOnlySaved={false}
+          onCardSave={props.onCardSave}
+          onCardDelete={props.onCardDelete}
+          serverError={props.serverError}
+          loading={props.loading}
         />
-      )}
-    </main>
-  );
+      </main>
+    </>
+  )
 }
 
-export default Movies;
+export default Movies

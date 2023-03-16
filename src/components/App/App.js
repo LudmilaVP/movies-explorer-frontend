@@ -1,5 +1,5 @@
 import './App.css';
-import { Route, Switch, useHistory } from 'react-router-dom';
+import { Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import Header from '../Header/Header';
@@ -15,42 +15,19 @@ import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { authorization, login, signout } from '../../utils/auth';
 import mainApi from '../../utils/MainApi';
 import moviesApi from '../../utils/MoviesApi'
-import { DURATION_MOVIES } from "../../utils/constants";
 
 function App() {
-  const [messageError, setMessageError] = useState('')
+  const [currentUser, setCurrentUser] = useState({})
+  const [errorMessage, setErrorMessage] = useState('')
+  const [movies, setMovies] = useState([])
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth)
+  const [moreCards, setMoreCards] = useState(0)
+  const [savedMovies, setSavedMovies] = useState([])
+  const [loading, setLoading] = useState(false)
+  const [serverError, setServerError] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false)
+  const location = useLocation()
   const history = useHistory()
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [currentUser, setCurrentUser] = useState({});
-
-  const [movies, setMovies] = useState([]);
-  const [saveMovies, setSaveMovies] = useState([]);
-
-  const [allMoviesList, setAllMoviesList] = useState(
-    JSON.parse(localStorage.getItem("allMoviesList"))
-  );
-
-  const [allMovies, setAllMovies] = useState(
-    JSON.parse(localStorage.getItem("allMovies")) ?? []
-  );
-  const [allSaveMovies, setAllSaveMovies] = useState(
-    JSON.parse(localStorage.getItem("saveMovies"))
-  );
-
-  const [filterMovies, setFilterMovies] = useState(
-    JSON.parse(localStorage.getItem("filterMovies")) ?? []
-  );
-  const [filterSaveMovies, setFilterSaveMovies] = useState(
-    JSON.parse(localStorage.getItem("filterSaveMovies"))
-  );
-
-  const [preloaderActive, setPreloaderActive] = useState(false);
-  const [checkbox, setCheckbox] = useState(
-    JSON.parse(localStorage.getItem("checkbox"))
-  );
-  const [searchValue, setSearchValue] = useState(
-    JSON.parse(localStorage.getItem("searchValue")) ?? ""
-  );
 
   useEffect(() => {
     if (loggedIn) {
@@ -58,7 +35,6 @@ function App() {
         .then((data) => {
           setLoggedIn(true)
           setCurrentUser(data)
-          getSaveMovies(data._id);
         })
         .catch((err) => {
           console.log(err)
@@ -86,7 +62,7 @@ function App() {
         handleLogin({ email, password })
       })
       .catch((err) => {
-        setMessageError('Что-то пошло не так...')
+        setErrorMessage('Что-то пошло не так...')
         console.log(err.message)
       })
   }
@@ -98,7 +74,7 @@ function App() {
         history.push('/movies')
       })
       .catch((err) => {
-        setMessageError('Что-то пошло не так...')
+        setErrorMessage('Что-то пошло не так...')
         console.log(err.message)
       })
   }
@@ -115,187 +91,123 @@ function App() {
       })
   }
 
-  useEffect(() => {
-    if (!checkbox) {
-      setMovies(allMovies);
-      setSaveMovies(allSaveMovies);
-      localStorage.setItem("checkbox", false);
-    } else {
-      setMovies(filterMovies);
-      setSaveMovies(filterSaveMovies);
-      localStorage.setItem("checkbox", true);
-    }
-  });
-
-  const searchAllMovies = (value) => {
-    setPreloaderActive(true);
-      moviesApi
-        .getApiMovies()
-        .then((movies) => {
-          localStorage.setItem("allMoviesList", JSON.stringify(movies));
-          setAllMoviesList(movies);
-          const moviesList = fitersMovies(movies, value);
-          searchMovies(moviesList, value);
-        })
-        .catch((err) => {
-          console.log(err);
-      const moviesList = fitersMovies(allMoviesList, value);
-      searchMovies(moviesList, value);
-    });
-  };
-
-  const searchMovies = (moviesList, value) => {
-    localStorage.setItem("searchValue", JSON.stringify(value));
-    setSearchValue(value);
-    localStorage.setItem("allMovies", JSON.stringify(moviesList));
-    setAllMovies(moviesList);
-    localStorage.setItem(
-      "filterMovies",
-      JSON.stringify(moviesList.filter((movie) => movie.duration <= DURATION_MOVIES))
-    );
-    setFilterMovies(moviesList.filter((movie) => movie.duration <= DURATION_MOVIES));
-    setPreloaderActive(false);
-  };
-
-  const fitersMovies = (movies, value) => {
-    return movies.filter((movie) => {
-      if (value.length > 0) {
-        return movie.nameRU.toLowerCase().includes(value.toLowerCase());
-      } else {
-      }
-    });
-  };
-
-  const getSaveMovies = (data) => {
-    mainApi
-      .getMovies()
+  function searchMovie(movieName, isShortFilms) {
+    setLoading(true)
+    moviesApi.getApiMovies()
       .then((movies) => {
-        const moviesList = movies.filter((movie) => movie.owner === data);
-
-        localStorage.setItem("saveMovies", JSON.stringify(moviesList));
-        setAllSaveMovies(moviesList);
-
-        localStorage.setItem(
-          "filterSaveMovies",
-          JSON.stringify(moviesList.filter((movie) => movie.duration <= DURATION_MOVIES))
-        );
-        setFilterSaveMovies(moviesList.filter((movie) => movie.duration <= DURATION_MOVIES));
+        const searchedMovies = movies.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
+        const foundMovies = isShortFilms ? searchedMovies.filter((item) => item.duration <= 40) : searchedMovies
+        localStorage.setItem('foundMovies', JSON.stringify(foundMovies))
+        localStorage.setItem('searchMovieName', movieName)
+        localStorage.setItem('shortFilms', isShortFilms)
+        setLoading(false)
+        handleResize()
       })
       .catch((err) => {
-        console.log(err);
-      });
-  };
-
-  const searchSaveMovies = (value) => {
-    setPreloaderActive(true);
-    const moviesList = JSON.parse(localStorage.getItem("saveMovies"));
-    const filterMoviesList = fiterSaveMovies(moviesList, value);
-    setAllSaveMovies(filterMoviesList);
-    setFilterSaveMovies(
-      filterMoviesList.filter((movie) => movie.duration <= DURATION_MOVIES)
-    );
-    setPreloaderActive(false);
-  };
-
-  const fiterSaveMovies = (movies, value) => {
-    return movies.filter((movie) =>
-      movie.nameRU.toLowerCase().includes(value.toLowerCase())
-    );
-  };
-  const handleUpdateUser = (data) => {
-    mainApi
-      .setUserProfile(data)
-      .then((user) => {
-        setCurrentUser(user.data);
+        console.log(err.message)
+        setLoading(false)
+        setServerError(true)
       })
-      .catch((err) => {
-        console.log(err);
-      });
-  };
+  }
 
-  const handleMovieLike = (movie, setLike) => {
-    const isLiked = saveMovies.some(
-      (i) => i.movieId === movie.id || i.movieId === movie.movieId
-    );
-    if (!isLiked) {
-      addMovies(movie, setLike);
-    } else {
-      deleteMovie(movie, setLike);
+  function checkWindowWidth() {
+    setWindowWidth(window.innerWidth)
+  }
+
+  function handleResize() {
+    const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
+    if (foundMovies === null) {
+      return
     }
-  };
+    if (windowWidth >= 1280) {
+      setMovies(foundMovies.slice(0, 12))
+      setMoreCards(3)
+    } else if (windowWidth > 480 && windowWidth < 1280) {
+      setMovies(foundMovies.slice(0, 8))
+      setMoreCards(2)
+    } else if (windowWidth <= 480) {
+      setMovies(foundMovies.slice(0, 5))
+      setMoreCards(2)
+    }
+  }
 
-  const addMovies = (data, setLike) => {
-    mainApi
-      .addMovie(movieDataСonversion(data))
-      .then((newMovie) => {
-        setLike(true);
-        setAllSaveMovies([newMovie.data, ...allSaveMovies]);
-        localStorage.setItem(
-          "saveMovies",
-          JSON.stringify([newMovie.data, ...allSaveMovies])
-        );
-        if (newMovie.data.duration < DURATION_MOVIES) {
-          localStorage.setItem(
-            "filterSaveMovies",
-            JSON.stringify([newMovie.data, ...filterSaveMovies])
-          );
-          setFilterSaveMovies([newMovie.data, ...filterSaveMovies]);
-        }
+  useEffect(() => {
+    window.addEventListener('resize', checkWindowWidth)
+    handleResize()
+  }, [windowWidth])
+
+  function handleShowMore() {
+    const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
+    setMovies(foundMovies.slice(0, movies.length + moreCards))
+  }
+
+  function handleSearch(movieName, isShortFilms) {
+    searchMovie(movieName, isShortFilms)
+  }
+
+
+  function getSavedMovies() {
+    mainApi.getMovies()
+      .then((savedMovies) => {
+        setSavedMovies(savedMovies)
       })
       .catch((err) => {
-        console.log(err);
-      });
-  };
+        console.log(err.message)
+      })
+  }
 
-  const deleteMovie = (data, setLike) => {
-    const d = allSaveMovies.filter((movie) => {
-      if (movie.movieId === data.id || movie.movieId === data.movieId) {
-        return movie;
-      }
-    });
+  useEffect(() => {    
+    const path = location.pathname
+    mainApi.getUserProfile()
+    .then((userData) => {
+      setLoggedIn(true)
+      history.push(path)
+      setCurrentUser(userData)
+      getSavedMovies()
+    })
+    .catch((err) => {
+      console.log(err.message)
+    })
+  }, [])
 
-    mainApi
-      .deleteMovie(d[0]._id)
+
+  function handleCardSave(movie) {
+    mainApi.addMovie(movie)
+      .then((movieData) => {
+        setSavedMovies([...savedMovies, movieData])
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
+  function handleCardDelete(card) {
+    const deleteCard = savedMovies.find(c => c.movieId === (card.id || card.movieId) && c.owner === currentUser._id)
+    if (!deleteCard) return
+    mainApi.deleteMovie(deleteCard._id)
       .then(() => {
-        setLike(false);
-        localStorage.getItem(
-          "filterSaveMovies",
-          setFilterSaveMovies((state) =>
-            state.filter((c) => c.movieId !== data.movieId)
-          )
-        );
-        setFilterSaveMovies((state) =>
-          state.filter((c) => c.movieId !== data.id)
-        );
-        setAllSaveMovies((state) => state.filter((c) => c.movieId !== data.id));
-        localStorage.getItem(
-          "saveMovies",
-          setAllSaveMovies((state) =>
-            state.filter((c) => c.movieId !== data.movieId)
-          )
-        );
+        setSavedMovies(savedMovies.filter(c => c._id !== deleteCard._id))
       })
       .catch((err) => {
-        console.log(err);
-      });
-  };
+        console.log(err.message)
+      })
+  }
 
-  const movieDataСonversion = (data) => {
-    const movieData = {
-      country: data.country,
-      director: data.director,
-      duration: data.duration,
-      year: data.year,
-      description: data.description,
-      image: `https://api.nomoreparties.co/${data.image.url}`,
-      trailerLink: data.trailerLink,
-      thumbnail: `https://api.nomoreparties.co/${data.image.url}`,
-      movieId: data.id,
-      nameRU: data.nameRU,
-      nameEN: data.nameEN,
-    };
-    return movieData;
-  };
+  function isSaved(card) {
+    return savedMovies.some(item => item.movieId === card.id && item.owner === currentUser._id)
+  }
+
+
+  function handleEditProfile(name, email) {
+    mainApi.setUserProfile({ name, email })
+      .then(() => {
+        setCurrentUser({ name, email })
+      })
+      .catch((err) => {
+        setErrorMessage('Что-то пошло не так...')
+        console.log(err.message)
+      })
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>
@@ -311,16 +223,16 @@ function App() {
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
               component={Movies}
-              searchAllMovies={searchAllMovies}
-                    movies={movies}
-                    onMovieLike={handleMovieLike}
-                    loggedIn={loggedIn}
-                    saveMovies={saveMovies}
-                    checkbox={checkbox}
-                    setCheckbox={setCheckbox}
-                    preloaderActive={preloaderActive}
-                    allMoviesList={allMoviesList}
-                    searchValue={searchValue}
+          loggedIn={loggedIn}
+          handleSearch={handleSearch}
+          defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
+          cards={movies}
+          handleShowMore={handleShowMore}
+          isSaved={isSaved}
+          onCardSave={handleCardSave}
+          onCardDelete={handleCardDelete}
+          serverError={serverError}
+          loading={loading}
             />
           </Route>
 
@@ -328,23 +240,22 @@ function App() {
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
               component={SavedMovies}
-              saveMovies={saveMovies}
-              onMovieLike={handleMovieLike}
-              searchSaveMovies={searchSaveMovies}
-              checkbox={checkbox}
-              setCheckbox={setCheckbox}
-              preloaderActive={preloaderActive}
-              allSaveMovies={allSaveMovies}
+              loggedIn={loggedIn}
+          loading={loading}
+          cards={savedMovies}
+          isSaved={isSaved}
+          onCardDelete={handleCardDelete}
+          serverError={serverError}
 
             />
           </Route>
 
           <Route path='/signup'>
-            <Register handleRegister={handleRegister} messageError={messageError} />
+            <Register handleRegister={handleRegister} messageError={errorMessage} />
           </Route>
 
           <Route path='/signin'>
-            <Login handleLogin={handleLogin} messageError={messageError} />
+            <Login handleLogin={handleLogin} messageError={errorMessage} />
           </Route>
 
           <Route exact path="/profile">
@@ -352,7 +263,7 @@ function App() {
             <ProtectedRoute
               loggedIn={loggedIn}
               component={Profile}
-              handleEditProfile={handleUpdateUser}
+              handleEditProfile={handleEditProfile}
               handleSignOut={handleSignOut}
             />
           </Route>

@@ -1,48 +1,45 @@
-import React, { useEffect } from "react";
-import { useState } from "react";
-import { useLocation } from "react-router-dom";
-import "./MoviesCard.css";
+import React from 'react'
+import './MoviesCard.css'
 
-function MoviesCard({ movie, onMovieLike, saveMovies}) {
-  const [like, setLike] = useState(false);
-  const { pathname } = useLocation();
+function MoviesCard(props) {
+  const nameRu = props.card.nameRU
+  const poster = props.isOnlySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
+  const trailerLink = props.card.trailerLink
 
-  const convertToHours = (mins) => {
-    return `${Math.trunc(mins / 60)}ч ${mins % 60}м`;
-  };
+  const duration = () => {
+    if (props.card.duration > 60) {
+      return (props.card.duration / 60 | 0) + "ч " + props.card.duration % 60 + "м"
+    }
+    if (props.card.duration === 60) {
+      return (props.card.duration / 60) + "ч"
+    } else {
+      return props.card.duration + "м"
+    }
+  }
 
-  useEffect(() => {
-    saveMovies.map((data) => {
-      if (data.movieId === movie.id) {
-        setLike(true);
-      }
-    });
-  }, [saveMovies]);
+  function handleCardSave() {
+    props.onCardSave(props.card)
+  }
 
-  const handleLikeClick = () => {
-    //setLike(!like)
-    onMovieLike(movie, setLike, like);
-  };
+  function handleCardDelete() {
+    props.onCardDelete(props.card)
+  }
 
   return (
     <li className="movie">
-      <div className="movie__container" href={movie.trailerLink} rel="noreferrer" target="_blank">
-        <img src={movie.trailerLink} alt="Постер" className="movie__image"></img>
-        <p className="movie__title">{movie.nameRU}</p>
+      <div className="movie__container" href={trailerLink} rel="noreferrer" target="_blank">
+        <img src={poster} alt="Постер" className="movie__image"></img>
+        <p className="movie__title">{nameRu}</p>
         <div className="movie__buttons">
 
-        <button
-          className={`${
-            pathname === "/saved-movies" ? "movie__button_delete" : ""
-          } movie__button ${
-            like ? "movie__button_active" : "movie__button_inactive"
-          }`}
-          type="button"
-          onClick={handleLikeClick}
-        ></button>
+        {props.isOnlySaved ? <button className="movie__button_delete" onClick={handleCardDelete} type="button"></button> :
+          (props.isSaved(props.card) ? <button className="movie__button movie__button_inactive" onClick={handleCardDelete} type="button"></button> :
+            <button className="movie__button movie__button_active" onClick={handleCardSave} type="button">Сохранить</button>)}
+
+    
         </div>
       </div>
-      <p className="movie__duration">{convertToHours(movie.duration)}</p>
+      <p className="movie__duration">{duration()}</p>
     </li>
   );
 };

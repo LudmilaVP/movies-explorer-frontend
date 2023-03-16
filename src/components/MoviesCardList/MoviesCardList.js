@@ -1,114 +1,38 @@
-import React from "react";
-import "./MoviesCardList.css";
-import MoviesCard from "../MoviesCard/MoviesCard";
-import { useLocation } from "react-router-dom";
-import { useState } from "react";
-import { useEffect } from "react";
-import {
-  ADD_MOVIES_EXTRO_LARGE_SIZE,
-  ADD_MOVIES_LARGE_SIZE,
-  ADD_MOVIES_MEDIUM_SIZE,
-  ADD_MOVIES_SMALL_SIZE,
-  DISPLAY_MOVIES_LARGE_SIZE,
-  DISPLAY_MOVIES_MEDIUM_SIZE,
-  DISPLAY_MOVIES_SMALL_SIZE,
-  EXTRO_LARGE_SIZE,
-  LARGE_SIZE,
-  MEDIUM_SIZE,
-} from "../../utils/constants";
+import MoviesCard from '../MoviesCard/MoviesCard'
+import Preloader from '../Preloader/Preloader'
+import './MoviesCardList.css'
 
-function MoviesCardList({
-  movies,
-  onMovieLike,
-  saveMovies,
-  allMoviesList,
-  searchValue,
-}) {
-  const { pathname } = useLocation();
-  const [width, setWidth] = useState(0);
-  const [numberOfFilms, setNumberOfFilms] = useState(0);
-  const slice = movies.slice(0, numberOfFilms);
+function MoviesCardList(props) {
+  if (props.loading) return <Preloader />
+  if (props.cards.length === 0) return <span className="movies__error">Ничего не найдено</span>
+  if (props.serverError) return <span className="movies__error">Во время запроса произошла ошибка.
+    Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз</span>
 
-  function screenWidthChange() {
-    setTimeout(() => {  
-      setWidth(window.innerWidth);
-    }, 1000);
-  }
-
-  const handleLoadMore = () => {
-    if (width >= EXTRO_LARGE_SIZE) {
-      setNumberOfFilms(numberOfFilms + ADD_MOVIES_EXTRO_LARGE_SIZE);
-    } else if (width >= LARGE_SIZE) {
-      setNumberOfFilms(numberOfFilms + ADD_MOVIES_LARGE_SIZE);
-    } else if (width >= MEDIUM_SIZE) {
-      setNumberOfFilms(numberOfFilms + ADD_MOVIES_MEDIUM_SIZE);
-    } else {
-      setNumberOfFilms(numberOfFilms + ADD_MOVIES_SMALL_SIZE);
-    }
-  };
-
-  useEffect(() => {
-    window.addEventListener("resize", screenWidthChange);
-    setWidth(window.innerWidth);
-    if (width >= LARGE_SIZE) {
-      setNumberOfFilms(DISPLAY_MOVIES_LARGE_SIZE);
-    } else if (width >= MEDIUM_SIZE) {
-      setNumberOfFilms(DISPLAY_MOVIES_MEDIUM_SIZE);
-    } else {
-      setNumberOfFilms(DISPLAY_MOVIES_SMALL_SIZE);
-    }
-    return () => {
-      window.removeEventListener("resize", screenWidthChange);
-    };
-  }, [width]);
+  const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
 
   return (
-    <section className="movies">
-      {(
-        pathname === "/movies"
-          ? allMoviesList === null
-          : JSON.parse(localStorage.getItem("saveMovies")).length === 0
-      ) ? (
-        pathname === "/movies" ? (
-          <div></div>
-        ) : (
-          <p className="movies__nothing-found">Нет сохранненых фильмов</p>
-        )
-      ) : (
-        <div className="movies__container">
-          {movies.length === 0 ? (
-            searchValue === "" ? (
-              <p className="movies__nothing-found">
-                Нужно ввести ключевое слово
-              </p>
-            ) : (
-              <p className="movies__nothing-found">Ничего не найдено</p>
+    <>
+      <section className="movies">
+        {
+          props.cards.map(card => {
+            return (
+              <MoviesCard
+                card={card}
+                key={props.isOnlySaved ? card.movieId : card.id}
+                isSaved={props.isSaved}
+                isOnlySaved={props.isOnlySaved}
+                onCardSave={props.onCardSave}
+                onCardDelete={props.onCardDelete}
+              />
             )
-          ) : (
-            slice.map((movie) => {
-              return (
-                <MoviesCard
-                  key={pathname === "/movies" ? movie.id : movie.movieId}
-                  movie={movie}
-                  onMovieLike={onMovieLike}
-                  saveMovies={saveMovies}
-                />
-              );
-            })
-          )}
-        </div>
-      )}
-      {numberOfFilms >= movies.length ? null : (
-        <button
-          className="movies__button"
-          type="button"
-          onClick={handleLoadMore}
-        >
-          Еще
-        </button>
-      )}
+          })
+        }
       </section>
-  );
+      {props.isOnlySaved ? '' :
+        (props.cards.length < foundMovies.length ?
+          <button className="movies__button" onClick={props.handleShowMore} type="button">Ещё</button> : '')}
+    </>
+  )
 }
 
-export default MoviesCardList;
+export default MoviesCardList

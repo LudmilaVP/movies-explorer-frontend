@@ -1,36 +1,53 @@
-import React from "react";
-import MoviesCardList from "../MoviesCardList/MoviesCardList";
-import Preloader from "../Preloader/Preloader";
-import SearchForm from "../SearchForm/SearchForm";
-import "./SavedMovies.css";
+import { useState, useEffect } from 'react'
+import SearchForm from '../SearchForm/SearchForm'
+import MoviesCardList from '../MoviesCardList/MoviesCardList'
+import './SavedMovies.css'
 
-function SavedMovies({
-  saveMovies,
-  onMovieLike,
-  searchSaveMovies,
-  checkbox,
-  setCheckbox,
-  preloaderActive,
-}) {
+function SavedMovies(props) {
+  const [filteredMovies, setFilteredMovies] = useState([])
+
+  function handleSearch(movieName, isShortFilms) {
+    const filteredMovies = props.cards.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
+    if (isShortFilms) {
+      setFilteredMovies(filteredMovies.filter((item) => item.duration <= 40))
+    }
+    else {
+      setFilteredMovies(filteredMovies)
+    }
+  }
+
+  function initFilteredMovies() {
+    setFilteredMovies(props.cards)
+  }
+
+  useEffect(() => {
+    setFilteredMovies(
+      filteredMovies.filter(movie => props.cards.some(card => movie.movieId === card.movieId))
+    )
+  }, [props.cards])
+
+  useEffect(() => {
+    initFilteredMovies()
+  }, [])
+
   return (
-    <main>
+    <>
       <SearchForm
-        searchSaveMovies={searchSaveMovies}
-        checkbox={checkbox}
-        setCheckbox={setCheckbox}
-        searchValue={''}
+        handleSearch={handleSearch}
+        defaultValue=""
       />
-      {preloaderActive ? (
-        <Preloader />
-      ) : (
+      <main className="movies__saved">
         <MoviesCardList
-          movies={saveMovies}
-          onMovieLike={onMovieLike}
-          saveMovies={saveMovies}
+          cards={filteredMovies}
+          isSaved={props.isSaved}
+          isOnlySaved={true}
+          onCardDelete={props.onCardDelete}
+          serverError={props.serverError}
+          loading={props.loading}
         />
-      )}
-    </main>
-  );
+      </main>
+    </>
+  )
 }
 
-export default SavedMovies;
+export default SavedMovies
