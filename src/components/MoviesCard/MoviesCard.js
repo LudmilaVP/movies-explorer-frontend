@@ -48,11 +48,9 @@ const MoviesCard = ({ film, savedMoviesToggle, filmsSaved }) => {
           ) : (
             <button type="button" className={`movie__button movie__button${favorite ? '_active' : '_inactive'}`} onClick={handleFavoriteToogle} />
           )}
-
-    
         </div>
+        <p className="movie__duration">{getMovieDuration(film.duration)}</p>
       </div>
-      <p className="movie__duration">{getMovieDuration(film.duration)}</p>
     </li>
   );
 };
