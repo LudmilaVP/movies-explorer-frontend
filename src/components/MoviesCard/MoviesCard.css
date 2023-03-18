@@ -9,7 +9,7 @@
   height: 201px;
   margin: 0;
   padding: 0;
-  object-fit: cover;
+  object-fit: contain;
   object-position: center;
 }
 
@@ -17,7 +17,7 @@
   width: 100%;
   padding: 0;
   box-sizing: border-box;
-  box-shadow: 0px 4px 30px rgba(0, 0, 0, 0.08);
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.08);
   background: #FDFDFD;
   display: flex;
   flex-direction: column;
@@ -61,10 +61,18 @@
 
 .movie__button_inactive {
   background: #f9f9f9 url(../../images/icon-saved-inactive.svg) center no-repeat;
+  background-color: #313131;
+  border: 1px solid transparent;
+  width: 24px;
+  height: 24px;
+  border-radius: 36px;
+  outline: none;
+  transition: border-color 0.3s;
 }
 
 .movie__button_active {
   background: #f9f9f9 url(../../images/icon-saved-active.svg) center no-repeat;
+  background-color: #313131;
 }
 
 .movie__button_delete {

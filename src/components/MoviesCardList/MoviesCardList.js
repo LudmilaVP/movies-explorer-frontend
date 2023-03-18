@@ -1,38 +1,32 @@
 import './MoviesCardList.css';
-import Preloader from '../Preloader/Preloader'
+import { useLocation } from 'react-router-dom';
 import MoviesCard from '../MoviesCard/MoviesCard';
 
-const MoviesCardList = (props) => {
-  if (props.loading) return <Preloader />
-  if (props.cards.length === 0) return <span className="movies__error">Ничего не найдено</span>
-  if (props.serverError) return <span className="movies__error">Во время запроса произошла ошибка.
-    Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз</span>
-
-  const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
+const MoviesCardList = ({ films, savedMoviesToggle, filmsSaved, filmsRemains, handleMore }) => {
+  const { pathname } = useLocation();
 
   return (
     <section className="movies">
-      <ul className="movies__list">
-        {props.cards.map(card => {
-          return (
+      {films.length > 0 ? (
+        <ul className="movies__list">
+          {films.map((film) => (
             <MoviesCard
-              key={props.isOnlySaved ? card.movieId : card.id}
-              isSaved={props.isSaved}
-              isOnlySaved={props.isOnlySaved}
-              card={card}
-              onCardSave={props.onCardSave}
-              onCardDelete={props.onCardDelete}
+              key={film.id || film.movieId}
+              film={film}
+              savedMoviesToggle={savedMoviesToggle}
+              filmsSaved={filmsSaved}
             />
-          )
-        })
-        }
-      </ul>
+          ))}
+        </ul>
+      ) : (
+        <div className="movies__text">Ничего не найдено</div>
+      )}
 
-      {props.isOnlySaved ? '' :
-        (props.cards.length < foundMovies.length ?
-          <div className="movies__container">
-            <button className="movies__button" type="button" name="more" onClick={props.handleMore}>Ещё</button>
-          </div> : '')}
+      {filmsRemains.length > 0 && pathname !== '/saved-movies' && (
+        <div className="movies__button-container">
+          <button className="movies__button" type="button" name="more" onClick={handleMore}>Ещё</button>
+        </div>
+      )}
     </section>
   );
 };
