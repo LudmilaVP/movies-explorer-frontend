@@ -1,99 +1,49 @@
 import './SavedMovies.css';
-import { useEffect, useState } from 'react';
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
-import Preloader from '../Preloader/Preloader';
-import mainApi from '../../utils/MainApi.js';
+import React, { useEffect, useState } from 'react';
 
-const SavedMovies = ({ messageError }) => {
-  const [films, setFilms] = useState(null);
-  const [preloader, setPreloader] = useState(false);
-  const [errorText, setErrorText] = useState('');
-  const [filmsTumbler, setFilmsTumbler] = useState(false);
-  const [filmsInputSearch, setFilmsInputSearch] = useState('');
-  const [filmsShowed, setFilmsShowed] = useState([]);
+function SavedMovies(props) {
+  const [filteredMovies, setFilteredMovies] = useState([])
 
-  async function handleGetMovies(inputSearch, tumbler) {
-    setErrorText('');
-    setPreloader(true);
-
-    try {
-      const data = films;
-      let filterData = data.filter(({ nameRU }) => nameRU.toLowerCase().includes(inputSearch.toLowerCase()));
-
-      if (tumbler) filterData = filterData.filter(({ duration }) => duration <= 40);
-
-      setFilmsShowed(filterData);
-
-      if (inputSearch) {
-        localStorage.setItem('savedFilms', JSON.stringify(filterData));
-        localStorage.setItem('savedFilmsTumbler', tumbler);
-        localStorage.setItem('savedFilmsInputSearch', inputSearch);
-      } else {
-        localStorage.removeItem('savedFilms');
-        localStorage.removeItem('savedFilmsTumbler');
-        localStorage.removeItem('savedFilmsInputSearch');
-      }
-    } catch (err) {
-      setErrorText(
-        'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
-      );
-
-      setFilms([]);
-      localStorage.removeItem('savedFilms');
-      localStorage.removeItem('savedFilmsTumbler');
-      localStorage.removeItem('savedFilmsInputSearch');
-    } finally {
-      setPreloader(false);
+  function handleSearch(movieName, isShortFilms) {
+    const filteredMovies = props.cards.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
+    if (isShortFilms) {
+      setFilteredMovies(filteredMovies.filter((item) => item.duration <= 40))
+    }
+    else {
+      setFilteredMovies(filteredMovies)
     }
   }
 
-  async function savedMoviesToggle(film, favorite) {
-    if (!favorite) {
-      try {
-        await mainApi.deleteMovie(film._id);
-        const newFilms = await mainApi.getMovies();
-        setFilmsShowed(newFilms);
-        setFilms(newFilms);
-      } catch (err) {
-        messageError('Во время удаления фильма произошла ошибка.');
-      }
-    }
+  function initFilteredMovies() {
+    setFilteredMovies(props.cards)
   }
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  useEffect(async () => {
-    const localStorageFilms = localStorage.getItem('savedFilms');
-    if (localStorageFilms) {
-      setFilms(JSON.parse(localStorageFilms));
-      const localStorageFilmsTumbler = localStorage.getItem('savedFilmsTumbler');
-      const localStorageFilmsInputSearch = localStorage.getItem('savedFilmsInputSearch');
+  useEffect(() => {
+    setFilteredMovies(
+      filteredMovies.filter(movie => props.cards.some(card => movie.movieId === card.movieId))
+    )
+  }, [props.cards])
 
-      if (localStorageFilmsTumbler) {
-        setFilmsTumbler(localStorageFilmsTumbler === 'true');
-      }
-      if (localStorageFilmsInputSearch) {
-        setFilmsInputSearch(localStorageFilmsInputSearch);
-      }
-    } else {
-      try {
-        const data = await mainApi.getMovies();
-        setFilms(data);
-        setFilmsShowed(data);
-      } catch (err) {
-        messageError(`Ошибка сервера ${err}`);
-      }
-    }
-  }, [messageError]);
+  useEffect(() => {
+    initFilteredMovies()
+  }, [])
 
   return (
-    <div className="movies__saved">
-      <SearchForm handleGetMovies={handleGetMovies} filmsTumbler={filmsTumbler} filmsInputSearch={filmsInputSearch} />
-      {preloader && <Preloader />}
-      {errorText && <div className="movie__saved_error">{errorText}</div>}
-      {!preloader && !errorText && films !== null && (
-        <MoviesCardList filmsRemains={[]} savedMoviesToggle={savedMoviesToggle} films={filmsShowed} />
-      )}
+    <div className="movies-saved">
+      <SearchForm
+        handleSearch={props.handleSearch}
+        defaultValue=""
+      />
+      <MoviesCardList
+        cards={filteredMovies}
+        isSaved={props.isSaved}
+        isOnlySaved={true}
+        onCardDelete={props.onCardDelete}
+        serverError={props.serverError}
+        isLoading={props.isLoading}
+      />
     </div>
   );
 };
