@@ -2,53 +2,53 @@ import './MoviesCard.css';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 
-const MoviesCard = ({ film, savedMoviesToggle, filmsSaved }) => {
+const MoviesCard = ({ movie, savedMoviesToggle, moviesSaved }) => {
+  const [like, setLike] = useState(false);
   const { pathname } = useLocation();
-  const [favorite, setFavorite] = useState(false);
-
-  function handleFavoriteToogle() {
-    const newFavorite = !favorite;
-    const savedFilm = filmsSaved.filter((obj) => {
-      return obj.movieId === film.id;
-    });
-    savedMoviesToggle({ ...film, _id: savedFilm.length > 0 ? savedFilm[0]._id : null }, newFavorite);
-  }
-
-  function handleFavoriteDelete() {
-    savedMoviesToggle(film, false);
-  }
 
   function getMovieDuration(mins) {
     return `${Math.floor(mins / 60)}ч ${mins % 60}м`;
   }
+  
+  function handleLikeDelete() {
+    savedMoviesToggle(movie, false);
+  }
+  
+  function handleLikeToogle() {
+    const newLike = !like;
+    const savedMovie = moviesSaved.filter((obj) => {
+      return obj.movieId === movie.id;
+    });
+    savedMoviesToggle({ ...movie, _id: savedMovie.length > 0 ? savedMovie[0]._id : null }, newLike);
+  }
 
   useEffect(() => {
     if (pathname !== '/saved-movies') {
-      const savedFilm = filmsSaved.filter((obj) => {
-        return obj.movieId === film.id;
+      const savedMovie = moviesSaved.filter((obj) => {
+        return obj.movieId === movie.id;
       });
 
-      if (savedFilm.length > 0) {
-        setFavorite(true);
+      if (savedMovie.length > 0) {
+        setLike(true);
       } else {
-        setFavorite(false);
+        setLike(false);
       }
     }
-  }, [pathname, filmsSaved, film.id]);
+  }, [pathname, moviesSaved, movie.id]);
 
   return (
     <li className="movie">
-      <div className="movie__container" href={pathname === '/saved-movies' ? film.trailer : film.trailerLink} target="_blank" rel="noreferrer">
-        <p className="movie__title">{film.nameRU}</p>
+      <div className="movie__container" href={pathname === '/saved-movies' ? movie.trailer : movie.trailerLink} target="_blank" rel="noreferrer">
+        <p className="movie__title">{movie.nameRU}</p>
         <div className="movie__buttons">
           {pathname === '/saved-movies' ? (
-            <button type="button" className="movie__button movie__button_delete" onClick={handleFavoriteDelete} />
+            <button type="button" className="movie__button movie__button_delete" onClick={handleLikeDelete} />
           ) : (
-            <button type="button" className={`movie__button movie__button${favorite ? '_active' : '_inactive'}`} onClick={handleFavoriteToogle} />
+            <button type="button" className={`movie__button movie__button${like ? '_active' : '_inactive'}`} onClick={handleLikeToogle} />
           )}
         </div>
-        <p className="movie__duration">{getMovieDuration(film.duration)}</p>
-        <img src={pathname === '/saved-movies' ? `${film.image}` : `https://api.nomoreparties.co${film.image.url}`} alt={film.nameRU} className="movie__image"></img>
+        <p className="movie__duration">{getMovieDuration(movie.duration)}</p>
+        <img src={pathname === '/saved-movies' ? `${movie.image}` : `https://api.nomoreparties.co${movie.image.url}`} alt={movie.nameRU} className="movie__image"></img>
       </div>
     </li>
   );

@@ -6,80 +6,83 @@ import Preloader from '../Preloader/Preloader';
 import mainApi from '../../utils/MainApi.js';
 
 const SavedMovies = ({ messageError }) => {
-  const [films, setFilms] = useState(null);
+  const [movies, setMovies] = useState(null);
+  const [moviesInputSearch, setMoviesInputSearch] = useState('');
+  const [moviesTumbler, setMoviesTumbler] = useState(false);
+  const [moviesShowed, setMoviesShowed] = useState([]);
+
   const [preloader, setPreloader] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const [filmsTumbler, setFilmsTumbler] = useState(false);
-  const [filmsInputSearch, setFilmsInputSearch] = useState('');
-  const [filmsShowed, setFilmsShowed] = useState([]);
+  
 
-  async function handleGetMovies(inputSearch, tumbler) {
-    setErrorText('');
-    setPreloader(true);
-
-    try {
-      const data = films;
-      let filterData = data.filter(({ nameRU }) => nameRU.toLowerCase().includes(inputSearch.toLowerCase()));
-
-      if (tumbler) filterData = filterData.filter(({ duration }) => duration <= 40);
-
-      setFilmsShowed(filterData);
-
-      if (inputSearch) {
-        localStorage.setItem('savedFilms', JSON.stringify(filterData));
-        localStorage.setItem('savedFilmsTumbler', tumbler);
-        localStorage.setItem('savedFilmsInputSearch', inputSearch);
-      } else {
-        localStorage.removeItem('savedFilms');
-        localStorage.removeItem('savedFilmsTumbler');
-        localStorage.removeItem('savedFilmsInputSearch');
-      }
-    } catch (err) {
-      setErrorText(
-        'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
-      );
-
-      setFilms([]);
-      localStorage.removeItem('savedFilms');
-      localStorage.removeItem('savedFilmsTumbler');
-      localStorage.removeItem('savedFilmsInputSearch');
-    } finally {
-      setPreloader(false);
-    }
-  }
-
-  async function savedMoviesToggle(film, favorite) {
-    if (!favorite) {
+  async function savedMoviesToggle(movie, like) {
+    if (!like) {
       try {
-        await mainApi.deleteMovie(film._id);
-        const newFilms = await mainApi.getMovies();
-        setFilmsShowed(newFilms);
-        setFilms(newFilms);
+        await mainApi.deleteMovie(movie._id);
+        const newMovies = await mainApi.getMovies();
+        setMoviesShowed(newMovies);
+        setMovies(newMovies);
       } catch (err) {
         messageError('Во время удаления фильма произошла ошибка.');
       }
     }
   }
 
+  async function handleGetMovies(inputSearch, tumbler) {
+    setPreloader(true);
+    setErrorText('');
+    
+    try {
+      const data = movies;
+      let filterData = data.filter(({ nameRU }) => nameRU.toLowerCase().includes(inputSearch.toLowerCase()));
+
+      if (tumbler) filterData = filterData.filter(({ duration }) => duration <= 40);
+
+      setMoviesShowed(filterData);
+
+      if (inputSearch) {
+        localStorage.setItem('savedMoviesInputSearch', inputSearch);
+        localStorage.setItem('savedMovies', JSON.stringify(filterData));
+        localStorage.setItem('savedMoviesTumbler', tumbler);
+      } else {
+        localStorage.removeItem('savedMoviesInputSearch');
+      localStorage.removeItem('savedmovies');
+      localStorage.removeItem('savedMoviesTumbler');
+      }
+    } catch (err) {
+      setErrorText(
+        'Во время запроса произошла ошибка. Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз'
+      );
+
+      setMovies([]);
+      localStorage.removeItem('savedMoviesInputSearch');
+      localStorage.removeItem('savedmovies');
+      localStorage.removeItem('savedMoviesTumbler');
+      
+    } finally {
+      setPreloader(false);
+    }
+  }
+
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(async () => {
-    const localStorageFilms = localStorage.getItem('savedFilms');
-    if (localStorageFilms) {
-      setFilms(JSON.parse(localStorageFilms));
-      const localStorageFilmsTumbler = localStorage.getItem('savedFilmsTumbler');
-      const localStorageFilmsInputSearch = localStorage.getItem('savedFilmsInputSearch');
+    const localStorageMovies = localStorage.getItem('savedMovies');
+    if (localStorageMovies) {
+      setMovies(JSON.parse(localStorageMovies));
+      const localStorageMoviesInputSearch = localStorage.getItem('savedMoviesInputSearch');
+      const localStorageMoviesTumbler = localStorage.getItem('savedMoviesTumbler');
 
-      if (localStorageFilmsTumbler) {
-        setFilmsTumbler(localStorageFilmsTumbler === 'true');
+      if (localStorageMoviesInputSearch) {
+        setMoviesInputSearch(localStorageMoviesInputSearch);
       }
-      if (localStorageFilmsInputSearch) {
-        setFilmsInputSearch(localStorageFilmsInputSearch);
+      if (localStorageMoviesTumbler) {
+        setMoviesTumbler(localStorageMoviesTumbler === 'true');
       }
     } else {
       try {
         const data = await mainApi.getMovies();
-        setFilms(data);
-        setFilmsShowed(data);
+        setMoviesShowed(data);
+        setMovies(data);
       } catch (err) {
         messageError(`Ошибка сервера ${err}`);
       }
@@ -88,11 +91,11 @@ const SavedMovies = ({ messageError }) => {
 
   return (
     <div className="movies__saved">
-      <SearchForm handleGetMovies={handleGetMovies} filmsTumbler={filmsTumbler} filmsInputSearch={filmsInputSearch} />
+      <SearchForm handleGetMovies={handleGetMovies} moviesTumbler={moviesTumbler} moviesInputSearch={moviesInputSearch} />
       {preloader && <Preloader />}
       {errorText && <div className="movie__saved_error">{errorText}</div>}
-      {!preloader && !errorText && films !== null && (
-        <MoviesCardList filmsRemains={[]} savedMoviesToggle={savedMoviesToggle} films={filmsShowed} />
+      {!preloader && !errorText && movies !== null && (
+        <MoviesCardList moviesRemains={[]} savedMoviesToggle={savedMoviesToggle} movies={moviesShowed} />
       )}
     </div>
   );

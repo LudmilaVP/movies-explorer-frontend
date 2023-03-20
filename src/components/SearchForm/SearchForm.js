@@ -1,12 +1,13 @@
 import './SearchForm.css';
 import { useEffect, useState } from 'react';
 
-const SearchForm = ({ handleGetMovies, filmsTumbler, filmsInputSearch, handleGetMoviesTumbler }) => {
+const SearchForm = ({ handleGetMovies, moviesTumbler, moviesInputSearch, handleGetMoviesTumbler }) => {
   const [inputSearch, setInputSearch] = useState('');
   const [tumbler, setTumbler] = useState(false);
 
-  function handleInputChange(e) {
-    setInputSearch(e.target.value);
+  function handleSubmit(e) {
+    e.preventDefault();
+    handleGetMovies(inputSearch);
   }
 
   function handleTumblerChange() {
@@ -15,15 +16,14 @@ const SearchForm = ({ handleGetMovies, filmsTumbler, filmsInputSearch, handleGet
     handleGetMoviesTumbler(newTumbler);
   }
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    handleGetMovies(inputSearch);
+  function handleInputChange(e) {
+    setInputSearch(e.target.value);
   }
 
   useEffect(() => {
-    setTumbler(filmsTumbler);
-    setInputSearch(filmsInputSearch);
-  }, [filmsTumbler, filmsInputSearch]);
+    setTumbler(moviesTumbler);
+    setInputSearch(moviesInputSearch);
+  }, [moviesTumbler, moviesInputSearch]);
 
   return (
     <section className="search">
