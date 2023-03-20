@@ -7,11 +7,7 @@ const MoviesCard = ({ film, savedMoviesToggle, filmsSaved }) => {
   const [favorite, setFavorite] = useState(false);
 
   function handleFavoriteToogle() {
-    const newFavorite = !favorite;
-    const savedFilm = filmsSaved.filter((obj) => {
-      return obj.movieId === film.id;
-    });
-    savedMoviesToggle({ ...film, _id: savedFilm.length > 0 ? savedFilm[0]._id : null }, newFavorite);
+    savedMoviesToggle(film, favorite, setFavorite);
   }
 
   function handleFavoriteDelete() {
@@ -23,18 +19,12 @@ const MoviesCard = ({ film, savedMoviesToggle, filmsSaved }) => {
   }
 
   useEffect(() => {
-    if (pathname !== '/saved-movies') {
-      const savedFilm = filmsSaved.filter((obj) => {
-        return obj.movieId === film.id;
-      });
-
-      if (savedFilm.length > 0) {
+    filmsSaved.map((data) => {
+      if (data.movieId === film.id) {
         setFavorite(true);
-      } else {
-        setFavorite(false);
       }
-    }
-  }, [pathname, filmsSaved, film.id]);
+    });
+  }, [filmsSaved]);
 
   return (
     <li className="movie">
