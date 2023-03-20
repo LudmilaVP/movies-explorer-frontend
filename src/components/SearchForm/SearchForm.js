@@ -5,18 +5,18 @@ const SearchForm = ({ handleGetMovies, filmsTumbler, filmsInputSearch, handleGet
   const [inputSearch, setInputSearch] = useState('');
   const [tumbler, setTumbler] = useState(false);
 
-  function handleInputChange(evt) {
-    setInputSearch(evt.target.value);
+  function handleInputChange(e) {
+    setInputSearch(e.target.value);
   }
 
-  function handleTumblerChange(evt) {
+  function handleTumblerChange() {
     const newTumbler = !tumbler;
     setTumbler(newTumbler);
     handleGetMoviesTumbler(newTumbler);
   }
 
-  function handleSubmit(evt) {
-    evt.preventDefault();
+  function handleSubmit(e) {
+    e.preventDefault();
     handleGetMovies(inputSearch);
   }
 
