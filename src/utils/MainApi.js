@@ -53,12 +53,12 @@ class MainApi {
             .then(this._getResponse);
     }
 
-    addMovie(movie) {
+    addMovie(data) {
         return fetch(`${this.baseUrl}/movies`, {
             method: 'POST',
             credentials: 'include',
             headers: this._headers,
-            body: JSON.stringify(movie)
+            body: JSON.stringify(data)
             })
             .then(this._getResponse);
     }

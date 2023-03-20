@@ -81,6 +81,12 @@ function App() {
       .then(() => {
         setLoggedIn(false)
         history.push('/')
+        localStorage.removeItem('films');
+    localStorage.removeItem('filmsTumbler');
+    localStorage.removeItem('filmsInputSearch');
+    localStorage.removeItem('savedFilms');
+    localStorage.removeItem('savedFilmsTumbler');
+    localStorage.removeItem('savedFilmsInputSearch');
       })
       .catch((err) => {
         console.log(err.message)
