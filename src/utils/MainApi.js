@@ -1,10 +1,8 @@
 import { BASE_URL } from './constants.js'
 class MainApi {
-    constructor({ baseUrl }) {
+    constructor({ baseUrl, headers }) {
         this.baseUrl = baseUrl;
-        this.headers = {
-            "Content-Type": "application/json",
-        };
+        this._headers = headers;
     }
 
     _getResponse(res) {
