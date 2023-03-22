@@ -1,5 +1,6 @@
 import './Movies.css';
-import React, { useEffect, useState, useLocation, useHistory } from 'react';
+import React, { useEffect, useState } from 'react';
+import { useLocation, useHistory } from 'react-router-dom'
 import SearchForm from '../SearchForm/SearchForm';
 import MoviesCardList from '../MoviesCardList/MoviesCardList';
 import Preloader from '../Preloader/Preloader';
