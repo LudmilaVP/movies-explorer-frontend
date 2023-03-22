@@ -14,7 +14,7 @@ import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
 import { authorization, login, signout } from '../../utils/auth';
 import mainApi from '../../utils/MainApi';
-import moviesApi from '../../utils/MoviesApi'
+import * as moviesApi from '../../utils/MoviesApi.js'
 
 function App() {
   const [currentUser, setCurrentUser] = useState({})
