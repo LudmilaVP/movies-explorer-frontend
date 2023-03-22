@@ -33,12 +33,9 @@ const SearchForm = (props) => {
           <input className="search__input" placeholder="Фильм" type="text" value={movieName} onChange={handleChangeMovieName} required />
           <button className="search__button" type="submit" onClick={handleSubmit}></button>
         </form>
-        <div className="search__toggle">
-          <label className="search__tumbler">
-            <input type="checkbox" name="shortFilms" className="search__checkbox" checked={checkbox} onChange={handleChangeCheckbox}/>
-            <span className="search__slider" />
-          </label>
-          <p className="search__films">Короткометражки</p>
+        <div className="search__checkbox-container">
+          <input className="search__checkbox" checked={checkbox} onChange={handleChangeCheckbox} type="checkbox" name="shortFilms" />
+          <label className="search__checkbox-label">Короткометражки</label>
         </div>
       </div>
       <div className="search__border-bottom"></div>
