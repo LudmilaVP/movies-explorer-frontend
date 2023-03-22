@@ -32,8 +32,8 @@ const MoviesCard = (props) => {
         <p className="movie__duration">{duration()}</p>
         <div className="movie__buttons">
           {props.isOnlySaved ? <button type="button" className="movie__button movie__button_delete" onClick={handleCardDelete} /> :
-            (props.isSaved(props.card) ? <button type="button" className="movie__button movie__button_active"></button> :
-              <button className="movie__button movie__button_inactive" onClick={handleCardSave} type="button"></button>)}
+            (props.isSaved(props.card) ? <button type="button" className="movie__button movie__button_inactive"></button> :
+              <button className="movie__button movie__button_active" onClick={handleCardSave} type="button"></button>)}
         </div>
         <img src={poster} alt="Постер" className="movie__image"></img>
       </div>

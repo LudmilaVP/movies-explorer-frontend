@@ -110,9 +110,9 @@
   width: 16px;
   left: 1px;
   bottom: 1px;
-  border: 1px solid white;;
+  border: 1px solid #2be080;
   border-radius: 50%;
-  background-color: #2be080
+  background-color: white;
 }
 
 .search__checkbox:checked+.search__slider {
@@ -122,7 +122,7 @@
 
 .search__checkbox:checked+.search__slider::before {
   transform: translateX(16px);
-  background-color: #2be080;
+  background-color: white;
 }
 .search__films {
   font-size: 13px;
