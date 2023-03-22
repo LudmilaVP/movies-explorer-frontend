@@ -53,23 +53,12 @@ class MainApi {
             .then(this._getResponse);
     }
 
-    addMovie(movie) {
+    addMovie(data) {
         return fetch(`${this.baseUrl}/movies`, {
             method: 'POST',
             credentials: 'include',
             headers: this._headers,
-            body: JSON.stringify({
-                country: movie.country || 'Нет данных',
-                director: movie.director,
-                duration: movie.duration,
-                year: movie.year,
-                description: movie.description,
-                image: (`https://api.nomoreparties.co/${movie.image.url}`),
-                trailerLink: movie.trailerLink || 'https://www.youtube.com',
-                thumbnail: (`https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`),
-                movieId: movie.id,
-                nameRU: movie.nameRU || 'Нет данных',
-                nameEN: movie.nameEN || 'Нет данных'})
+            body: JSON.stringify(data)
             })
             .then(this._getResponse);
     }
