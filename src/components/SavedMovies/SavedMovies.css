@@ -2,7 +2,7 @@
   flex: 1 0 auto;
 }
 
-.movies__saved_error {
+.movies-saved__error {
   text-align: center;
   color: #8b8b8b;
   font-size: 20px;
