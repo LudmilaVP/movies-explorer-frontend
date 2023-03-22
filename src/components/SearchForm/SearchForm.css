@@ -103,7 +103,7 @@
   transform: scale(-1, -1);
 }
 
-.search__slider::after {
+.search__slider::before {
   position: absolute;
   content: '';
   height: 16px;
@@ -120,11 +120,10 @@
   border: 1px solid #2be080;
 }
 
-.search__checkbox:checked+.search__slider::after {
+.search__checkbox:checked+.search__slider::before {
   transform: translateX(16px);
-  background-color: #2be080;
+  background-color: white;
 }
-
 .search__films {
   font-size: 13px;
   line-height: 18px;
