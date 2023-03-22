@@ -14,7 +14,7 @@
     padding: 20px 0 0;
   }
   
-  .movies__button-container {
+  .movies__container {
     max-width: 320px;
     padding: 45px 0 49px;
     margin: 0 auto;
@@ -36,16 +36,6 @@
   .movies__button:hover {
     opacity: .6;
     cursor: pointer;
-  }
-
-  .movies__text{
-    margin: 0;
-    padding: 0 0 20px;
-    text-align: center;
-    color: #8b8b8b;
-    font-size: 44px;
-    font-weight: 500;
-    line-height: 92px;
   }
   @media screen and (max-width: 1540px) {
     .movies__list {
