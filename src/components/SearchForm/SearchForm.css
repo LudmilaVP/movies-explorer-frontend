@@ -103,7 +103,7 @@
   transform: scale(-1, -1);
 }
 
-.search__slider::before {
+.search__slider::after {
   position: absolute;
   content: '';
   height: 16px;
@@ -120,7 +120,7 @@
   border: 1px solid #2be080;
 }
 
-.search__checkbox:checked+.search__slider::before {
+.search__checkbox:checked+.search__slider::after {
   transform: translateX(16px);
   background-color: #2be080;
 }

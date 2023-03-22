@@ -28,15 +28,15 @@ const MoviesCard = (props) => {
   return (
     <li className="movie">
       <div className="movie__container" href={trailerLink} rel="noreferrer" target="_blank">
-        <img src={poster} alt="Постер" className="movie__image"></img>
         <p className="movie__title">{nameRu}</p>
+        <p className="movie__duration">{duration()}</p>
         <div className="movie__buttons">
           {props.isOnlySaved ? <button type="button" className="movie__button movie__button_delete" onClick={handleCardDelete} /> :
             (props.isSaved(props.card) ? <button type="button" className="movie__button movie__button_active" onClick={handleCardDelete}></button> :
-              <button className="movie__button movie__button_inactive" onClick={handleCardSave} type="button">Сохранить</button>)}
+              <button className="movie__button movie__button_inactive" onClick={handleCardSave} type="button"></button>)}
         </div>
+        <img src={poster} alt="Постер" className="movie__image"></img>
       </div>
-      <p className="movie__duration">{duration()}</p>
     </li>
   );
 };
