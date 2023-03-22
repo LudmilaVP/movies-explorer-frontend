@@ -180,7 +180,7 @@ const Movies = ({ messageError }) => {
       setMoviesInputSearch(localStorageMoviesInputSearch);
     }
   }, [messageError]);
-  
+
   return (
 
     <div className="movies__main">
