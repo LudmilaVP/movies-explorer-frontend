@@ -5,3 +5,4 @@
 - IP: 84.201.130.102
 - Backend: https://api.moviexplorer.nomoredomains.rocks
 - Frontend: https://moviexplorer.nomoredomains.rocks
+- Ссылка на пул-реквест: https://github.com/LudmilaVP/movies-explorer-frontend/pull/7
