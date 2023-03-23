@@ -123,7 +123,7 @@ function App() {
 
   useEffect(() => {    
     const path = location.pathname
-    mainApi.getUserInfo()
+    mainApi.getUserProfile()
     .then((userData) => {
       setLoggedIn(true)
       history.push(path)

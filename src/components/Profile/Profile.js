@@ -16,7 +16,7 @@ const Profile = ({ onSignOut }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    mainApi.updateUserInfo({ name, email }).then(() => {
+    mainApi.setUserProfile({ name, email }).then(() => {
       setButton(false);
       setLastName(name);
       setLastEmail(email);
