@@ -34,7 +34,7 @@ function MoviesCard(props) {
 
         {props.isOnlySaved ? <button className="movie__button movie__button_delete" onClick={handleCardDelete} type="button"></button> :
           (props.isSaved(props.card) ? <button className="movie__button movie__button_active" onClick={handleCardDelete} type="button"></button> :
-            <button className="movie__button movie__button_inactive" onClick={handleCardSave} type="button">Сохранить</button>)}
+            <button className="movie__button movie__button_inactive" onClick={handleCardSave} type="button"></button>)}
 
                 </div>
         <img src={poster} alt="Постер" className="movie__image"></img>
