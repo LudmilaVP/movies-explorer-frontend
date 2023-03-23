@@ -3,12 +3,12 @@ import React from 'react';
 
 function MoviesCard(props) {
 
-  function handleCardSave() {
-    props.onCardSave(props.card)
+  function handleMovieSave() {
+    props.onMovieSave(props.card)
   }
 
-  function handleCardDelete() {
-    props.onCardDelete(props.card)
+  function handleMovieDelete() {
+    props.onMovieDelete(props.card)
   }
 
   const duration = () => {
@@ -29,9 +29,9 @@ function MoviesCard(props) {
         <p className="movie__duration">{duration()}</p>
         <div className="movie__buttons">
 
-          {props.isAlreadySaved ? <button className="movie__button movie__button_delete" onClick={handleCardDelete} type="button"></button> :
-            (props.isSaved(props.card) ? <button className="movie__button movie__button_active" onClick={handleCardDelete} type="button"></button> :
-              <button className="movie__button movie__button_inactive" onClick={handleCardSave} type="button"></button>)}
+          {props.isAlreadySaved ? <button className="movie__button movie__button_delete" onClick={handleMovieDelete} type="button"></button> :
+            (props.isSaved(props.card) ? <button className="movie__button movie__button_active" onClick={handleMovieDelete} type="button"></button> :
+              <button className="movie__button movie__button_inactive" onClick={handleMovieSave} type="button"></button>)}
 
         </div>
         <img src={props.isAlreadySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`} alt="Постер" className="movie__image"></img>

@@ -23,7 +23,7 @@ function App() {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [moreCards, setMoreCards] = useState(0)
   const [savedMovies, setSavedMovies] = useState([])
-  const [loading, setLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const [serverError, setServerError] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false)
   const location = useLocation()
@@ -55,123 +55,6 @@ function App() {
         console.log(err)
       })
   }, [loggedIn])
-
-  function searchMovie(movieName, isShortFilms) {
-    setLoading(true)
-    moviesApi.getApiMovies()
-      .then((movies) => {
-        const searchedMovies = movies.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
-        const foundMovies = isShortFilms ? searchedMovies.filter((item) => item.duration <= 40) : searchedMovies
-        localStorage.setItem('foundMovies', JSON.stringify(foundMovies))
-        localStorage.setItem('searchMovieName', movieName)
-        localStorage.setItem('shortFilms', isShortFilms)
-        setLoading(false)
-        handleResize()
-      })
-      .catch((err) => {
-        console.log(err.message)
-        setLoading(false)
-        setServerError(true)
-      })
-  }
-
-  function checkWindowWidth() {
-    setWindowWidth(window.innerWidth)
-  }
-
-  function handleResize() {
-    const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
-    if (foundMovies === null) {
-      return
-    }
-    if (windowWidth >= 1280) {
-      setMovies(foundMovies.slice(0, 12))
-      setMoreCards(3)
-    } else if (windowWidth > 480 && windowWidth < 1280) {
-      setMovies(foundMovies.slice(0, 8))
-      setMoreCards(2)
-    } else if (windowWidth <= 480) {
-      setMovies(foundMovies.slice(0, 5))
-      setMoreCards(2)
-    }
-  }
-
-  useEffect(() => {
-    window.addEventListener('resize', checkWindowWidth)
-    handleResize()
-  }, [windowWidth])
-
-  function handleShowMore() {
-    const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
-    setMovies(foundMovies.slice(0, movies.length + moreCards))
-  }
-
-  function handleSearch(movieName, isShortFilms) {
-    searchMovie(movieName, isShortFilms)
-  }
-
-
-  function getSavedMovies() {
-    mainApi.getMovies()
-      .then((savedMovies) => {
-        setSavedMovies(savedMovies)
-      })
-      .catch((err) => {
-        console.log(err.message)
-      })
-  }
-
-  useEffect(() => {    
-    const path = location.pathname
-    mainApi.getUserProfile()
-    .then((userData) => {
-      setLoggedIn(true)
-      history.push(path)
-      setCurrentUser(userData)
-      getSavedMovies()
-    })
-    .catch((err) => {
-      console.log(err.message)
-    })
-  }, [])
-
-
-  function handleCardSave(movie) {
-    mainApi.addMovie(movie)
-      .then((movieData) => {
-        setSavedMovies([...savedMovies, movieData])
-      })
-      .catch((err) => {
-        console.log(err.message)
-      })
-  }
-
-  function handleCardDelete(card) {
-    const deleteCard = savedMovies.find(c => c.movieId === (card.id || card.movieId) && c.owner === currentUser._id)
-    if (!deleteCard) return
-    mainApi.deleteMovie(deleteCard._id)
-      .then(() => {
-        setSavedMovies(savedMovies.filter(c => c._id !== deleteCard._id))
-      })
-      .catch((err) => {
-        console.log(err.message)
-      })
-  }
-
-  function isSaved(card) {
-    return savedMovies.some(item => item.movieId === card.id && item.owner === currentUser._id)
-  }
-
-  function handleEditProfile(name, email) {
-    mainApi.setUserProfile({ name, email })
-      .then(() => {
-        setCurrentUser({ name, email })
-      })
-      .catch((err) => {
-        setMessageError('Что-то пошло не так...')
-        console.log(err.message)
-      })
-  }
 
   function handleRegister({ name, email, password }) {
     authorization(name, email, password)
@@ -207,6 +90,121 @@ function App() {
       })
   }
 
+  function searchMovie(movieName, isShortFilms) {
+    setIsLoading(true)
+    moviesApi.getApiMovies()
+      .then((movies) => {
+        const searchedMovies = movies.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
+        const foundMovies = isShortFilms ? searchedMovies.filter((item) => item.duration <= 40) : searchedMovies
+        localStorage.setItem('foundMovies', JSON.stringify(foundMovies))
+        localStorage.setItem('shortFilms', isShortFilms)
+        localStorage.setItem('searchMovieName', movieName)
+        handleResize()
+        setIsLoading(false)
+      })
+      .catch((err) => {
+        console.log(err.message)
+        setServerError(true)
+        setIsLoading(false)
+      })
+  }
+
+  function handleResize() {
+    const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
+    if (foundMovies === null) {
+      return
+    }
+    if (windowWidth >= 1280) {
+      setMovies(foundMovies.slice(0, 12))
+      setMoreCards(3)
+    } else if (windowWidth > 480 && windowWidth < 1280) {
+      setMovies(foundMovies.slice(0, 8))
+      setMoreCards(2)
+    } else if (windowWidth <= 480) {
+      setMovies(foundMovies.slice(0, 5))
+      setMoreCards(2)
+    }
+  }
+
+  function checkWindowWidth() {
+    setWindowWidth(window.innerWidth)
+  }
+
+  useEffect(() => {
+    window.addEventListener('resize', checkWindowWidth)
+    handleResize()
+  }, [windowWidth])
+
+  function handleShowMore() {
+    const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
+    setMovies(foundMovies.slice(0, movies.length + moreCards))
+  }
+
+  function handleSearchMovie(movieName, isShortFilms) {
+    searchMovie(movieName, isShortFilms)
+  }
+
+  function getSavedMovies() {
+    mainApi.getMovies()
+      .then((savedMovies) => {
+        setSavedMovies(savedMovies)
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
+  useEffect(() => {
+    const path = location.pathname
+    mainApi.getUserProfile()
+      .then((userData) => {
+        setLoggedIn(true)
+        history.push(path)
+        setCurrentUser(userData)
+        getSavedMovies()
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }, [])
+
+  function isSaved(card) {
+    return savedMovies.some(item => item.movieId === card.id && item.owner === currentUser._id)
+  }
+
+  function handleMovieSave(movie) {
+    mainApi.addMovie(movie)
+      .then((movieData) => {
+        setSavedMovies([...savedMovies, movieData])
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
+  function handleMovieDelete(card) {
+    const deleteCard = savedMovies.find(c => c.movieId === (card.id || card.movieId) && c.owner === currentUser._id)
+    if (!deleteCard) return
+    mainApi.deleteMovie(deleteCard._id)
+      .then(() => {
+        setSavedMovies(savedMovies.filter(c => c._id !== deleteCard._id))
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
+  function handleEditProfile(name, email) {
+    mainApi.setUserProfile({ name, email })
+      .then(() => {
+        setCurrentUser({ name, email })
+      })
+      .catch((err) => {
+        setMessageError('Что-то пошло не так...')
+        console.log(err.message)
+      })
+  }
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -221,16 +219,16 @@ function App() {
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
               component={Movies}
-              loggedIn={loggedIn}
-              handleSearch={handleSearch}
-              defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
               cards={movies}
-              handleShowMore={handleShowMore}
+              defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
               isSaved={isSaved}
-              onCardSave={handleCardSave}
-              onCardDelete={handleCardDelete}
+              handleShowMore={handleShowMore}
+              handleSearchMovie={handleSearchMovie}
+              onMovieSave={handleMovieSave}
+              onMovieDelete={handleMovieDelete}
               serverError={serverError}
-              loading={loading}
+              isLoading={isLoading}
+              loggedIn={loggedIn}
             />
           </Route>
 
@@ -238,12 +236,12 @@ function App() {
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
               component={SavedMovies}
-              loggedIn={loggedIn}
-              loading={loading}
               cards={savedMovies}
               isSaved={isSaved}
-              onCardDelete={handleCardDelete}
+              onMovieDelete={handleMovieDelete}
               serverError={serverError}
+              loggedIn={loggedIn}
+              isLoading={isLoading}
             />
           </Route>
 
@@ -259,7 +257,7 @@ function App() {
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
               loggedIn={loggedIn}
-              loading={loading}
+              isLoading={isLoading}
               component={Profile}
               handleEditProfile={handleEditProfile}
               handleSignOut={handleSignOut}
