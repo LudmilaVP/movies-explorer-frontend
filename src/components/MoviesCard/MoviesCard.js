@@ -1,11 +1,12 @@
 import './MoviesCard.css';
 import React from 'react';
-import {Route} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const MoviesCard = (props) => {
   const nameRu = props.card.nameRU
   const poster = props.isOnlySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
   const trailerLink = props.card.trailerLink
+  const { pathname } = useLocation();
 
   const duration = () => {
     if (props.card.duration > 60) {
@@ -33,22 +34,11 @@ const MoviesCard = (props) => {
         <p className="movie__duration">{duration()}</p>
         <div className="movie__buttons">
 
-        <Route path="/movies">
-                    <button
-                        className={props.isSaved ? "movie__button movie__button_active" : "movie__button_inactive"}
-                        type="button"
-                        onClick={handleCardSave}
-                    >
-                    </button>
-                </Route>
-
-                <Route path="/saved-movies">
-                    <button
-                        className="movie__button movie__button_delete"
-                        type="button"
-                        onClick={handleCardDelete}
-                    />
-                </Route>
+        {pathname === '/saved-movies' ? (
+            <button type="button" className="movie__button movie__button_delete" onClick={handleCardDelete} />
+          ) : (
+            <button type="button" className={`movie__button movie__button${props.isSaved ? '_active' : '_inactive'}`} onClick={handleCardSave} />
+          )}
 
                 </div>
         <img src={poster} alt="Постер" className="movie__image"></img>
