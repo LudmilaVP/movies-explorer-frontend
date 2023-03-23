@@ -2,8 +2,8 @@ import './MoviesCardList.css';
 import Preloader from '../Preloader/Preloader'
 import MoviesCard from '../MoviesCard/MoviesCard';
 
-const MoviesCardList = (props) => {
-  if (props.loading) return <Preloader />
+function MoviesCardList(props) {
+  if (props.isLoading) return <Preloader />
   if (props.cards.length === 0) return <span className="movies__error">Ничего не найдено</span>
   if (props.serverError) return <span className="movies__error">Во время запроса произошла ошибка.
     Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз</span>

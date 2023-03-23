@@ -1,12 +1,11 @@
 import './MoviesCard.css';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 
 const MoviesCard = (props) => {
   const nameRu = props.card.nameRU
   const poster = props.isOnlySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
   const trailerLink = props.card.trailerLink
-  const { pathname } = useLocation();
+
 
   const duration = () => {
     if (props.card.duration > 60) {
