@@ -137,7 +137,7 @@ function App() {
 
 
   function handleCardDelete(card) {
-    const deleteCard = savedMovies.find(c => c.movieId === (card.id || card.movieId) && c.owner === currentUser._id)
+    const deleteCard = savedMovies.find(c => c.movieId === (card.id || card.movieId))
     if (!deleteCard) return
     mainApi.deleteMovie(deleteCard._id)
       .then(() => {
@@ -149,7 +149,7 @@ function App() {
   }
 
   function isSaved(card) {
-    savedMovies.some(item => item.movieId === card.id && item.owner === currentUser._id)
+    savedMovies.some(item => item.movieId === card.id)
   }
 
   function handleCardSave(movie) {
