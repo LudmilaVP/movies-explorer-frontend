@@ -138,7 +138,6 @@ function App() {
 
   function handleCardDelete(card) {
     const deleteCard = savedMovies.find(c => c.movieId === (card.id || card.movieId))
-    if (!deleteCard) return
     mainApi.deleteMovie(deleteCard._id)
       .then(() => {
         setSavedMovies(savedMovies.filter(c => c._id !== deleteCard._id))

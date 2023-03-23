@@ -20,9 +20,9 @@ const MoviesCard = (props) => {
   }
 
   function handleCardSave() {
-    if (props.isSaved) {
+    if (!props.isSaved) {
       props.onCardDelete(props.card)
-      } else if (!props.isSaved) {
+      } else if (props.isSaved) {
         props.onCardSave(props.card)
   }
 }
@@ -38,7 +38,7 @@ const MoviesCard = (props) => {
         <p className="movie__duration">{duration()}</p>
         <div className="movie__buttons">
 
-        {pathname === '/movies' ? (
+        {pathname === '/saved-movies' ? (
             <button type="button" className="movie__button movie__button_delete" onClick={handleCardDelete} />
           ) : (
             <button type="button" className={`movie__button movie__button${!props.isSaved ? '_active' : '_inactive'}`} onClick={handleCardSave} />
