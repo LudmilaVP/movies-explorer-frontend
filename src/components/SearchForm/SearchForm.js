@@ -26,7 +26,7 @@ const SearchForm = (props) => {
   }, [])
 
   return (
-    <section className="search">
+    <section className="search" onSubmit={handleSubmit}>
       <div className="search__box">
         <form className="search__form">
           <div className="search__icon"></div>

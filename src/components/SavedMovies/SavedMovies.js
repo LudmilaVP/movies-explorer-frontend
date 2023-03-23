@@ -33,7 +33,7 @@ function SavedMovies(props) {
   return (
     <div className="movies-saved">
       <SearchForm
-        handleSearch={props.handleSearch}
+        handleSearch={handleSearch}
         defaultValue=""
       />
       <MoviesCardList
