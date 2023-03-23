@@ -153,7 +153,7 @@ function App() {
   }
 
   function handleCardSave(movie) {
-    if (!isSaved) {
+    if (isSaved) {
     mainApi.addMovie(movie)
       .then((movieData) => {
         setSavedMovies([...savedMovies, movieData])
