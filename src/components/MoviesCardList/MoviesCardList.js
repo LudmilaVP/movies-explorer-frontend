@@ -16,9 +16,9 @@ function MoviesCardList(props) {
           return (
             <MoviesCard
             card={card}
-            key={props.isOnlySaved ? card.movieId : card.id}
+            key={props.isAlreadySaved ? card.movieId : card.id}
             isSaved={props.isSaved}
-            isOnlySaved={props.isOnlySaved}
+            isAlreadySaved={props.isAlreadySaved}
             onCardSave={props.onCardSave}
             onCardDelete={props.onCardDelete}
             />
@@ -27,7 +27,7 @@ function MoviesCardList(props) {
         }
       </ul>
 
-      {props.isOnlySaved ? '' :
+      {props.isAlreadySaved ? '' :
         (props.cards.length < foundMovies.length ?
           <div className="movies__container">
             <button className="movies__button" type="button" name="more" onClick={props.handleMore}>Ещё</button>

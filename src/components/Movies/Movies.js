@@ -15,7 +15,7 @@ function Movies(props) {
                     cards={props.cards}
                     handleShowMore={props.handleShowMore}
                     isSaved={props.isSaved}
-                    isOnlySaved={false}
+                    isAlreadySaved={false}
                     onCardSave={props.onCardSave}
                     onCardDelete={props.onCardDelete}
                     serverError={props.serverError}

@@ -196,7 +196,6 @@ function App() {
       })
   }
 
-
   function handleSignOut() {
     signout()
       .then(() => {

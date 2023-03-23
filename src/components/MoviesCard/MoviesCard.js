@@ -2,9 +2,14 @@ import './MoviesCard.css';
 import React from 'react';
 
 function MoviesCard(props) {
-  const nameRu = props.card.nameRU
-  const poster = props.isOnlySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
-  const trailerLink = props.card.trailerLink
+
+  function handleCardSave() {
+    props.onCardSave(props.card)
+  }
+
+  function handleCardDelete() {
+    props.onCardDelete(props.card)
+  }
 
   const duration = () => {
     if (props.card.duration > 60) {
@@ -17,27 +22,19 @@ function MoviesCard(props) {
     }
   }
 
-  function handleCardSave() {
-    props.onCardSave(props.card)
-  }
-
-  function handleCardDelete() {
-    props.onCardDelete(props.card)
-  }
-
   return (
     <li className="movie">
-      <div className="movie__container" href={trailerLink} rel="noreferrer" target="_blank">
-        <p className="movie__title">{nameRu}</p>
+      <div className="movie__container" href={props.card.trailerLink} rel="noreferrer" target="_blank">
+        <p className="movie__title">{props.card.nameRU}</p>
         <p className="movie__duration">{duration()}</p>
         <div className="movie__buttons">
 
-        {props.isOnlySaved ? <button className="movie__button movie__button_delete" onClick={handleCardDelete} type="button"></button> :
-          (props.isSaved(props.card) ? <button className="movie__button movie__button_active" onClick={handleCardSave} type="button"></button> :
-            <button className="movie__button movie__button_inactive" onClick={handleCardDelete} type="button"></button>)}
+          {props.isAlreadySaved ? <button className="movie__button movie__button_delete" onClick={handleCardDelete} type="button"></button> :
+            (props.isSaved(props.card) ? <button className="movie__button movie__button_active" onClick={handleCardDelete} type="button"></button> :
+              <button className="movie__button movie__button_inactive" onClick={handleCardSave} type="button"></button>)}
 
-                </div>
-        <img src={poster} alt="Постер" className="movie__image"></img>
+        </div>
+        <img src={props.isAlreadySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`} alt="Постер" className="movie__image"></img>
       </div>
     </li>
   );

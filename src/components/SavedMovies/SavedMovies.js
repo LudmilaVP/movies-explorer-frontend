@@ -39,7 +39,7 @@ function SavedMovies(props) {
       <MoviesCardList
          cards={filteredMovies}
           isSaved={props.isSaved}
-          isOnlySaved={true}
+          isAlreadySaved={true}
           onCardDelete={props.onCardDelete}
           serverError={props.serverError}
           loading={props.loading}
