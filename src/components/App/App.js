@@ -17,17 +17,17 @@ import mainApi from '../../utils/MainApi';
 import * as moviesApi from '../../utils/MoviesApi.js'
 
 function App() {
-  const [currentUser, setCurrentUser] = useState({})
-  const [loggedIn, setLoggedIn] = useState(false)
-  const [isLoading, setIsLoading] = useState(false);
   const [messageError, setMessageError] = useState('')
-  const history = useHistory()
-  const pathname = useLocation()
+  const [currentUser, setCurrentUser] = useState({})
   const [movies, setMovies] = useState([])
   const [windowWidth, setWindowWidth] = useState(window.innerWidth)
   const [moreCards, setMoreCards] = useState(0)
   const [savedMovies, setSavedMovies] = useState([])
+  const [loading, setLoading] = useState(false)
   const [serverError, setServerError] = useState(false)
+  const [loggedIn, setLoggedIn] = useState(false)
+  const location = useLocation()
+  const history = useHistory()
 
   useEffect(() => {
     if (loggedIn) {
@@ -57,7 +57,7 @@ function App() {
   }, [loggedIn])
 
   function searchMovie(movieName, isShortFilms) {
-    setIsLoading(true)
+    setLoading(true)
     moviesApi.getApiMovies()
       .then((movies) => {
         const searchedMovies = movies.filter((item) => item.nameRU.toLowerCase().includes(movieName.toLowerCase()))
@@ -65,12 +65,12 @@ function App() {
         localStorage.setItem('foundMovies', JSON.stringify(foundMovies))
         localStorage.setItem('searchMovieName', movieName)
         localStorage.setItem('shortFilms', isShortFilms)
-        setIsLoading(false)
+        setLoading(false)
         handleResize()
       })
       .catch((err) => {
         console.log(err.message)
-        setIsLoading(false)
+        setLoading(false)
         setServerError(true)
       })
   }
@@ -101,7 +101,7 @@ function App() {
     handleResize()
   }, [windowWidth])
 
-  function handleMore() {
+  function handleShowMore() {
     const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
     setMovies(foundMovies.slice(0, movies.length + moreCards))
   }
@@ -121,18 +121,18 @@ function App() {
       })
   }
 
-  useEffect(() => {
-    const path = pathname.pathname
-    mainApi.getUserProfile()
-      .then((userData) => {
-        setLoggedIn(true)
-        history.push(path)
-        setCurrentUser(userData)
-        getSavedMovies()
-      })
-      .catch((err) => {
-        console.log(err.message)
-      })
+  useEffect(() => {    
+    const path = location.pathname
+    mainApi.getUserInfo()
+    .then((userData) => {
+      setLoggedIn(true)
+      history.push(path)
+      setCurrentUser(userData)
+      getSavedMovies()
+    })
+    .catch((err) => {
+      console.log(err.message)
+    })
   }, [])
 
 
@@ -221,29 +221,30 @@ function App() {
           <Route exact path="/movies">
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
-              loggedIn={loggedIn}
-              isLoading={isLoading}
               component={Movies}
+              loggedIn={loggedIn}
               handleSearch={handleSearch}
               defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
               cards={movies}
+              handleShowMore={handleShowMore}
               isSaved={isSaved}
               onCardSave={handleCardSave}
               onCardDelete={handleCardDelete}
               serverError={serverError}
-              handleMore={handleMore}
+              loading={loading}
             />
           </Route>
 
           <Route exact path="/saved-movies">
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
-              loggedIn={loggedIn}
-              isLoading={isLoading}
               component={SavedMovies}
+              loggedIn={loggedIn}
+              loading={loading}
+              cards={savedMovies}
+              isSaved={isSaved}
               onCardDelete={handleCardDelete}
               serverError={serverError}
-              isSaved={isSaved}
             />
           </Route>
 
@@ -259,7 +260,7 @@ function App() {
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
               loggedIn={loggedIn}
-              isLoading={isLoading}
+              loading={loading}
               component={Profile}
               handleEditProfile={handleEditProfile}
               handleSignOut={handleSignOut}

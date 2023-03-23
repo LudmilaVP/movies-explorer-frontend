@@ -1,7 +1,7 @@
 import "./SearchForm.css";
 import { useEffect, useState } from 'react';
 
-const SearchForm = (props) => {
+function SearchForm(props) {
   const [movieName, setMovieName] = useState('')
   const [checkbox, setCheckbox] = useState(false)
 

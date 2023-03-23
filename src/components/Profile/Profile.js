@@ -5,7 +5,7 @@ import { useState, useContext } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import mainApi from '../../utils/MainApi';
 
-const Profile = ({ onSignOut, openPopup }) => {
+const Profile = ({ onSignOut }) => {
   const currentUser = useContext(CurrentUserContext);
   const [name, setName] = useState(currentUser.name);
   const [lastName, setLastName] = useState(currentUser.name);
@@ -20,10 +20,9 @@ const Profile = ({ onSignOut, openPopup }) => {
       setButton(false);
       setLastName(name);
       setLastEmail(email);
-      openPopup('Данные успешно изменены!');
     })
       .catch((err) => {
-        openPopup(`Что-то пошло не так! ${err}`);
+        console.log(err.message);
       });
   };
 

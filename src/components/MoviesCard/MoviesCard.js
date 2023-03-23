@@ -1,11 +1,10 @@
 import './MoviesCard.css';
 import React from 'react';
 
-const MoviesCard = (props) => {
+function MoviesCard(props) {
   const nameRu = props.card.nameRU
   const poster = props.isOnlySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
   const trailerLink = props.card.trailerLink
-
 
   const duration = () => {
     if (props.card.duration > 60) {

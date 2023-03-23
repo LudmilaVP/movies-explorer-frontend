@@ -37,12 +37,12 @@ function SavedMovies(props) {
         defaultValue=""
       />
       <MoviesCardList
-        cards={filteredMovies}
-        isSaved={props.isSaved}
-        isOnlySaved={true}
-        onCardDelete={props.onCardDelete}
-        serverError={props.serverError}
-        isLoading={props.isLoading}
+         cards={filteredMovies}
+          isSaved={props.isSaved}
+          isOnlySaved={true}
+          onCardDelete={props.onCardDelete}
+          serverError={props.serverError}
+          loading={props.loading}
       />
     </div>
   );
