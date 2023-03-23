@@ -37,7 +37,7 @@ const MoviesCard = (props) => {
         {pathname === '/saved-movies' ? (
             <button type="button" className="movie__button movie__button_delete" onClick={handleCardDelete} />
           ) : (
-            <button type="button" className={`movie__button movie__button${props.isSaved ? '_active' : '_inactive'}`} onClick={handleCardSave} />
+            <button type="button" className={`movie__button movie__button${!props.isSaved ? '_active' : '_inactive'}`} onClick={handleCardSave} />
           )}
 
                 </div>

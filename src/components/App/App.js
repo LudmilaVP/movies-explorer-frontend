@@ -149,11 +149,11 @@ function App() {
   }
 
   function isSaved(card) {
-    return savedMovies.some(item => item.movieId === card.id && item.owner === currentUser._id)
+    savedMovies.some(item => item.movieId === card.id && item.owner === currentUser._id)
   }
 
   function handleCardSave(movie) {
-    if (isSaved) {
+    if (!isSaved) {
     mainApi.addMovie(movie)
       .then((movieData) => {
         setSavedMovies([...savedMovies, movieData])
@@ -161,7 +161,7 @@ function App() {
       .catch((err) => {
         console.log(err.message)
       })
-    }else{handleCardDelete(movie)}
+    } else {handleCardDelete(movie)}
   }
 
   function handleEditProfile(name, email) {
