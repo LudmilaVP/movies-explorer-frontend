@@ -40,43 +40,47 @@
   max-width: 37px;
 }
 
-.movie__button {
+.movie__button_save {
   position: absolute;
   top: 14px;
   right: 14px;
   font-size: 10px;
   line-height: 9px;
-  height: 30px;
-  width: 30px;
-  padding: 0;
+  background: #F9F9F9;
   border: none;
-  border-radius: 36px;
-  transition: opacity .2s linear;
+  border-radius: 30px;
+  padding: 6px 7px;
+  opacity: 0;
 }
 
-.movie__button:hover {
-  opacity: .6;
-  cursor: pointer;
+.movie__button_save:hover {
+  opacity: 1;
 }
 
-.movie__button_inactive {
-  background: #f9f9f9 url(../../images/icon-saved-inactive.svg) center no-repeat;
-}
-
-.movie__button_active {
-  background: #f9f9f9 url(../../images/icon-saved-active.svg) center no-repeat;
+.movie__button_saved {
+  width: 21px;
+  height: 21px;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background-image: url(../../images/icon-saved-active.svg);
+  background-color: transparent;
+  border: none;
 }
 
 .movie__button_delete {
-  width: 30px;
-  height: 30px;
-  background: #F4F4F4 url(../../images/remove-icon.svg) no-repeat center;
-  visibility: hidden;
-  cursor: pointer;
+  width: 21px;
+  height: 21px;
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background-image: url(../../images/remove-icon.svg);
+  background-color: transparent;
+  border: none;
 }
 
-.movie:hover .movie__button_delete {
-  visibility: visible;
+.movie__button_saved:hover {
+  background-image: url(../../images/remove-icon.svg);
 }
 
 @media screen and (max-width: 760px) {

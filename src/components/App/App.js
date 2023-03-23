@@ -136,8 +136,19 @@ function App() {
   }, [])
 
 
+  function handleCardSave(movie) {
+    mainApi.addMovie(movie)
+      .then((movieData) => {
+        setSavedMovies([...savedMovies, movieData])
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+
   function handleCardDelete(card) {
-    const deleteCard = savedMovies.find(c => c.movieId === (card.id || card.movieId))
+    const deleteCard = savedMovies.find(c => c.movieId === (card.id || card.movieId) && c.owner === currentUser._id)
+    if (!deleteCard) return
     mainApi.deleteMovie(deleteCard._id)
       .then(() => {
         setSavedMovies(savedMovies.filter(c => c._id !== deleteCard._id))
@@ -148,17 +159,7 @@ function App() {
   }
 
   function isSaved(card) {
-    savedMovies.some(item => item.movieId === card.id)
-  }
-
-  function handleCardSave(movie) {
-    mainApi.addMovie(movie)
-      .then((movieData) => {
-        setSavedMovies([...savedMovies, movieData])
-      })
-      .catch((err) => {
-        console.log(err.message)
-      })
+    return savedMovies.some(item => item.movieId === card.id && item.owner === currentUser._id)
   }
 
   function handleEditProfile(name, email) {
