@@ -145,7 +145,7 @@ function App() {
   }
 
   function handleRegister({ name, email, password }) {
-    authorization(name, email, password)
+    auth.authorization(name, email, password)
       .then(() => {
         handleLogin({ email, password })
       })
@@ -156,7 +156,7 @@ function App() {
   }
 
   function handleLogin({ email, password }) {
-    login(email, password)
+    auth.login(email, password)
       .then(() => {
         setLoggedIn(true)
         history.push('/movies')
@@ -169,7 +169,7 @@ function App() {
   }
 
   function handleSignOut() {
-    signout()
+    auth.signout()
       .then(() => {
         setLoggedIn(false)
         history.push('/')
