@@ -29,8 +29,7 @@ function App() {
   const location = useLocation()
   const history = useHistory()
 
-  useEffect(() => {
-    if (loggedIn) {
+  function getUserProfile() {
       mainApi.getUserProfile()
         .then((data) => {
           setLoggedIn(true)
@@ -39,22 +38,8 @@ function App() {
         .catch((err) => {
           console.log(err)
         })
-    }
-  }, [loggedIn])
+  }
 
-  useEffect(() => {
-    mainApi
-      .checkToken()
-      .then((data) => {
-        if (data) {
-          setLoggedIn(true)
-          setCurrentUser(data)
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [loggedIn])
 
   function handleRegister({ name, email, password }) {
     authorization(name, email, password)
@@ -72,6 +57,7 @@ function App() {
       .then(() => {
         setLoggedIn(true)
         history.push('/movies')
+        getUserProfile()
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
