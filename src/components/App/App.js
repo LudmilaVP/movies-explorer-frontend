@@ -29,8 +29,7 @@ function App() {
   const { pathname } = useLocation();
   const history = useHistory()
   
-  useEffect(() => {
-    if (loggedIn) {
+  function getUserProfile() {
       mainApi.getUserProfile()
         .then((data) => {
           setLoggedIn(true)
@@ -40,7 +39,6 @@ function App() {
           console.log(err)
         })
     }
-  }, [loggedIn])
 
   useEffect(() => {
     mainApi
@@ -55,7 +53,7 @@ function App() {
         console.log(err)
       })
   }, [loggedIn])
-  
+
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
     moviesApi.getApiMovies()
@@ -160,17 +158,6 @@ function App() {
       })
   }
 
-  function handleEditProfile(name, email) {
-    mainApi.setUserProfile({ name, email })
-      .then(() => {
-        setCurrentUser({ name, email })
-      })
-      .catch((err) => {
-        setMessageError('Что-то пошло не так...')
-        console.log(err.message)
-      })
-  }
-
   function handleRegister({ name, email, password }) {
     authorization(name, email, password)
       .then(() => {
@@ -187,6 +174,7 @@ function App() {
       .then(() => {
         setLoggedIn(true)
         history.push('/movies')
+        getUserProfile()
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
@@ -216,8 +204,7 @@ function App() {
             <Main />
           </Route>
 
-          <Route exact path="/movies">
-            <ProtectedRoute
+            <ProtectedRoute path="/movies"
               component={Movies}
               cards={movies}
               defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
@@ -230,11 +217,8 @@ function App() {
               isLoading={isLoading}
               loggedIn={loggedIn}
             />
-          </Route>
 
-          <Route exact path="/saved-movies">
-
-            <ProtectedRoute
+            <ProtectedRoute path="/saved-movies"
               component={SavedMovies}
               cards={savedMovies}
               isSaved={isSaved}
@@ -243,7 +227,6 @@ function App() {
               loggedIn={loggedIn}
               isLoading={isLoading}
             />
-          </Route>
 
           <Route path='/signup'>
             <Register handleRegister={handleRegister} messageError={messageError} />
@@ -253,15 +236,11 @@ function App() {
             <Login handleLogin={handleLogin} messageError={messageError} />
           </Route>
 
-          <Route exact path="/profile">
-
-            <ProtectedRoute
+            <ProtectedRoute path="/profile"
               component={Profile}
               loggedIn={loggedIn}
-              handleEditProfile={handleEditProfile}
               handleSignOut={handleSignOut}
             />
-          </Route>
 
           <Route path="*">
             <PageNotFound />
