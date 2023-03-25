@@ -13,7 +13,7 @@ const Profile = ({ onSignOut }) => {
   const [lastEmail, setLastEmail] = useState(currentUser.email);
   const [isButton, setButton] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleEditProfile = (e) => {
     e.preventDefault();
 
     mainApi.setUserProfile({ name, email }).then(() => {
@@ -21,9 +21,9 @@ const Profile = ({ onSignOut }) => {
       setLastName(name);
       setLastEmail(email);
     })
-      .catch((err) => {
-        console.log(err.message);
-      });
+    .catch((err) => {
+      console.log(err.message)
+    });
   };
 
   function handleNameChange(e) {
@@ -47,9 +47,10 @@ const Profile = ({ onSignOut }) => {
       setButton(false);
     }
   }
+
   return (
     <section className="profile">
-      <form className="profile__form" onSubmit={handleSubmit}>
+      <form className="profile__form" onSubmit={handleEditProfile}>
         <h3 className="profile__welcome">Привет, {name}!</h3>
         <div className="profile__input">
           <p className="profile__text">Имя</p>

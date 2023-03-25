@@ -194,17 +194,6 @@ function App() {
       })
   }
 
-  function handleEditProfile(name, email) {
-    mainApi.setUserProfile({ name, email })
-      .then(() => {
-        setCurrentUser({ name, email })
-      })
-      .catch((err) => {
-        setMessageError('Что-то пошло не так...')
-        console.log(err.message)
-      })
-  }
-
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
@@ -256,10 +245,9 @@ function App() {
           <Route exact path="/profile">
             <Header loggedIn={loggedIn} />
             <ProtectedRoute
+              component={Profile}
               loggedIn={loggedIn}
               isLoading={isLoading}
-              component={Profile}
-              handleEditProfile={handleEditProfile}
               handleSignOut={handleSignOut}
             />
           </Route>
