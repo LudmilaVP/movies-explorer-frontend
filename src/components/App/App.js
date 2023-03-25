@@ -29,6 +29,10 @@ function App() {
   const location = useLocation()
   const history = useHistory()
 
+  useEffect(() => {
+    getUserProfile();
+  }, []);
+  
   function getUserProfile() {
       mainApi.getUserProfile()
         .then((data) => {
@@ -39,6 +43,20 @@ function App() {
           console.log(err)
         })
   }
+
+  useEffect(() => {
+    mainApi
+      .checkToken()
+      .then((data) => {
+        if (data) {
+          setLoggedIn(true)
+          setCurrentUser(data)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [loggedIn]) 
 
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
@@ -178,7 +196,7 @@ function App() {
         console.log(err.message)
       })
   }
-  
+
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
