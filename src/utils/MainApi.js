@@ -21,14 +21,6 @@ class MainApi {
             .then(this._getResponse)
     }
 
-    checkToken() {
-        return fetch(`${this.baseUrl}/users/me`, {
-            credentials: 'include',
-            headers: this._headers,
-        })
-            .then(this._getResponse)
-    }
-
     setUserProfile({ name, email }) {
         return fetch(`${this.baseUrl}/users/me`, {
             method: 'PATCH',

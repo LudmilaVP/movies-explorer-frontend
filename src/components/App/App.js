@@ -28,10 +28,6 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false)
   const location = useLocation()
   const history = useHistory()
-
-  useEffect(() => {
-    getUserProfile();
-  }, []);
   
   function getUserProfile() {
       mainApi.getUserProfile()
@@ -43,20 +39,6 @@ function App() {
           console.log(err)
         })
   }
-
-  useEffect(() => {
-    mainApi
-      .checkToken()
-      .then((data) => {
-        if (data) {
-          setLoggedIn(true)
-          setCurrentUser(data)
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [loggedIn]) 
 
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
@@ -162,10 +144,10 @@ function App() {
       })
   }
 
-  function handleRegister({ name, email, password }) {
-    authorization(name, email, password)
+  function handleEditProfile(name, email) {
+    mainApi.setUserProfile({ name, email })
       .then(() => {
-        handleLogin({ email, password })
+        setCurrentUser({ name, email })
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
@@ -173,7 +155,18 @@ function App() {
       })
   }
 
-  function handleLogin({ email, password }) {
+  function handleRegister(name, email, password) {
+    authorization(name, email, password)
+      .then(() => {
+        handleLogin(email, password)
+      })
+      .catch((err) => {
+        setMessageError('Что-то пошло не так...')
+        console.log(err.message)
+      })
+  }
+
+  function handleLogin(email, password) {
     login(email, password)
       .then(() => {
         setLoggedIn(true)
@@ -250,7 +243,7 @@ function App() {
             <ProtectedRoute
               component={Profile}
               loggedIn={loggedIn}
-              isLoading={isLoading}
+              handleEditProfile={handleEditProfile}
               handleSignOut={handleSignOut}
             />
           </Route>
