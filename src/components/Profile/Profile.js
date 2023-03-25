@@ -11,14 +11,14 @@ function Profile(props) {
   const [lastName, setLastName] = useState(currentUser.name);
   const [email, setEmail] = useState(currentUser.email);
   const [lastEmail, setLastEmail] = useState(currentUser.email);
-  const [isVisibleButton, setVisibleButton] = useState(false);
+  const [isButton, setButton] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
     mainApi.setUserProfile({ name, email })
     .then(() => {
-      setVisibleButton(false);
+      setButton(false);
       setLastName(name);
       setLastEmail(email);
     })
@@ -32,9 +32,9 @@ function Profile(props) {
     setName(value);
 
     if (value !== lastName) {
-      setVisibleButton(true);
+      setButton(true);
     } else {
-      setVisibleButton(false);
+      setButton(false);
     }
   }
 
@@ -43,9 +43,9 @@ function Profile(props) {
     setEmail(value);
 
     if (value !== lastEmail) {
-      setVisibleButton(true);
+      setButton(true);
     } else {
-      setVisibleButton(false);
+      setButton(false);
     }
   }
 
@@ -63,7 +63,7 @@ function Profile(props) {
           </div>
           <p className="profile__text">E-mail</p>
         </div>
-        <Link to="/profile" className="profile__button" disabled={!isVisibleButton}>Редактировать</Link>
+        <Link to="/profile" className="profile__button" disabled={!isButton}>Редактировать</Link>
         <Link to="/" className="profile__link" onClick={props.handleSignOut}>Выйти из аккаунта</Link>
       </form>
     </section>
