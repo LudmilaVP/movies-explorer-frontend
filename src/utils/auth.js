@@ -1,6 +1,6 @@
 import { BASE_URL } from './constants.js'
 
-function getResponse(res) {
+const getResponse = (res) => {
   if (res.ok) {
     return res.json();
   }
@@ -17,7 +17,7 @@ export const authorization = (name, email, password) => {
     },
     body: JSON.stringify({ name, email, password })
   })
-    .then(res => getResponse(res))
+  .then(getResponse)
 }
 
 export const login = (email, password) => {
@@ -30,17 +30,17 @@ export const login = (email, password) => {
     },
     body: JSON.stringify({ email, password })
   })
-    .then(res => getResponse(res))
+  .then(getResponse)
 }
 
 export const signout = () => {
   return fetch(`${BASE_URL}/signout`, {
-    method: "GET",
+    method: "POST",
     credentials: 'include',
     headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     },
   })
-    .then(res => getResponse(res));
+  .then(getResponse)
 };

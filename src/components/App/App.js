@@ -12,7 +12,7 @@ import Login from '../Login/Login';
 import Profile from '../Profile/Profile';
 import PageNotFound from '../PageNotFound/PageNotFound';
 import ProtectedRoute from '../ProtectedRoute/ProtectedRoute';
-import { authorization, login, signout } from '../../utils/auth';
+import * as auth from '../../utils/auth';
 import mainApi from '../../utils/MainApi';
 import * as moviesApi from '../../utils/MoviesApi.js'
 
@@ -29,7 +29,7 @@ function App() {
   const { pathname } = useLocation();
   const history = useHistory()
   
-  function getUserProfile() {
+  function getUserInfo() {
       mainApi.getUserProfile()
         .then((data) => {
           setLoggedIn(true)
@@ -39,20 +39,6 @@ function App() {
           console.log(err)
         })
     }
-
-  useEffect(() => {
-    mainApi
-      .checkToken()
-      .then((data) => {
-        if (data) {
-          setLoggedIn(true)
-          setCurrentUser(data)
-        }
-      })
-      .catch((err) => {
-        console.log(err)
-      })
-  }, [loggedIn])
 
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
@@ -174,7 +160,7 @@ function App() {
       .then(() => {
         setLoggedIn(true)
         history.push('/movies')
-        getUserProfile()
+        getUserInfo()
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
