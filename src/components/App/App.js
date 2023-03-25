@@ -26,10 +26,11 @@ function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [serverError, setServerError] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false)
-  const location = useLocation()
+  const { pathname } = useLocation();
   const history = useHistory()
   
-  function getUserProfile() {
+  useEffect(() => {
+    if (loggedIn) {
       mainApi.getUserProfile()
         .then((data) => {
           setLoggedIn(true)
@@ -38,7 +39,8 @@ function App() {
         .catch((err) => {
           console.log(err)
         })
-  }
+    }
+  }, [loggedIn])
 
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
@@ -105,7 +107,7 @@ function App() {
   }
 
   useEffect(() => {
-    const path = location.pathname
+    const path = pathname.pathname
     mainApi.getUserProfile()
       .then((userData) => {
         setLoggedIn(true)
@@ -155,10 +157,10 @@ function App() {
       })
   }
 
-  function handleRegister(name, email, password) {
+  function handleRegister({ name, email, password }) {
     authorization(name, email, password)
       .then(() => {
-        handleLogin(email, password)
+        handleLogin({ email, password })
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
@@ -166,12 +168,11 @@ function App() {
       })
   }
 
-  function handleLogin(email, password) {
+  function handleLogin({ email, password }) {
     login(email, password)
       .then(() => {
         setLoggedIn(true)
         history.push('/movies')
-        getUserProfile()
       })
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
@@ -193,15 +194,15 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
+      {pathname === '/' || pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile' ?
+          <Header loggedIn={loggedIn} /> : ''}
         <Switch>
 
           <Route exact path='/'>
-            <Header loggedIn={!loggedIn} />
             <Main />
           </Route>
 
           <Route exact path="/movies">
-            <Header loggedIn={loggedIn} />
             <ProtectedRoute
               component={Movies}
               cards={movies}
@@ -218,7 +219,7 @@ function App() {
           </Route>
 
           <Route exact path="/saved-movies">
-            <Header loggedIn={loggedIn} />
+
             <ProtectedRoute
               component={SavedMovies}
               cards={savedMovies}
@@ -239,7 +240,7 @@ function App() {
           </Route>
 
           <Route exact path="/profile">
-            <Header loggedIn={loggedIn} />
+
             <ProtectedRoute
               component={Profile}
               loggedIn={loggedIn}
