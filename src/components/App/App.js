@@ -40,42 +40,6 @@ function App() {
         })
   }
 
-
-  function handleRegister({ name, email, password }) {
-    authorization(name, email, password)
-      .then(() => {
-        handleLogin({ email, password })
-      })
-      .catch((err) => {
-        setMessageError('Что-то пошло не так...')
-        console.log(err.message)
-      })
-  }
-
-  function handleLogin({ email, password }) {
-    login(email, password)
-      .then(() => {
-        setLoggedIn(true)
-        history.push('/movies')
-        getUserProfile()
-      })
-      .catch((err) => {
-        setMessageError('Что-то пошло не так...')
-        console.log(err.message)
-      })
-  }
-
-  function handleSignOut() {
-    signout()
-      .then(() => {
-        setLoggedIn(false)
-        history.push('/')
-      })
-      .catch((err) => {
-        console.log(err.message)
-      })
-  }
-
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
     moviesApi.getApiMovies()
@@ -180,6 +144,41 @@ function App() {
       })
   }
 
+  function handleRegister({ name, email, password }) {
+    authorization(name, email, password)
+      .then(() => {
+        handleLogin({ email, password })
+      })
+      .catch((err) => {
+        setMessageError('Что-то пошло не так...')
+        console.log(err.message)
+      })
+  }
+
+  function handleLogin({ email, password }) {
+    login(email, password)
+      .then(() => {
+        setLoggedIn(true)
+        history.push('/movies')
+        getUserProfile()
+      })
+      .catch((err) => {
+        setMessageError('Что-то пошло не так...')
+        console.log(err.message)
+      })
+  }
+
+  function handleSignOut() {
+    signout()
+      .then(() => {
+        setLoggedIn(false)
+        history.push('/')
+      })
+      .catch((err) => {
+        console.log(err.message)
+      })
+  }
+  
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
