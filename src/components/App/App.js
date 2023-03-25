@@ -42,6 +42,20 @@ function App() {
     }
   }, [loggedIn])
 
+  useEffect(() => {
+    mainApi
+      .checkToken()
+      .then((data) => {
+        if (data) {
+          setLoggedIn(true)
+          setCurrentUser(data)
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }, [loggedIn])
+  
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
     moviesApi.getApiMovies()
