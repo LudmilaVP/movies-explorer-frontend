@@ -1,5 +1,5 @@
 import './Profile.css';
-import { useState, useContext } from 'react';
+import { useState, useContext, useHistory } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import mainApi from '../../utils/MainApi';
 
@@ -10,18 +10,19 @@ function Profile({ onSignOut }) {
   const [email, setEmail] = useState(currentUser.email);
   const [lastEmail, setLastEmail] = useState(currentUser.email);
   const [isButton, setButton] = useState(false);
+  const history = useHistory();
 
-  function handleSubmit(e) {
+  function handleSubmit() {
     mainApi.setUserProfile({ name, email })
     .then(() => {
       setButton(false);
       setLastName(name);
       setLastEmail(email);
+      history.push('/profile')
     })
     .catch((err) => {
       console.log(err.message)
     });
-    e.preventDefault();
   };
 
   function handleNameChange(e) {
