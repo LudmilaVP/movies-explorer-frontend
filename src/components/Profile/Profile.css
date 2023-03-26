@@ -105,14 +105,9 @@
     opacity: .3;
   }
   
-  .profile__link {
+  .profile__button_logout{
     margin: 0 0 10px;
     color: #FF3055;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 16px;
-    text-decoration: none;
-    transition: opacity .2s linear;
   }
   
   .profile__link:hover {
