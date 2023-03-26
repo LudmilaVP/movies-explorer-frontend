@@ -236,8 +236,8 @@ function App() {
             <ProtectedRoute path="/profile"
               component={Profile}
               loggedIn={loggedIn}
-              handleSignOut={handleSignOut}
-              handleEditProfile={handleEditProfile}
+              logOut={handleSignOut}
+              onProfile={handleEditProfile}
             />
 
           <Route path="*">
