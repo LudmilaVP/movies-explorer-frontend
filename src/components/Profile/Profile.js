@@ -4,7 +4,7 @@ import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import useFormValidation from '../../utils/ProfileValidation';
 
 function Profile(props) {
-  const { handleChange, handleSubmit, values, errors, isValid, setValues } = useFormValidation(props.handleEditProfile)
+  const { handleChange, handleSubmit, values, errors, isValid, setValues } = useFormValidation(props.handleUpdateProfile)
   const currentUser = useContext(CurrentUserContext)
   const [isInputDisabled, setIsInputDisabled] = useState(true)
   const [isSuccess, setIsSuccess] = useState(false)
@@ -38,7 +38,7 @@ function Profile(props) {
           {errors?.email && <span className="profile__error">{errors.email}</span>}
         </div>
 
-        {isSuccess ? <p className="profile__status">Изменения сохранены</p> :
+        {isSuccess ? <p className="profile__button profile__button_status">Изменения сохранены</p> :
           <span className="profile__error">{errors?.email}</span>}
 
         {isInputDisabled ? (

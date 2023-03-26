@@ -121,17 +121,13 @@
     font-size: 12px;
     line-height: 12px;
   }
-
-  .profile__button_edit {
-    margin-top: 188px;
-  }
   
   .profile__button_logout {
     color: #FF3055;
     font-weight: 500;
   }
   
-  .profile__save-button {
+  .profile__button_save {
     width: 100%;
     margin: 169px 0 16px;
     padding: 14px 0;
@@ -149,7 +145,7 @@
     color: #A0A0A0;
   }
   
-  .profile__status {
+  .profile__button_status {
     color: #2BE080;
   }
   
