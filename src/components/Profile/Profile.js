@@ -1,5 +1,6 @@
 import './Profile.css';
-import { useState, useContext, useHistory } from 'react';
+import { useState, useContext} from 'react';
+import { useHistory } from 'react-router-dom';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import mainApi from '../../utils/MainApi';
 
