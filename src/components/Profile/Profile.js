@@ -41,11 +41,11 @@ function Profile({ onSignOut, handleUpdateProfile }) {
         <div className="profile__input">
           <p className="profile__text">Имя</p>
           <div className="profile__field profile__field_type_name">
-            <input className="profile__settings" name="name" defaultValue={user.name} onChange={handleNameChange} required />
+            <input className="profile__settings" type="text" name="name" defaultValue={user.name} onChange={handleNameChange} required />
           </div>
 
           <div className="profile__field profile__field_type_email">
-            <input className="profile__settings" name="email" defaultValue={user.email} onChange={handleEmailChange} required />
+            <input className="profile__settings" type="email" name="email" defaultValue={user.email} onChange={handleEmailChange} required />
           </div>
           <p className="profile__text">E-mail</p>
         </div>
