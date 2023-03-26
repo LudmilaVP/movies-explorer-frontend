@@ -144,6 +144,17 @@ function App() {
       })
   }
 
+  function handleUpdateProfile(name, email) {
+    mainApi.setUserProfile({ name, email })
+      .then(() => {
+        setCurrentUser({ name, email })
+      })
+      .catch((err) => {
+        setMessageError('Что-то пошло не так...')
+        console.log(err.message)
+      })
+  }
+
   function handleRegister({ name, email, password }) {
     auth.authorization(name, email, password)
       .then(() => {
@@ -226,6 +237,7 @@ function App() {
               component={Profile}
               loggedIn={loggedIn}
               onSignOut={handleSignOut}
+              handleUpdateProfile={handleUpdateProfile}
             />
 
           <Route path="*">

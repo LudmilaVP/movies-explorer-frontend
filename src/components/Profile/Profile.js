@@ -1,67 +1,56 @@
 import './Profile.css';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import mainApi from '../../utils/MainApi';
 
-function Profile({ onSignOut}) {
-  const currentUser = useContext(CurrentUserContext);
-  const [name, setName] = useState(currentUser.name);
-  const [lastName, setLastName] = useState(currentUser.name);
-  const [email, setEmail] = useState(currentUser.email);
-  const [lastEmail, setLastEmail] = useState(currentUser.email);
-  const [isButton, setButton] = useState(false);
+function Profile({ onSignOut, handleUpdateProfile }) {
+  const user = useContext(CurrentUserContext);
 
-  const handleSubmit = () => {
-    mainApi.setUserProfile({ name, email })
-    .then(() => {
-      setButton(false);
-      setLastName(name);
-      setLastEmail(email);
-    })
-    .catch((err) => {
-      console.log(err.message);
-    });
-  };
+  const [userName, setUserName] = useState(user.name);
+  const [userEmail, setUserEmail] = useState(user.email);
+  const [disableForm, setDisableForm] = useState(true)
 
   function handleNameChange(e) {
-    const value = e.target.value;
-    setName(value);
-
-    if (value !== lastName) {
-      setButton(true);
-    } else {
-      setButton(false);
-    }
+    setUserName(e.target.value);
   }
 
   function handleEmailChange(e) {
-    const value = e.target.value;
-    setEmail(value);
-
-    if (value !== lastEmail) {
-      setButton(true);
-    } else {
-      setButton(false);
-    }
+    setUserEmail(e.target.value)
   }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    handleUpdateProfile({
+      name: userName,
+      email: userEmail
+    })
+  }
+
+  useEffect(() => {
+    if (userName !== user.name || userEmail !== user.email) {
+      setDisableForm(false)
+    }
+     else {
+      setDisableForm(true)
+    }
+  }, [handleNameChange, handleEmailChange, userName, userEmail, user.name, user.email])
 
   return (
     <section className="profile">
       <form className="profile__form" onSubmit={handleSubmit}>
-        <h3 className="profile__welcome">Привет, {name}!</h3>
+        <h3 className="profile__welcome">Привет, {user.name}!</h3>
         <div className="profile__input">
           <p className="profile__text">Имя</p>
           <div className="profile__field profile__field_type_name">
-            <input className="profile__settings" value={name} onChange={handleNameChange} required />
+            <input className="profile__settings" name="name" defaultValue={user.name} onChange={handleNameChange} required />
           </div>
 
           <div className="profile__field profile__field_type_email">
-            <input className="profile__settings" value={email} onChange={handleEmailChange} required />
+            <input className="profile__settings" name="email" defaultValue={user.email} onChange={handleEmailChange} required />
           </div>
           <p className="profile__text">E-mail</p>
         </div>
 
-        <button className="profile__button" disabled={!isButton}>Редактировать</button>
+        <button className="profile__button" disabled={disableForm}>Редактировать</button>
         <button className="profile__button profile__button_logout" onClick={onSignOut}>Выйти из аккаунта</button>
 
       </form>
