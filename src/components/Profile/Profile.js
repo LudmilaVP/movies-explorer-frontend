@@ -14,7 +14,7 @@ function Profile({ onSignOut, handleUpdateProfile }) {
 
   const handleSubmit = e => {
     e.preventDefault()
-    handleUpdateProfile(values.name, values.email)
+    handleUpdateProfile(currentUser.name, currentUser.email)
   }
 
   function handleChange(e) {
@@ -31,11 +31,11 @@ function Profile({ onSignOut, handleUpdateProfile }) {
         <div className="profile__input">
           <p className="profile__text">Имя</p>
           <div className="profile__field profile__field_type_name">
-            <input className="profile__settings" value={values.name} onChange={handleChange} required />
+            <input className="profile__settings" value={currentUser.name} onChange={handleChange} required />
           </div>
 
           <div className="profile__field profile__field_type_email">
-            <input className="profile__settings" value={values.email} onChange={handleChange} required />
+            <input className="profile__settings" value={currentUser.email} onChange={handleChange} required />
           </div>
           <p className="profile__text">E-mail</p>
         </div>
