@@ -145,7 +145,7 @@ function App() {
   }
 
   function handleUpdateProfile(name, email) {
-    mainApi.setUserInfo({ name, email })
+    mainApi.setUserProfile({ name, email })
       .then(() => {
         setCurrentUser({ name, email })
       })

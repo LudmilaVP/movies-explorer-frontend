@@ -1,11 +1,15 @@
 import './Profile.css';
-import { useState, useContext} from 'react';
+import { useState, useContext, useEffect} from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 
 function Profile({ onSignOut, handleUpdateProfile }) {
   const currentUser = useContext(CurrentUserContext);
-  const [isButton, setButton] = useState(false);
+  const [isValid , setIsValid] = useState(false)
   const [values, setValues] = useState()
+
+  useEffect(() => {
+    setValues(currentUser)
+  }, [currentUser])
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -24,12 +28,7 @@ function Profile({ onSignOut, handleUpdateProfile }) {
     const target = e.target
     const { name, value } = target
     setValues({...values, [name]: value})
-
-    if (value !== name) {
-      setButton(true);
-    } else {
-      setButton(false);
-    }
+    setIsValid(target.closest('form').checkValidity())
   }
 
   return (
@@ -48,7 +47,7 @@ function Profile({ onSignOut, handleUpdateProfile }) {
           <p className="profile__text">E-mail</p>
         </div>
 
-            <button className="profile__button" disabled={!isButton}>Редактировать</button>
+            <button className="profile__button" disabled={!isValid}>Редактировать</button>
             <button className="profile__button profile__button_logout" onClick={onSignOut}>Выйти из аккаунта</button>
 
       </form>
