@@ -28,17 +28,17 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false)
   const { pathname } = useLocation();
   const history = useHistory()
-  
+
   function getUserInfo() {
-      mainApi.getUserProfile()
-        .then((data) => {
-          setLoggedIn(true)
-          setCurrentUser(data)
-        })
-        .catch((err) => {
-          console.log(err)
-        })
-    }
+    mainApi.getUserProfile()
+      .then((data) => {
+        setLoggedIn(true)
+        setCurrentUser(data)
+      })
+      .catch((err) => {
+        console.log(err)
+      })
+  }
 
   function searchMovie(movieName, isShortFilms) {
     setIsLoading(true)
@@ -144,11 +144,9 @@ function App() {
       })
   }
 
-  function handleUpdateProfile(name, email) {
-    mainApi.setUserProfile({ name, email })
-      .then(() => {
-        setCurrentUser({ name, email })
-      })
+  function handleUpdateProfile(user) {
+    mainApi.setUserProfile(user)
+      .then(res => setCurrentUser(res))
       .catch((err) => {
         setMessageError('Что-то пошло не так...')
         console.log(err.message)
@@ -193,7 +191,7 @@ function App() {
   return (
     <CurrentUserContext.Provider value={currentUser}>
       <div className="App">
-      {pathname === '/' || pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile' ?
+        {pathname === '/' || pathname === '/movies' || pathname === '/saved-movies' || pathname === '/profile' ?
           <Header loggedIn={loggedIn} /> : ''}
         <Switch>
 
@@ -201,29 +199,29 @@ function App() {
             <Main />
           </Route>
 
-            <ProtectedRoute path="/movies"
-              component={Movies}
-              cards={movies}
-              defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
-              isSaved={isSaved}
-              handleShowMore={handleShowMore}
-              handleSearchMovie={handleSearchMovie}
-              onMovieSave={handleMovieSave}
-              onMovieDelete={handleMovieDelete}
-              serverError={serverError}
-              isLoading={isLoading}
-              loggedIn={loggedIn}
-            />
+          <ProtectedRoute path="/movies"
+            component={Movies}
+            cards={movies}
+            defaultSearchValue={localStorage.getItem('searchMovieName') || ""}
+            isSaved={isSaved}
+            handleShowMore={handleShowMore}
+            handleSearchMovie={handleSearchMovie}
+            onMovieSave={handleMovieSave}
+            onMovieDelete={handleMovieDelete}
+            serverError={serverError}
+            isLoading={isLoading}
+            loggedIn={loggedIn}
+          />
 
-            <ProtectedRoute path="/saved-movies"
-              component={SavedMovies}
-              cards={savedMovies}
-              isSaved={isSaved}
-              onMovieDelete={handleMovieDelete}
-              serverError={serverError}
-              loggedIn={loggedIn}
-              isLoading={isLoading}
-            />
+          <ProtectedRoute path="/saved-movies"
+            component={SavedMovies}
+            cards={savedMovies}
+            isSaved={isSaved}
+            onMovieDelete={handleMovieDelete}
+            serverError={serverError}
+            loggedIn={loggedIn}
+            isLoading={isLoading}
+          />
 
           <Route path='/signup'>
             <Register handleRegister={handleRegister} messageError={messageError} />
@@ -233,12 +231,12 @@ function App() {
             <Login handleLogin={handleLogin} messageError={messageError} />
           </Route>
 
-            <ProtectedRoute path="/profile"
-              component={Profile}
-              loggedIn={loggedIn}
-              onSignOut={handleSignOut}
-              handleUpdateProfile={handleUpdateProfile}
-            />
+          <ProtectedRoute path="/profile"
+            component={Profile}
+            loggedIn={loggedIn}
+            onSignOut={handleSignOut}
+            handleUpdateProfile={handleUpdateProfile}
+          />
 
           <Route path="*">
             <PageNotFound />
