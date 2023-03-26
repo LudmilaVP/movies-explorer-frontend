@@ -122,33 +122,10 @@
     line-height: 12px;
   }
   
-  .profile__button_logout {
-    color: #FF3055;
-    font-weight: 500;
+  .profile__button_disabled {
+    color: #8b8b8b;
+    cursor: default;
   }
-  
-  .profile__button_save {
-    width: 100%;
-    margin: 169px 0 16px;
-    padding: 14px 0;
-    background: #2BE080;
-    color: white;
-    border: none;
-    border-radius: 3px;
-    font-size: 14px;
-    line-height: 17px;
-    font-weight: 500;
-  }
-  
-  .profile__button_save_disabled {
-    background: #F9F9F9;
-    color: #A0A0A0;
-  }
-  
-  .profile__button_status {
-    color: #2BE080;
-  }
-  
 
   @media screen and (max-width: 800px) {
     .profile__form {

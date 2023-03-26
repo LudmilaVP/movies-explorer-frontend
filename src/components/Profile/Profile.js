@@ -1,25 +1,26 @@
 import './Profile.css';
-import { useState, useEffect, useContext } from 'react';
+import { useEffect, useContext } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
 import useFormValidation from '../../utils/ProfileValidation';
 
-function Profile(props) {
-  const { handleChange, handleSubmit, values, errors, isValid, setValues } = useFormValidation(props.handleUpdateProfile)
-  const currentUser = useContext(CurrentUserContext)
-  const [isInputDisabled, setIsInputDisabled] = useState(true)
-  const [isSuccess, setIsSuccess] = useState(false)
+function Profile({ handleSignOut, handleProfile }) {
+  const { values, handleChange, resetForm, errors, isValid } = useFormValidation();
+  const currentUser = useContext(CurrentUserContext); // подписка на контекст
 
+  function handleSubmit(e) {
+    e.preventDefault();
+    handleProfile(values);
+  }
+
+  // после загрузки текущего пользователя из API
+  // его данные будут использованы в управляемых компонентах.
   useEffect(() => {
-    setValues(currentUser)
-  }, [currentUser])
+    if (currentUser) {
+      resetForm(currentUser, {}, true);
+    }
+  }, [currentUser, resetForm]);
 
-  function handleUpdateProfile() {
-    setIsInputDisabled(false)
-  }
-
-  function handleSave() {
-    setIsSuccess(true)
-  }
+  const requirementValidity = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
 
   return (
     <section className="profile">
@@ -28,29 +29,18 @@ function Profile(props) {
         <div className="profile__input">
           <p className="profile__text">Имя</p>
           <div className="profile__field profile__field_type_name">
-            <input className="profile__settings" value={values?.name} onChange={handleChange} disabled={isInputDisabled} required />
+            <input className="profile__settings" value={values.name} onChange={handleChange} required />
           </div>
           {errors?.name && <span className="profile__error">{errors.name}</span>}
           <div className="profile__field profile__field_type_email">
-            <input className="profile__settings" value={values?.email} onChange={handleChange} disabled={isInputDisabled} required />
+            <input className="profile__settings" value={values.email} onChange={handleChange} required />
           </div>
           <p className="profile__text">E-mail</p>
           {errors?.email && <span className="profile__error">{errors.email}</span>}
         </div>
 
-        {isSuccess ? <p className="profile__button profile__button_status">Изменения сохранены</p> :
-          <span className="profile__error">{errors?.email}</span>}
-
-        {isInputDisabled ? (
-          <>
-            <button className="profile__button" onClick={handleUpdateProfile}>Редактировать</button>
-            <button className="profile__button profile__button_logout" onClick={props.handleSignOut}>Выйти из аккаунта</button>
-          </>
-        ) : (
-          <button className={isValid ? "profile__button profile__button_save" :
-            "profile__button profile__button_save_disabled"} onClick={handleSave} disabled={!isValid}>Сохранить</button>
-        )}
-
+            <button  className={`profile__button ${requirementValidity ? 'profile__button_disabled' : ''}`} disabled={requirementValidity ? true : false}>Редактировать</button>
+            <button className="profile__button profile__button_logout" onClick={handleSignOut}>Выйти из аккаунта</button>
 
       </form>
     </section>
