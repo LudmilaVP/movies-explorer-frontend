@@ -25,6 +25,7 @@ function App() {
   const [savedMovies, setSavedMovies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [serverError, setServerError] = useState(false)
+  const [profileIsBeingEdited, setProfileIsBeingEdited] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false)
   const { pathname } = useLocation();
   const history = useHistory()
@@ -144,7 +145,7 @@ function App() {
       })
   }
 
-  function handleEditProfile(name, email) {
+  function handleUpdateProfile(name, email) {
     mainApi.setUserProfile({ name, email })
       .then(() => {
         setCurrentUser({ name, email })
@@ -153,6 +154,10 @@ function App() {
         setMessageError('Что-то пошло не так...')
         console.log(err.message)
       })
+  }
+
+  const handleEditProfile = () => {
+    setProfileIsBeingEdited(true);
   }
 
   function handleRegister({ name, email, password }) {
@@ -237,7 +242,9 @@ function App() {
               component={Profile}
               loggedIn={loggedIn}
               onSignOut={handleSignOut}
-              onUpdateProfile={handleEditProfile}
+              onUpdateProfile={handleUpdateProfile}
+              onEditProfile={handleEditProfile}
+                  onBeingEdited={profileIsBeingEdited}
             />
 
           <Route path="*">
