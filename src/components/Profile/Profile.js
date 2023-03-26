@@ -1,10 +1,10 @@
 import './Profile.css';
 import { useState, useEffect, useContext } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import ProfileValidation from '../../utils/useFormValidation';
+import useFormValidation from '../../utils/ProfileValidation';
 
 function Profile(props) {
-  const { handleChange, handleSubmit, values, errors, isValid, setValues } = ProfileValidation(props.handleEditProfile)
+  const { handleChange, handleSubmit, values, errors, isValid, setValues } = useFormValidation(props.handleEditProfile)
   const currentUser = useContext(CurrentUserContext)
   const [isInputDisabled, setIsInputDisabled] = useState(true)
   const [isSuccess, setIsSuccess] = useState(false)
