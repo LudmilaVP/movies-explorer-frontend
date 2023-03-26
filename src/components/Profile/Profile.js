@@ -1,46 +1,70 @@
 import './Profile.css';
-import { useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import useFormValidation from '../../utils/ProfileValidation';
+import mainApi from '../../utils/MainApi';
 
-function Profile({ handleSignOut, handleProfile }) {
-  const { values, handleChange, resetForm, errors, isValid } = useFormValidation();
-  const currentUser = useContext(CurrentUserContext); // подписка на контекст
+function Profile({ onSignOut }) {
+  const currentUser = useContext(CurrentUserContext);
+  const [name, setName] = useState(currentUser.name);
+  const [lastName, setLastName] = useState(currentUser.name);
+  const [email, setEmail] = useState(currentUser.email);
+  const [lastEmail, setLastEmail] = useState(currentUser.email);
+  const [isVisibleButton, setVisibleButton] = useState(false);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    handleProfile(values);
+  const handleSubmit = (evt) => {
+    evt.preventDefault();
+
+    mainApi.setUserProfile({ name, email }).then(() => {
+      setVisibleButton(false);
+      setLastName(name);
+      setLastEmail(email);
+    })
+    .catch((err) => {
+      console.log(err.message)
+    });
+  };
+
+  function handleNameChange(evt) {
+    const value = evt.target.value;
+    setName(value);
+
+    if (value !== lastName) {
+      setVisibleButton(true);
+    } else {
+      setVisibleButton(false);
+    }
   }
 
-  // после загрузки текущего пользователя из API
-  // его данные будут использованы в управляемых компонентах.
-  useEffect(() => {
-    if (currentUser) {
-      resetForm(currentUser, {}, true);
-    }
-  }, [currentUser, resetForm]);
+  function handleEmailChange(evt) {
+    const value = evt.target.value;
+    setEmail(value);
 
-  const requirementValidity = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
+    if (value !== lastEmail) {
+      setVisibleButton(true);
+    } else {
+      setVisibleButton(false);
+    }
+  }
 
   return (
     <section className="profile">
       <form className="profile__form" onSubmit={handleSubmit}>
-        <h3 className="profile__welcome">Привет, {currentUser.name}!</h3>
+        <h3 className="profile__welcome">Привет, {name}!</h3>
         <div className="profile__input">
           <p className="profile__text">Имя</p>
           <div className="profile__field profile__field_type_name">
-            <input className="profile__settings" value={values.name} onChange={handleChange} required />
+            <input className="profile__settings" value={name} onChange={handleNameChange} required />
           </div>
-          {errors?.name && <span className="profile__error">{errors.name}</span>}
+
           <div className="profile__field profile__field_type_email">
-            <input className="profile__settings" value={values.email} onChange={handleChange} required />
+            <input className="profile__settings" value={email} onChange={handleEmailChange} required />
           </div>
           <p className="profile__text">E-mail</p>
-          {errors?.email && <span className="profile__error">{errors.email}</span>}
+
         </div>
 
-            <button  className={`profile__button ${requirementValidity ? 'profile__button_disabled' : ''}`} disabled={requirementValidity ? true : false}>Редактировать</button>
-            <button className="profile__button profile__button_logout" onClick={handleSignOut}>Выйти из аккаунта</button>
+            <button className="profile__button" disabled={!isVisibleButton}>Редактировать</button>
+            <button className="profile__button profile__button_logout" onClick={onSignOut}>Выйти из аккаунта</button>
 
       </form>
     </section>
