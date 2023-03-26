@@ -9,13 +9,13 @@ function Profile({ onSignOut }) {
   const [lastName, setLastName] = useState(currentUser.name);
   const [email, setEmail] = useState(currentUser.email);
   const [lastEmail, setLastEmail] = useState(currentUser.email);
-  const [isVisibleButton, setVisibleButton] = useState(false);
+  const [isButton, setButton] = useState(false);
 
-  const handleSubmit = (evt) => {
-    evt.preventDefault();
-
-    mainApi.setUserProfile({ name, email }).then(() => {
-      setVisibleButton(false);
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mainApi.setUserProfile({ name, email })
+    .then(() => {
+      setButton(false);
       setLastName(name);
       setLastEmail(email);
     })
@@ -24,25 +24,25 @@ function Profile({ onSignOut }) {
     });
   };
 
-  function handleNameChange(evt) {
-    const value = evt.target.value;
+  function handleNameChange(e) {
+    const value = e.target.value;
     setName(value);
 
     if (value !== lastName) {
-      setVisibleButton(true);
+      setButton(true);
     } else {
-      setVisibleButton(false);
+      setButton(false);
     }
   }
 
-  function handleEmailChange(evt) {
-    const value = evt.target.value;
+  function handleEmailChange(e) {
+    const value = e.target.value;
     setEmail(value);
 
     if (value !== lastEmail) {
-      setVisibleButton(true);
+      setButton(true);
     } else {
-      setVisibleButton(false);
+      setButton(false);
     }
   }
 
@@ -60,10 +60,9 @@ function Profile({ onSignOut }) {
             <input className="profile__settings" value={email} onChange={handleEmailChange} required />
           </div>
           <p className="profile__text">E-mail</p>
-
         </div>
 
-            <button className="profile__button" disabled={!isVisibleButton}>Редактировать</button>
+            <button className="profile__button" disabled={!isButton}>Редактировать</button>
             <button className="profile__button profile__button_logout" onClick={onSignOut}>Выйти из аккаунта</button>
 
       </form>
