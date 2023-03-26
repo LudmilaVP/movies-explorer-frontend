@@ -17,11 +17,11 @@ function Profile({ onSignOut }) {
       setButton(false);
       setLastName(name);
       setLastEmail(email);
-      e.preventDefault();
     })
     .catch((err) => {
       console.log(err.message)
     });
+    e.preventDefault();
   };
 
   function handleNameChange(e) {
