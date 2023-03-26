@@ -12,12 +12,12 @@ function Profile({ onSignOut }) {
   const [isButton, setButton] = useState(false);
 
   function handleSubmit(e) {
-    e.preventDefault();
     mainApi.setUserProfile({ name, email })
     .then(() => {
       setButton(false);
       setLastName(name);
       setLastEmail(email);
+      e.preventDefault();
     })
     .catch((err) => {
       console.log(err.message)
