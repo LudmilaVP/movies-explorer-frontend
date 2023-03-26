@@ -144,17 +144,6 @@ function App() {
       })
   }
 
-  function handleEditProfile(name, email) {
-    mainApi.setUserProfile({ name, email })
-      .then(() => {
-        setCurrentUser({ name, email })
-      })
-      .catch((err) => {
-        setMessageError('Что-то пошло не так...')
-        console.log(err.message)
-      })
-  }
-
   function handleRegister({ name, email, password }) {
     auth.authorization(name, email, password)
       .then(() => {
@@ -236,8 +225,7 @@ function App() {
             <ProtectedRoute path="/profile"
               component={Profile}
               loggedIn={loggedIn}
-              logOut={handleSignOut}
-              onProfile={handleEditProfile}
+              onSignOut={handleSignOut}
             />
 
           <Route path="*">
