@@ -1,28 +1,24 @@
 import './Profile.css';
-import { useState, useContext, useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
+import useFormValidation from '../../utils/useFormValidation.js';
 
 function Profile({ onSignOut, handleUpdateProfile }) {
-  const currentUser = useContext(CurrentUserContext);
-  const [isValid, setIsValid] = useState(false)
-  const [values, setValues] = useState({})
-  
+  const { values, handleChange, resetForm, isValid } = useFormValidation();
+  const currentUser = useContext(CurrentUserContext); 
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    handleUpdateProfile(values);
+  }
 
   useEffect(() => {
-    setValues(currentUser)
-  }, [currentUser])
+    if (currentUser) {
+      resetForm(currentUser, {}, true);
+    }
+  }, [currentUser, resetForm]);
 
-  const handleSubmit = e => {
-    e.preventDefault()
-    handleUpdateProfile(values)
-  }
-
-  function handleChange(e) {
-    const target = e.target
-    const { name, value } = target
-    setValues({ ...values, [name]: value })
-    setIsValid(false);
-  }
+  const requirementValidity = (!isValid || (currentUser.name === values.name && currentUser.email === values.email));
 
   return (
     <section className="profile">
@@ -40,7 +36,7 @@ function Profile({ onSignOut, handleUpdateProfile }) {
           <p className="profile__text">E-mail</p>
         </div>
 
-        <button className="profile__button" disabled={!isValid}>Редактировать</button>
+        <button className="profile__button" disabled={requirementValidity ? true : false}>Редактировать</button>
         <button className="profile__button profile__button_logout" onClick={onSignOut}>Выйти из аккаунта</button>
 
       </form>
