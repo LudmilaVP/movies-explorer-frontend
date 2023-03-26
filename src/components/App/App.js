@@ -25,7 +25,6 @@ function App() {
   const [savedMovies, setSavedMovies] = useState([])
   const [isLoading, setIsLoading] = useState(false)
   const [serverError, setServerError] = useState(false)
-  const [profileIsBeingEdited, setProfileIsBeingEdited] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false)
   const { pathname } = useLocation();
   const history = useHistory()
@@ -156,10 +155,6 @@ function App() {
       })
   }
 
-  const handleEditProfile = () => {
-    setProfileIsBeingEdited(true);
-  }
-
   function handleRegister({ name, email, password }) {
     auth.authorization(name, email, password)
       .then(() => {
@@ -242,9 +237,7 @@ function App() {
               component={Profile}
               loggedIn={loggedIn}
               onSignOut={handleSignOut}
-              onUpdateProfile={handleUpdateProfile}
-              onEditProfile={handleEditProfile}
-                  onBeingEdited={profileIsBeingEdited}
+              handleUpdateProfile={handleUpdateProfile}
             />
 
           <Route path="*">

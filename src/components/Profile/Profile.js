@@ -1,52 +1,57 @@
 import './Profile.css';
-import { useCallback, useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { CurrentUserContext } from '../../contexts/CurrentUserContext';
-import ProfileValidation from '../../utils/ProfileValidation';
+import ProfileValidation from '../../utils/useFormValidation';
 
-function Profile({ onSignOut, onUpdateProfile }) {
-  const currentUser = useContext(CurrentUserContext);
-    const currentUserName = currentUser.name
-    const [isSubmitDisabled, setIsSubmitDisabled] = useState(true);
-    const { values, setValues, handleChange, errors, isValid } = ProfileValidation();
+function Profile(props) {
+  const { handleChange, handleSubmit, values, errors, isValid, setValues } = ProfileValidation(props.handleEditProfile)
+  const currentUser = useContext(CurrentUserContext)
+  const [isInputDisabled, setIsInputDisabled] = useState(true)
+  const [isSuccess, setIsSuccess] = useState(false)
 
-    const checkStatusSubmit = useCallback(() => {
-        return !isValid || values.name === currentUser.name && values.email === currentUser.email;
+  useEffect(() => {
+    setValues(currentUser)
+  }, [currentUser])
 
-    }, [isValid, values, currentUser]);
+  function handleUpdateProfile() {
+    setIsInputDisabled(false)
+  }
 
-    useEffect(() => {
-        setValues({ 'name': currentUser.name, 'email': currentUser.email });
-    }, [setValues, currentUser]);
-
-    useEffect(() => {
-        setIsSubmitDisabled(checkStatusSubmit());
-    }, [checkStatusSubmit]);
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        setIsSubmitDisabled(true);
-        onUpdateProfile(values);
-        checkStatusSubmit();
-    }
+  function handleSave() {
+    setIsSuccess(true)
+  }
 
   return (
     <section className="profile">
       <form className="profile__form" onSubmit={handleSubmit}>
-        <h3 className="profile__welcome">Привет, {currentUserName}!</h3>
+        <h3 className="profile__welcome">Привет, {currentUser.name}!</h3>
         <div className="profile__input">
           <p className="profile__text">Имя</p>
           <div className="profile__field profile__field_type_name">
-            <input className="profile__settings" value={values.name || ''} onChange={handleChange} required />
+            <input className="profile__settings" value={values?.name} onChange={handleChange} disabled={isInputDisabled} required />
           </div>
-          <span className='profile__error'>{errors.name || ''}</span>
+          {errors?.name && <span className="profile__error">{errors.name}</span>}
           <div className="profile__field profile__field_type_email">
-            <input className="profile__settings" value={values.email || ''} onChange={handleChange} required />
+            <input className="profile__settings" value={values?.email} onChange={handleChange} disabled={isInputDisabled} required />
           </div>
           <p className="profile__text">E-mail</p>
-          <span className='profile__error'>{errors.email || ''}</span>
+          {errors?.email && <span className="profile__error">{errors.email}</span>}
         </div>
-        <button className="profile__button" disabled={isSubmitDisabled}>Редактировать</button>
-        <button className="profile__button profile__button_logout" onClick={onSignOut}>Выйти из аккаунта</button>
+
+        {isSuccess ? <p className="profile__status">Изменения сохранены</p> :
+          <span className="profile__error">{errors?.email}</span>}
+
+        {isInputDisabled ? (
+          <>
+            <button className="profile__button" onClick={handleUpdateProfile}>Редактировать</button>
+            <button className="profile__button profile__button_logout" onClick={props.handleSignOut}>Выйти из аккаунта</button>
+          </>
+        ) : (
+          <button className={isValid ? "profile__button profile__button_save" :
+            "profile__button profile__button_save_disabled"} onClick={handleSave} disabled={!isValid}>Сохранить</button>
+        )}
+
+
       </form>
     </section>
   );
