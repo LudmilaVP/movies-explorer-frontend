@@ -29,14 +29,14 @@ class MainApi {
             .then(this._getResponse)
     }
 
-    setUserProfile(data) {
+    setUserProfile({name, email}) {
         return fetch(`${this.baseUrl}/users/me`, {
             method: 'PATCH',
             credentials: 'include',
             headers: this._headers,
             body: JSON.stringify({
-                name: data.name,
-                email: data.email
+                name: name,
+                email: email
             })
         })
             .then(this._getResponse);
