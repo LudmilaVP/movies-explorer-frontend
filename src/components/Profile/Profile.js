@@ -11,8 +11,7 @@ function Profile({ onSignOut }) {
   const [lastEmail, setLastEmail] = useState(currentUser.email);
   const [isButton, setButton] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+  function handleSubmit() {
     mainApi.setUserProfile({ name, email })
     .then(() => {
       setButton(false);
