@@ -6,6 +6,7 @@ function Profile({ onSignOut, handleUpdateProfile }) {
   const currentUser = useContext(CurrentUserContext);
   const [isValid, setIsValid] = useState(false)
   const [values, setValues] = useState()
+  
 
   useEffect(() => {
     setValues(currentUser)
@@ -20,11 +21,7 @@ function Profile({ onSignOut, handleUpdateProfile }) {
     const target = e.target
     const { name, value } = target
     setValues({ ...values, [name]: value })
-    if (value !== values.name) {
-      setIsValid(true);
-    } else {
-      setIsValid(false);
-    }
+    setIsValid(false);
   }
 
   return (
