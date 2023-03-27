@@ -105,14 +105,9 @@
     opacity: .3;
   }
   
-  .profile__link {
+  .profile__button_logout{
     margin: 0 0 10px;
     color: #FF3055;
-    font-size: 13px;
-    font-weight: 500;
-    line-height: 16px;
-    text-decoration: none;
-    transition: opacity .2s linear;
   }
   
   .profile__link:hover {
@@ -120,6 +115,24 @@
     cursor: pointer;
   }
   
+  .profile__error {
+    color: #FF3055;
+    margin-top: 10px;
+    font-size: 12px;
+    line-height: 12px;
+  }
+  
+  .profile__button_disabled {
+    color: #8b8b8b;
+    cursor: default;
+  }
+
+  .profile__edit-status {
+    color: #2BE080;
+    margin-top: 30px;
+    text-align: center;
+  }
+
   @media screen and (max-width: 800px) {
     .profile__form {
       padding: 236px 0 0;

@@ -37,6 +37,20 @@
     opacity: .6;
     cursor: pointer;
   }
+
+  .movies__error{
+    margin: 0;
+    padding: 0 0 20px;
+    text-align: center;
+    color: #8b8b8b;
+    font-size: 30px;
+    font-weight: 500;
+    line-height: 72px;
+    display: grid;
+  justify-content: center;
+  }
+
+
   @media screen and (max-width: 1540px) {
     .movies__list {
       grid-template-columns: repeat(3, 1fr);

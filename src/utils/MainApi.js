@@ -1,10 +1,8 @@
 import { BASE_URL } from './constants.js'
 class MainApi {
-    constructor({ baseUrl }) {
+    constructor({ baseUrl, headers }) {
         this.baseUrl = baseUrl;
-        this.headers = {
-            "Content-Type": "application/json",
-        };
+        this._headers = headers;
     }
 
     _getResponse(res) {
@@ -23,15 +21,22 @@ class MainApi {
             .then(this._getResponse)
     }
 
-    setUserProfile({ name, email }) {
+    checkToken() {
+        return fetch(`${this.baseUrl}/users/me`, {
+            credentials: 'include',
+            headers: this._headers,
+        })
+            .then(this._getResponse)
+    }
+
+    setUserProfile(user) {
         return fetch(`${this.baseUrl}/users/me`, {
             method: 'PATCH',
             credentials: 'include',
             headers: this._headers,
-
             body: JSON.stringify({
-                name: name,
-                email: email
+                name: user.name,
+                email: user.email
             })
         })
             .then(this._getResponse);
@@ -50,7 +55,19 @@ class MainApi {
             method: 'POST',
             credentials: 'include',
             headers: this._headers,
-            body: JSON.stringify(movie),
+            body: JSON.stringify({
+                country: movie.country || 'Нет данных',
+                director: movie.director,
+                duration: movie.duration,
+                year: movie.year,
+                description: movie.description,
+                image: (`https://api.nomoreparties.co/${movie.image.url}`),
+                trailerLink: movie.trailerLink || 'https://www.youtube.com',
+                thumbnail: (`https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`),
+                movieId: movie.id,
+                nameRU: movie.nameRU || 'Нет данных',
+                nameEN: movie.nameEN || 'Нет данных'
+            })
         })
             .then(this._getResponse);
     }
@@ -68,6 +85,7 @@ class MainApi {
 const mainApi = new MainApi({
     baseUrl: BASE_URL,
     headers: {
+        'Accept': 'application/json',
         "Content-Type": "application/json",
     },
 })

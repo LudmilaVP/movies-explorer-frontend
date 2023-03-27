@@ -1,32 +1,38 @@
 import './MoviesCardList.css';
-import React, { useState } from 'react';
+import Preloader from '../Preloader/Preloader'
 import MoviesCard from '../MoviesCard/MoviesCard';
-import Preloader from '../Preloader/Preloader';
 
-const MoviesCardList = ({ cards, buttonMore }) => {
-  const [isLoading, setLoading] = useState(false);
+function MoviesCardList(props) {
+  if (props.isLoading) return <Preloader />
+  if (props.serverError) return <span className="movies__error">Во время запроса произошла ошибка.
+    Возможно, проблема с соединением или сервер недоступен. Подождите немного и попробуйте ещё раз</span>
+  if (props.cards.length === 0) return <span className="movies__error">Ничего не найдено</span>
 
-  const handlePreloader = () => {
-    setLoading(true);
-  };
+  const foundMovies = JSON.parse(localStorage.getItem('foundMovies'))
 
   return (
     <section className="movies">
       <ul className="movies__list">
-        {cards.map((card) => (
-          <MoviesCard key={card.id} card={card} />
-        ))}
+        {props.cards.map(card => {
+          return (
+            <MoviesCard
+              key={props.isAlreadySaved ? card.movieId : card.id}
+              card={card}
+              onMovieSave={props.onMovieSave}
+              onMovieDelete={props.onMovieDelete}
+              isSaved={props.isSaved}
+              isAlreadySaved={props.isAlreadySaved}
+            />
+          )
+        })
+        }
       </ul>
 
-      {isLoading ? (
-        <Preloader />
-      ) : (
-        buttonMore && (
+      {props.isAlreadySaved ? '' :
+        (props.cards.length < foundMovies.length ?
           <div className="movies__container">
-            <button className="movies__button" type="button" name="more" onClick={handlePreloader}>Ещё</button>
-          </div>
-        )
-      )}
+            <button className="movies__button" type="button" name="more" onClick={props.handleShowMore}>Ещё</button>
+          </div> : '')}
     </section>
   );
 };

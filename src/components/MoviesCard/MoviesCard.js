@@ -1,33 +1,43 @@
 import './MoviesCard.css';
 import React from 'react';
-import { useLocation } from 'react-router-dom';
 
-const MoviesCard = ({ card }) => {
-  const [saved, setSaved] = React.useState(false);
-
-  function handleSavedMovie() {
-    setSaved(!saved);
+function MoviesCard(props) {
+  const image = props.isAlreadySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
+  const trailerLink = props.card.trailerLink
+  function handleMovieSave() {
+    props.onMovieSave(props.card)
   }
 
-  const { pathname } = useLocation();
+  function handleMovieDelete() {
+    props.onMovieDelete(props.card)
+  }
+
+  const duration = () => {
+    if (props.card.duration > 60) {
+      return (props.card.duration / 60 | 0) + "ч " + props.card.duration % 60 + "м"
+    }
+    if (props.card.duration === 60) {
+      return (props.card.duration / 60) + "ч"
+    } else {
+      return props.card.duration + "м"
+    }
+  }
 
   return (
     <li className="movie">
-        <div className="movie__container">
-        <p className="movie__title">{card.title}</p>
-        <p className="movie__duration">{card.duration}</p>
+      <div className="movie__container">
+        <p className="movie__title">{props.card.nameRU}</p>
+        <p className="movie__duration">{duration()}</p>
         <div className="movie__buttons">
-          {pathname === '/saved-movies' ? (
-            <button type="button" className="movie__button movie__button_delete" />
-          ) : (
-            <button
-              type="button"
-              className={`movie__button movie__button${saved ? '_active' : '_inactive'}`}
-              onClick={handleSavedMovie}
-            />
-          )}
+
+          {props.isAlreadySaved ? <button className="movie__button movie__button_delete" onClick={handleMovieDelete} type="button"></button> :
+            (props.isSaved(props.card) ? <button className="movie__button movie__button_active" onClick={handleMovieDelete} type="button"></button> :
+              <button className="movie__button movie__button_inactive" onClick={handleMovieSave} type="button"></button>)}
+
         </div>
-        <img src={card.image} alt={card.title} className="movie__image"></img>
+        <a className="movie__trailer" href={trailerLink} rel="noreferrer" target="_blank">
+          <img src={image} alt="Постер" className="movie__image"></img>
+        </a>
       </div>
     </li>
   );

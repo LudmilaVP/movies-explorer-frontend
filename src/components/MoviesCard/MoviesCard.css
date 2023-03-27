@@ -11,6 +11,7 @@
   padding: 0;
   object-fit: cover;
   object-position: center;
+  cursor: pointer;
 }
 
 .movie__container {
@@ -70,13 +71,10 @@
 .movie__button_delete {
   width: 30px;
   height: 30px;
-  background: #F4F4F4 url(../../images/remove-icon.svg) no-repeat center;
-  visibility: hidden;
-  cursor: pointer;
 }
 
-.movie:hover .movie__button_delete {
-  visibility: visible;
+.movie__button_delete:hover {
+  background: #F4F4F4 url(../../images/remove-icon.svg) no-repeat center;
 }
 
 @media screen and (max-width: 760px) {

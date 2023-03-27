@@ -122,9 +122,8 @@
 
 .search__checkbox:checked+.search__slider::before {
   transform: translateX(16px);
-  background-color: #2be080;
+  background-color: white;
 }
-
 .search__films {
   font-size: 13px;
   line-height: 18px;
