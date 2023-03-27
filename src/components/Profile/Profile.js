@@ -24,7 +24,6 @@ function Profile({ onSignOut, handleUpdateProfile }) {
       name: userName,
       email: userEmail
     })
-    setIsSuccess(false)
   }
 
   useEffect(() => {
@@ -35,6 +34,10 @@ function Profile({ onSignOut, handleUpdateProfile }) {
       setDisableForm(true)
     }
   }, [handleNameChange, handleEmailChange, userName, userEmail, user.name, user.email])
+
+  function handleSave() {
+    setIsSuccess(true)
+  }
 
   return (
     <section className="profile">
@@ -53,7 +56,7 @@ function Profile({ onSignOut, handleUpdateProfile }) {
         </div>
         {isSuccess ? <p className="profile__edit-status">Изменения сохранены</p> : <span className="profile__error"></span>}
 
-        <button className="profile__button" disabled={disableForm}>Редактировать</button>
+        <button className="profile__button" disabled={disableForm} onClick={handleSave}>Редактировать</button>
         <button className="profile__button profile__button_logout" onClick={onSignOut}>Выйти из аккаунта</button>
 
       </form>
