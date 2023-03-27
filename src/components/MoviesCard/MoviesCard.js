@@ -2,7 +2,7 @@ import './MoviesCard.css';
 import React from 'react';
 
 function MoviesCard(props) {
-
+  const image = props.isOnlySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
   function handleMovieSave() {
     props.onMovieSave(props.card)
   }
@@ -34,7 +34,7 @@ function MoviesCard(props) {
               <button className="movie__button movie__button_inactive" onClick={handleMovieSave} type="button"></button>)}
 
         </div>
-        <img src={props.isAlreadySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`} alt="Постер" className="movie__image"></img>
+        <img src={image} alt="Постер" className="movie__image"></img>
       </div>
     </li>
   );

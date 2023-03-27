@@ -127,6 +127,11 @@
     cursor: default;
   }
 
+  .profile__edit-status {
+    color: #2BE080;
+    margin-top: 200px;
+  }
+
   @media screen and (max-width: 800px) {
     .profile__form {
       padding: 236px 0 0;

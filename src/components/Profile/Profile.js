@@ -8,6 +8,7 @@ function Profile({ onSignOut, handleUpdateProfile }) {
   const [userName, setUserName] = useState(user.name);
   const [userEmail, setUserEmail] = useState(user.email);
   const [disableForm, setDisableForm] = useState(true)
+  const [isSuccess, setIsSuccess] = useState(false)
 
   function handleNameChange(e) {
     setUserName(e.target.value);
@@ -28,9 +29,11 @@ function Profile({ onSignOut, handleUpdateProfile }) {
   useEffect(() => {
     if (userName !== user.name || userEmail !== user.email) {
       setDisableForm(false)
+      setIsSuccess(true)
     }
      else {
       setDisableForm(true)
+      setIsSuccess(false)
     }
   }, [handleNameChange, handleEmailChange, userName, userEmail, user.name, user.email])
 
@@ -43,6 +46,8 @@ function Profile({ onSignOut, handleUpdateProfile }) {
           <div className="profile__field profile__field_type_name">
             <input className="profile__settings" type="text" name="name" defaultValue={user.name} onChange={handleNameChange} required />
           </div>
+
+          {isSuccess ? <p className="profile__edit-status">Изменения сохранены</p>:<span className="profile__error"></span>}
 
           <div className="profile__field profile__field_type_email">
             <input className="profile__settings" type="email" name="email" defaultValue={user.email} onChange={handleEmailChange} required />
