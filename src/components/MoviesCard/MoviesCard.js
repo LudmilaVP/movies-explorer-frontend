@@ -2,7 +2,7 @@ import './MoviesCard.css';
 import React from 'react';
 
 function MoviesCard(props) {
-  const image = props.isOnlySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
+  const image = props.isAlreadySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
   const trailerLink = props.card.trailerLink
   function handleMovieSave() {
     props.onMovieSave(props.card)
