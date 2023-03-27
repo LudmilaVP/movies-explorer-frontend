@@ -25,7 +25,7 @@ function MoviesCard(props) {
 
   return (
     <li className="movie">
-      <div className="movie__container" href={trailerLink} rel="noreferrer" target="_blank">
+      <div className="movie__container">
         <p className="movie__title">{props.card.nameRU}</p>
         <p className="movie__duration">{duration()}</p>
         <div className="movie__buttons">
@@ -35,7 +35,9 @@ function MoviesCard(props) {
               <button className="movie__button movie__button_inactive" onClick={handleMovieSave} type="button"></button>)}
 
         </div>
-        <img src={image} alt="Постер" className="movie__image"></img>
+        <a className="movie__trailer" href={trailerLink} rel="noreferrer" target="_blank">
+          <img src={image} alt="Постер" className="movie__image"></img>
+        </a>
       </div>
     </li>
   );

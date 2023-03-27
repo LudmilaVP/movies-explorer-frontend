@@ -24,16 +24,15 @@ function Profile({ onSignOut, handleUpdateProfile }) {
       name: userName,
       email: userEmail
     })
+    setIsSuccess(false)
   }
 
   useEffect(() => {
     if (userName !== user.name || userEmail !== user.email) {
       setDisableForm(false)
-      setIsSuccess(false)
     }
-     else {
+    else {
       setDisableForm(true)
-      setIsSuccess(true)
     }
   }, [handleNameChange, handleEmailChange, userName, userEmail, user.name, user.email])
 
@@ -47,13 +46,12 @@ function Profile({ onSignOut, handleUpdateProfile }) {
             <input className="profile__settings" type="text" name="name" defaultValue={user.name} onChange={handleNameChange} required />
           </div>
 
-          {isSuccess ? <p className="profile__edit-status">Изменения сохранены</p>:<span className="profile__error"></span>}
-
           <div className="profile__field profile__field_type_email">
             <input className="profile__settings" type="email" name="email" defaultValue={user.email} onChange={handleEmailChange} required />
           </div>
           <p className="profile__text">E-mail</p>
         </div>
+        {isSuccess ? <p className="profile__edit-status">Изменения сохранены</p> : <span className="profile__error"></span>}
 
         <button className="profile__button" disabled={disableForm}>Редактировать</button>
         <button className="profile__button profile__button_logout" onClick={onSignOut}>Выйти из аккаунта</button>

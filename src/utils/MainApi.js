@@ -66,8 +66,9 @@ class MainApi {
                 thumbnail: (`https://api.nomoreparties.co/${movie.image.formats.thumbnail.url}`),
                 movieId: movie.id,
                 nameRU: movie.nameRU || 'Нет данных',
-                nameEN: movie.nameEN || 'Нет данных'})
+                nameEN: movie.nameEN || 'Нет данных'
             })
+        })
             .then(this._getResponse);
     }
 
