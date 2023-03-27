@@ -129,7 +129,8 @@
 
   .profile__edit-status {
     color: #2BE080;
-    margin-top: 200px;
+    margin-top: 188px;
+    text-align: center;
   }
 
   @media screen and (max-width: 800px) {

@@ -29,11 +29,11 @@ function Profile({ onSignOut, handleUpdateProfile }) {
   useEffect(() => {
     if (userName !== user.name || userEmail !== user.email) {
       setDisableForm(false)
-      setIsSuccess(true)
+      setIsSuccess(false)
     }
      else {
       setDisableForm(true)
-      setIsSuccess(false)
+      setIsSuccess(true)
     }
   }, [handleNameChange, handleEmailChange, userName, userEmail, user.name, user.email])
 

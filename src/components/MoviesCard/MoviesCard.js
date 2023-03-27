@@ -3,6 +3,7 @@ import React from 'react';
 
 function MoviesCard(props) {
   const image = props.isOnlySaved ? props.card.image : `https://api.nomoreparties.co/${props.card.image.url}`
+  const trailerLink = props.card.trailerLink
   function handleMovieSave() {
     props.onMovieSave(props.card)
   }
@@ -24,7 +25,7 @@ function MoviesCard(props) {
 
   return (
     <li className="movie">
-      <div className="movie__container" href={props.card.trailerLink} rel="noreferrer" target="_blank">
+      <div className="movie__container" href={trailerLink} rel="noreferrer" target="_blank">
         <p className="movie__title">{props.card.nameRU}</p>
         <p className="movie__duration">{duration()}</p>
         <div className="movie__buttons">
