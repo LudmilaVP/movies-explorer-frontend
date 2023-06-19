@@ -1,35 +1,35 @@
-# Название проекта: Movies Explorer Frontend
+# Movies Explorer Frontend
 
-## Описание
+## Description
 
-Фронтенд часть сайта по поиску фильмов и созданию личного кабинета.
+The frontend is part of the site for finding movies and creating a personal account.
 
-## Запуск проекта
+## Project launch
 
-- `npm run start` — запускает сервер
-- `npm run build` — билд проекта
+- `npm run start` — starts the server
+- `npm run build` — build of project
 
-## Стек:
+## Stack:
 - HTML;
 - CSS;
 - JavaScript;
 - React;
 - Node.js;
 - Express.js;
-- Яндекс.Облако.
+- Yandex.Cloud.
 
-## Реализация:
-- проект создан на React;
-- присвоение доменного имени;
-- подключение сертификатов;
-- создание облачного сервера;
-- подключение проекта к серверу;
-- защита API авторизацией;
-- централизованная обработка ошибок;
-- использование Webpack;
-- файловая структура по БЭМ (Nested);
-- flexbox-верстка;
+## Implementation:
+- the project was created on React;
+- assignment of a domain name;
+- connecting certificates;
+- creating a cloud server;
+- connecting the project to the server;
+- API authorization protection;
+- centralized error handling;
+- using Webpack;
+- BEM file structure (Nested);
+- flexbox-layout;
 - grid;
-- адаптивная верстка;
-- формы и валидация форм;
-- работа с Figma.
+- adaptive layout;
+- forms and form validation;
+- working with Figma.
